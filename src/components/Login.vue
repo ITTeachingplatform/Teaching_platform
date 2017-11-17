@@ -112,6 +112,7 @@
                 return true;
             }
             else if(this.role === 'admin' && vm.account === store.state.admin_account['id'] && vm.checkPwd === store.state.admin_account['pwd']){
+                //测试一下state的获取
                 alert('成功登录管理员入口');
                 this.$router.push({path:'/admin_index'});
                 return true;
