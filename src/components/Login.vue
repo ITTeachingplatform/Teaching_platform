@@ -34,7 +34,6 @@
 
 <script>
   import communication from '../assets/communication';
-  import store from '../vuex/admin/store';
   export default {
     name: 'Login',
     data() {
@@ -91,7 +90,6 @@
         }
       };
     },
-    store,
     methods: {
       submitForm(formName) {
         var vm = this.ruleForm2;
@@ -111,7 +109,7 @@
                 alert('成功登录教师入口');
                 return true;
             }
-            else if(this.role === 'admin' && vm.account === store.state.admin_account['id'] && vm.checkPwd === store.state.admin_account['pwd']){
+            else if(this.role === 'admin' && vm.account === '33333' && vm.checkPwd === '12345'){
                 alert('成功登录管理员入口');
                 this.$router.push({path:'/admin_index'});
                 return true;
