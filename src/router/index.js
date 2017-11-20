@@ -12,6 +12,17 @@ import Announce_table from '@/components/Announce_table'
 import Manage_discussion from '../admin_page/Manage_discussion'
 import Manage_lesson from '../admin_page/Manage_lesson'
 import Manage_announce from '../admin_page/Manage_announce'
+/*********教师********/
+import Teacher from '@/components/Teacher/Teacher'
+import Info_bar_teaacher from '@/components/Teacher/Info_bar_teacher'
+import Teacher_announce from '../teacher_page/Teacher_announce'
+import Teacher_courses from '../teacher_page/Teacher_courses'
+import Teacher_discussion from '../teacher_page/Teacher_discussion'
+import Teacher_personal from '../teacher_page/Teacher_personal'
+import Teacher_index from '../teacher_page/Teacher_index'
+import Teacher_platform from '../teacher_page/Teacher_platform'
+/*********教师********/
+
 Vue.use(Router)
 
 export default new Router({
@@ -51,5 +62,37 @@ export default new Router({
       name: 'admin_page',
       component: Index
     },
+    /******************教师页面teacher_page****************** */
+    { 
+      path: '/teacher_index',
+      name: 'Teacher_index',
+      component: Teacher_index
+    },
+    { 
+      path: '/teacher_announce',
+      name: 'Teacher_announce',
+      component: Teacher_announce
+    },
+    { 
+      path: '/teacher_discussion',
+      name: 'Teacher_discussion',
+      component: Teacher_discussion
+    },
+    { 
+      path: '/teacher_personal',
+      name: 'Teacher_personal',
+      component: Teacher_personal
+    },
+    { 
+      path: '/teacher_courses',
+      name: 'Teacher_courses',
+      component: Teacher_courses
+    },
+    { 
+      path: '/teacher_platform',
+      name: 'Teacher_platform',
+      component: Teacher_platform
+    },
+    /******************教师页面****************** */
   ]
 })
