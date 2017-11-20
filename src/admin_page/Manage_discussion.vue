@@ -5,8 +5,8 @@
         讨论区列表
 </el-row>
  <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
-        <el-progress :percentage="100" :show-text="false"></el-progress>
-  <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
+      
+  <el-row type="flex" justify="center">
           <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span>搜索框</span>
@@ -92,8 +92,8 @@
 </el-card>
 
       </el-row>
-           <el-progress :percentage="100" :show-text="false"></el-progress>
-  <el-row type="flex" justify="center" style="margin-left:150px;margin-right:50px">
+         
+  <el-row type="flex" justify="center" style="margin-left:9%">
           <el-table
     :data="tableData"
     style="width: 100%">
@@ -173,39 +173,41 @@
 </el-row>
   </el-tab-pane>
 </el-row>  
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
 import Admin from '../components/Admin';
+import store from '../vuex/admin/store';
   export default {
       name: 'manage_dicussion',
       components: {
       'Admin': Admin
       },
+      store,
       data() {
-      return {
-        radio: '1',
-        numberValidateForm: {
-          id_word: '',
-          writer: '',
-          publish_date: '',
-          other_condition: '',
-        },
-        tableData: [{
-          topic: '关于上课的一点疑问',
-          writer: 'XXX',
-          publish_date: '2017/09/10',
-          tag: 'IT项目管理、学习',
-          final_changer: '小葱',
-          vis_num: '155',
-          sup_num: '99',
-          anw_num: '10'
-        }]
-      }
-    },
+        return {
+          radio: '1',
+          numberValidateForm: {
+            id_word: '',
+            writer: '',
+            publish_date: '',
+            other_condition: '',
+          }
+        }
+      },
+      mounted () {
+        store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+      },      
+      computed: {
+         tableData:{
+          get:function(){
+              return store.state.discussion_info
+          }
+         }
+      },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);

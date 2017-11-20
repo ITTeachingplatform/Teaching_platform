@@ -5,7 +5,7 @@
         公告列表
 </el-row>
  <el-button round style="margin-left:600px;margin-bottom:20px">发布公告</el-button>
-          <el-progress :percentage="100" :show-text="false"></el-progress>
+        
 <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
           <el-card class="box-card">
   <div slot="header" class="clearfix">>
@@ -72,8 +72,8 @@
 </el-card>
 
       </el-row>
-             <el-progress :percentage="100" :show-text="false"></el-progress>
-<el-row type="flex" justify="center" style="margin-left:150px;margin-right:50px">
+           
+<el-row type="flex" justify="center" style="margin-left:11%">
           <el-table
     :data="tableData"
     style="width: 100%;margin-top:20px">
@@ -127,40 +127,41 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
 import Admin from '../components/Admin'
+import store from '../vuex/admin/store'
   export default {
       name: 'announce_table',
       components: {
         'Admin': Admin
       },
+      store,
       data() {
-      return {
-        radio: '1',
-        numberValidateForm: {
-          title: '',
-          writer: '',
-          publish_date: '',
-          brief_content: '',
-        },
-        tableData: [{
-          title: '关于大学课后学习情况调查',
-          writer: '饶浩聪',
-          publish_date: '2017/09/10',
-          brief_content: '临近期末.....大家的复习进度......',
-        }, {
-          title: '关于IT项目管理的注意事项',
-          writer: '饶浩聪',
-          publish_date: '2017/10/10',
-          brief_content: '临近大作业提交，我们需要.....',
-        }]
-      }
-    },
+        return {
+          radio: '1',
+          numberValidateForm: {
+            title: '',
+            writer: '',
+            publish_date: '',
+            brief_content: '',
+          }
+        }
+      },
+      computed: {
+         tableData:{
+          get:function(){
+              return store.state.announce_info
+          }
+         }
+      },
+      mounted () {
+        store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
+      },     
     methods: {
       handleEdit(index, row) {
         console.log(index, row);

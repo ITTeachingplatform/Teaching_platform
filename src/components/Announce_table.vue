@@ -7,7 +7,7 @@
   <el-row>
           <el-card class="box-card">
   <div slot="header" class="clearfix">
-        <el-progress :percentage="100" :show-text="false"></el-progress>
+      
     <span>搜索框</span>
     <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
   </div>
@@ -76,7 +76,7 @@
           <el-table
     :data="tableData"
     style="width: 100%">
-        <el-progress :percentage="100" :show-text="false"></el-progress>
+      
     <el-table-column
       label="公告标题"
       width="280px">
@@ -127,36 +127,41 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
+import store from '../vuex/admin/store'
   export default {
       name: 'announce_table',
+      store,
+      computed: {
+         tableData:{
+          get:function(){
+              return store.state.student_info
+          }
+         }
+      },
       data() {
-      return {
-        radio: '1',
-        numberValidateForm: {
-          title: '',
-          writer: '',
-          publish_date: '',
-          brief_content: '',
-        },
-        tableData: [{
-          title: '关于大学课后学习情况调查',
-          writer: '饶浩聪',
-          publish_date: '2017/09/10',
-          brief_content: '临近期末.....大家的复习进度......',
-        }, {
-          title: '关于IT项目管理的注意事项',
-          writer: '饶浩聪',
-          publish_date: '2017/10/10',
-          brief_content: '临近大作业提交，我们需要.....',
-        }]
-      }
-    },
+        return {
+          radio: '1',
+          numberValidateForm: {
+            title: '',
+            writer: '',
+            publish_date: '',
+            brief_content: '',
+          }
+        }
+      },
+      computed: {
+         tableData:{
+          get:function(){
+              return store.state.announce_info
+          }
+         }
+      },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);

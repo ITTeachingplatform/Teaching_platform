@@ -1,6 +1,6 @@
 <template>
 <div id="teacher_table">
-          <el-progress :percentage="100" :show-text="false"></el-progress>
+        
   <el-row>
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -102,7 +102,7 @@
           <el-table
     :data="tableData"
     style="width: 100%">
-             <el-progress :percentage="100" :show-text="false"></el-progress>
+           
     <el-table-column
       label="工号"
       width="180px">
@@ -159,14 +159,23 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
+import store from '../vuex/admin/store'
   export default {
       name: 'teahcer_table',
+      store,
+      computed: {
+         tableData:{
+          get:function(){
+              return store.state.teacher_info
+          }
+         }
+      },
       data() {
       return {
         numberValidateForm: {
@@ -175,23 +184,7 @@
           department: '',
           major: '',
           take_job_date: ''
-        },
-        tableData: [{
-          id: '306126xx',
-          name: '李红',
-          department: '软件学院',
-          major: 'IT项目管理',
-          take_job_date: '2008-09-01'
-        }, {
-          id: '306126xx',
-          name: '小红',
-        }, {
-          id: '306126xx',
-          name: '大红',
-        }, {
-          id: '306126xx',
-          name: '大南',
-        }]
+        }
       }
     },
     methods: {
@@ -215,5 +208,6 @@
         this.$refs[formName].resetFields();
       }
     }
+    // 用于测试
   }
 </script>

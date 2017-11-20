@@ -1,6 +1,6 @@
 <template>
 <div id="student_table">
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
   <el-row>
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -100,7 +100,7 @@
       </el-row>
 
    <el-row style="margin-top:20px">
-         <el-progress :percentage="100" :show-text="false"></el-progress>
+       
           <el-table
     :data="tableData"
     style="width: 100%">
@@ -160,14 +160,16 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
+import store from '../vuex/admin/store'
   export default {
       name: 'student_table',
+      store,
       data() {
       return {
         numberValidateForm: {
@@ -176,25 +178,16 @@
           department: '',
           major: '',
           class: ''
-        },
-        tableData: [{
-          id: '2016306126xx',
-          name: '饶浩聪',
-          department: '软件学院',
-          major: '软件工程',
-          class: '4班'
-        }, {
-          id: '2016306126xx',
-          name: '小聪',
-        }, {
-          id: '2016306126xx',
-          name: '大葱',
-        }, {
-          id: '2016306126xx',
-          name: '大聪',
-        }]
+        }
       }
     },
+     computed: {
+         tableData:{
+          get:function(){
+              return store.state.student_info
+          }
+         }
+      },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);

@@ -5,7 +5,7 @@
         课程列表
 </el-row>
  <el-button round style="margin-left:600px;margin-bottom:20px">添加课程</el-button> 
-    <el-progress :percentage="100" :show-text="false"></el-progress>
+  
 <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -92,8 +92,8 @@
 </el-card>
 
       </el-row>
-<el-row type="flex" justify="center" style="margin-left:150px;margin-right:50px">
-           <el-progress :percentage="100" :show-text="false"></el-progress>
+<el-row type="flex" justify="center" style="margin-left:21%">
+         
           <el-table
     :data="tableData"
     style="width: 100%">
@@ -147,18 +147,20 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
+    
 </div>
 </template>
 
 
 <script>
 import Admin from '../components/Admin'
+import store from '../vuex/admin/store'
   export default {
       name: 'manage_lesson',
       components: {
         'Admin': Admin
       },
+      store,
       data() {
       return {
         numberValidateForm: {
@@ -167,15 +169,19 @@ import Admin from '../components/Admin'
           pub_department: '',
           other_condition: '',
           publish_year: ''
-        },
-        tableData: [{
-         lesson_name: 'IT项目管理',
-          name: '李红',
-          pub_department: '软件学院',
-          publish_year: '2017'
-        }]
+        }
       }
     },
+     computed: {
+         tableData:{
+          get:function(){
+              return store.state.lesson_info
+          }
+         }
+      },
+    mounted () {
+        store.dispatch('get_lesson_item', {'Help_text': '此处获取课程信息'});
+    },     
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
