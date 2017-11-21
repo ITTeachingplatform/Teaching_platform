@@ -2,6 +2,7 @@
   <div id="teacher_announce">
       <Teacher activeIndex='2'></Teacher>
   </div>
+
 </template>
 
 <script>

@@ -1,43 +1,10 @@
 <template>
   <div id="teacher_personal">
       <Teacher activeIndex='5'></Teacher>
-      <div>
-        <!-- 确认修改按钮 -->
-        <el-row style="margin-top:20px">
-          <el-col span="6" offset="16">
-            <div><el-button type="primary">确认修改</el-button></div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" type="flex" justify="center" style="margin-top:20px">
-          <el-col :span="6"><div></div></el-col>
-          <!-- 上传头像 -->
-          <el-col :span="6">
-            <el-upload
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-            <!-- 个人信息 -->
-          </el-col :span="6">
-          <el-col style="margin-left:20px">
-            <el-form ref="form" :model="form" label-width="80px">
-              <el-form-item label="活动名称">
-                <el-input v-model="form.name"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                <el-button>取消</el-button>
-              </el-form-item>
-            </el-form>
-          </el-col>
-          <el-col :span="6"><div></div></el-col>
-        </el-row>
-        
-      </div>
+      <el-row type="flex" class="row-bg" justify="space-around">
+        <el-col :span="6"><div style="color:red"></div></el-col>
+        <el-col :span="10"><div style="background-color:red"></div></el-col>
+      </el-row>
   </div>
 </template>
 
