@@ -1,7 +1,11 @@
 <template>
   <div id="teacher_personal">
       <Teacher activeIndex='5'></Teacher>
-      <div>
+
+      <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">个人中心</el-row>
+      <el-row type='flex' justify="center">
+        <div class="block" style="width:900px;margin-top:10px">
+          <el-progress :percentage="100" :show-text="false"></el-progress>
         <!-- 确认修改按钮 -->
         <el-row style="margin-top:20px">
           <el-col span="6" offset="16">
@@ -38,6 +42,7 @@
         </el-row>
         
       </div>
+      </el-row>
   </div>
 </template>
 

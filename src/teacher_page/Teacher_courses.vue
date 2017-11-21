@@ -4,14 +4,19 @@
       <!-- 导航栏 -->
       <Teacher activeIndex='4'></Teacher>
       <!-- 未批改作业 -->
-      <div align="center">
+
+      
+<el-row type='flex' justify="center">
+
+      <div align="center" style="width:900px">
           <!-- <el-card class="box-card"> -->
             <div>
-                <span style=" font-size:36px">未批改作业</span>
+                <!-- <span style=" font-size:36px">未批改作业</span> -->
+                <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">未批改作业</el-row>
                 <el-progress :percentage="100" :show-text="false"></el-progress>
                 <el-table
                 :data="tableData"
-                style="width: 80%">
+                style="width: 100%">
                 <el-table-column
                     prop="course"
                     label="课程"
@@ -33,36 +38,49 @@
                 </el-table>
             </div>
       </div>
+
+
+</el-row>
+
+
+
+<el-row type='flex' justify="center">
       <!-- 课程选择 -->
-      <div>
+      <div style="width:900px">
           <span style="font-size:36px">课程选择</span>
             <el-progress :percentage="100" :show-text="false"></el-progress>
             <el-row :gutter="20">
-              <el-col :span="6"><div class="grid-content bg-purple">
+              <el-col :span="8"><div class="grid-content bg-purple">
                 <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>项目管理</span>
                 <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
               </div>
               <div class="text item">
-                课程编号：xxx
-                教学班：xxx
+                <p>课程编号：xxx</p>
+                <p>教学班：xxx</p>
               </div>
             </el-card></div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple">
+              <el-col :span="8"><div class="grid-content bg-purple">
                 <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>软件架构</span>
                 <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
               </div>
               <div class="text item">
-                课程编号：xxx
-                教学班：xxx
+                <p>课程编号：xxx</p>
+                <p>教学班：xxx</p>
               </div>
             </el-card></div></el-col>
             </el-row>
               
       </div>
+
+
+</el-row>
+
+
+
   </div>
 </template>
 
@@ -120,7 +138,7 @@ export default {
   }
 
   .box-card {
-    width: 290px;
+    width: 100%;
   }
 
 .el-row {
