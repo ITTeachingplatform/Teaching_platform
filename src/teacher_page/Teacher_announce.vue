@@ -27,7 +27,7 @@
               <el-col>
                 <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="250px" class="demo-ruleForm">
                   <el-form-item
-                    label="公告发布者(教师名称/编号/管理员)"
+                    label="公告发布者(编号/管理员)"
                     prop="name"
                     :rules="[]"
                     >
@@ -73,10 +73,10 @@
 
           <el-table
     :data="tableData"
-    style="width: 100%;margin-top:20px">
+    style="width: 100%;margin-top:20px;text-align:left;">
     <el-table-column
       label="公告标题"
-      width="280px">
+      width="300px">
       <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.title }}</span>
       </template>
@@ -96,13 +96,13 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="发布时间(年月日)" width="150px">
+    <el-table-column label="发布时间(年月日)" width="200px">
       <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.publish_date }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column label="内容摘要" width="280px">
+    <el-table-column label="内容摘要" width="300px">
       <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.brief_content }}</span>
       </template>
