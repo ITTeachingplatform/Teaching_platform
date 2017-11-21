@@ -3,20 +3,16 @@
   <div id="teacher_courses">
       <!-- 导航栏 -->
       <Teacher activeIndex='4'></Teacher>
-      <!-- 未批改作业 -->
-
-      
-<el-row type='flex' justify="center">
-
-      <div align="center" style="width:900px">
-          <!-- <el-card class="box-card"> -->
-            <div>
-                <!-- <span style=" font-size:36px">未批改作业</span> -->
-                <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">未批改作业</el-row>
+      <div align="center">
+        <div class="container">
+        <!-- 未批改作业 -->    
+                <div style="margin:20px">
+                <span style=" font-size:36px">未批改作业</span>
+                </div>
                 <el-progress :percentage="100" :show-text="false"></el-progress>
                 <el-table
                 :data="tableData"
-                style="width: 100%">
+                style="width:100%">
                 <el-table-column
                     prop="course"
                     label="课程"
@@ -35,19 +31,11 @@
                     prop="number"
                     label="未批改数量">
                 </el-table-column>
-                </el-table>
-            </div>
-      </div>
-
-
-</el-row>
-
-
-
-<el-row type='flex' justify="center">
+                </el-table>     
       <!-- 课程选择 -->
-      <div style="width:900px">
+                <div style="margin:20px">
           <span style="font-size:36px">课程选择</span>
+                </div>
             <el-progress :percentage="100" :show-text="false"></el-progress>
             <el-row :gutter="20">
               <el-col :span="8"><div class="grid-content bg-purple">
@@ -73,7 +61,7 @@
               </div>
             </el-card></div></el-col>
             </el-row>
-              
+        </div> 
       </div>
 
 
@@ -166,5 +154,9 @@ export default {
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;
+  }
+
+  .container {
+    width:900px;
   }
 </style>

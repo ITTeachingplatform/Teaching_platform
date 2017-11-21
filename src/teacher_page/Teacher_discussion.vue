@@ -1,11 +1,12 @@
 <template>
-  <div id="teacher_discussion">
+  <div id="teacher_discussion"  align="center">
       <Teacher activeIndex='3'></Teacher>
+      <div class="container">
       <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
       <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
 
       <el-progress :percentage="100" :show-text="false"></el-progress>
-      <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
+      <el-row type="flex" justify="center" >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>搜索框</span>
@@ -83,13 +84,13 @@
       </el-row>
       <el-progress :percentage="100" :show-text="false"></el-progress>
 
-      <el-row type="flex" justify="center" style="margin-left:150px;margin-right:50px">
+      <el-row type="flex" justify="center" >
         <el-table
         :data="tableData"
         style="width:100%">
         <el-table-column
           label="讨论主题"
-          width="100px">
+          width="200px">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{scope.row.topic }}</span>
           </template>
@@ -115,7 +116,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="标签" width="200px">
+        <el-table-column label="标签" width="180px">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.tag }}</span>
           </template>
@@ -144,21 +145,9 @@
             <span style="margin-left: 10px">{{ scope.row.sup_num }}</span>
           </template>
         </el-table-column>
-
-        <el-table-column label="操作" width="150px">
-          <template slot-scope="scope">
-            <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
         </el-table>
       </el-row>
-      
+    </div>
   
 
 
@@ -231,6 +220,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .container {
+    width:900px;
+  }
+  .box-card{
+    width:100%;
+  }
 </style>
