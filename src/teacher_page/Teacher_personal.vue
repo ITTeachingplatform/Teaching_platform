@@ -1,9 +1,21 @@
 <template>
   <div id="teacher_personal">
       <Teacher activeIndex='5'></Teacher>
-      <el-row type="flex" class="row-bg" justify="center">
-        <el-col :span="6">
-          <div>
+
+      <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">个人中心</el-row>
+      <el-row type='flex' justify="center">
+        <div class="block" style="width:900px;margin-top:10px">
+          <el-progress :percentage="100" :show-text="false"></el-progress>
+        <!-- 确认修改按钮 -->
+        <el-row style="margin-top:20px">
+          <el-col span="6" offset="16">
+            <div><el-button type="primary">确认修改</el-button></div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20" type="flex" justify="center" style="margin-top:20px">
+          <el-col :span="6"><div></div></el-col>
+          <!-- 上传头像 -->
+          <el-col :span="6">
             <el-upload
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -22,8 +34,16 @@
               <el-input v-model="form.name"></el-input>
             </el-form-item>
             </el-form>
+<<<<<<< HEAD
             </div>
             </el-col>
+=======
+          </el-col>
+          <el-col :span="6"><div></div></el-col>
+        </el-row>
+        
+      </div>
+>>>>>>> refs/remotes/origin/qym
       </el-row>
   </div>
 </template>
