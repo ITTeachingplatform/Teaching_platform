@@ -1,27 +1,41 @@
+/*********Basic********/
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Start from '@/components/Start'
+
+/*********Admin********/
 import Admin from '@/components/Admin'
-import Index from '../admin_page/Index_page'
 import Info_bar from '@/components/Info_bar'
-import Manage_id from '../admin_page/Manage_id'
 import Student_table from '@/components/Student_table'
 import Teacher_table from '@/components/Teacher_table'
 import Announce_table from '@/components/Announce_table'
+import Index from '../admin_page/Index_page'
+import Manage_id from '../admin_page/Manage_id'
 import Manage_discussion from '../admin_page/Manage_discussion'
 import Manage_lesson from '../admin_page/Manage_lesson'
 import Manage_announce from '../admin_page/Manage_announce'
-/*********教师********/
+
+/*********Teacher********/
 import Teacher from '@/components/Teacher/Teacher'
-import Info_bar_teaacher from '@/components/Teacher/Info_bar_teacher'
+import Info_bar_teacher from '@/components/Teacher/Info_bar_teacher'
 import Teacher_announce from '../teacher_page/Teacher_announce'
 import Teacher_courses from '../teacher_page/Teacher_courses'
 import Teacher_discussion from '../teacher_page/Teacher_discussion'
 import Teacher_personal from '../teacher_page/Teacher_personal'
 import Teacher_index from '../teacher_page/Teacher_index'
 import Teacher_platform from '../teacher_page/Teacher_platform'
-/*********教师********/
+
+/*********Student********/
+import Student from '@/components/Student/Student'
+import Info_bar_Student from '@/components/Student/Info_bar_Student'
+import Student_announce from '../student_page/Student_announce'
+import Student_courses from '../student_page/Student_courses'
+import Student_discussion from '../student_page/Student_discussion'
+import Student_personal from '../student_page/Student_personal'
+import Student_index from '../student_page/Student_index'
+import Student_platform from '../student_page/Student_platform'
+
 
 Vue.use(Router)
 
@@ -37,6 +51,7 @@ export default new Router({
       name: 'Start',
       component: Start
     },
+    /*******************Admin*******************/
     { 
       path: '/admin/manage_id',
       name: 'Manage_id',
@@ -62,7 +77,7 @@ export default new Router({
       name: 'admin_page',
       component: Index
     },
-    /******************教师页面teacher_page****************** */
+    /*******************Teacher*******************/
     { 
       path: '/teacher_index',
       name: 'Teacher_index',
@@ -93,6 +108,36 @@ export default new Router({
       name: 'Teacher_platform',
       component: Teacher_platform
     },
-    /******************教师页面****************** */
+    /*******************Student*******************/
+    { 
+      path: '/student_index',
+      name: 'Student_index',
+      component: Student_index
+    },
+    { 
+      path: '/student_announce',
+      name: 'Student_announce',
+      component: Student_announce
+    },
+    { 
+      path: '/student_discussion',
+      name: 'Student_discussion',
+      component: Student_discussion
+    },
+    { 
+      path: '/student_personal',
+      name: 'Student_personal',
+      component: Student_personal
+    },
+    { 
+      path: '/student_courses',
+      name: 'Student_courses',
+      component: Student_courses
+    },
+    { 
+      path: '/student_platform',
+      name: 'Student_platform',
+      component: Student_platform
+    }
   ]
 })
