@@ -42,7 +42,7 @@
                 <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>项目管理</span>
-                <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
+                <router-link to="/course_page"><el-button style="float: right; padding: 3px 0" type="text">查看</el-button></router-link>
               </div>
               <div class="text item">
                 <p>课程编号：xxx</p>
@@ -61,6 +61,7 @@
               </div>
             </el-card></div></el-col>
             </el-row>
+            <router-view></router-view>
         </div> 
       </div>
 
@@ -74,11 +75,13 @@
 
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
+import store from '../vuex/teacher/store'
 export default {
     name: 'teacher_courses',
     components: {
         'Teacher': Teacher,
     },
+    store,
     data() {
         return {
           tableData: [{

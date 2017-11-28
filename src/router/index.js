@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Start from '@/components/Start'
+import Platform from '@/components/Platform'
 
 /*********Admin********/
 import Admin from '@/components/Admin'
@@ -25,7 +26,8 @@ import Teacher_discussion from '../teacher_page/Teacher_discussion'
 import Teacher_personal from '../teacher_page/Teacher_personal'
 import Teacher_index from '../teacher_page/Teacher_index'
 import Teacher_platform from '../teacher_page/Teacher_platform'
-
+import Course_page from '../teacher_page/subpage/Course_page'
+import Course_introduction from '@/components/Teacher/Course_introduction'
 /*********Student********/
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
@@ -107,6 +109,11 @@ export default new Router({
       path: '/teacher_platform',
       name: 'Teacher_platform',
       component: Teacher_platform
+    },
+    {
+      path: '/course_page',
+      name: 'Course_page',
+      component: Course_page
     },
     /*******************Student*******************/
     { 
