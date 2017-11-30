@@ -1,14 +1,14 @@
 <template>
 <div id="announce_table">
       <Admin activeIndex='3'> </Admin>
-  <el-row style="font-size:50px">
+  <el-row style="font-size:50px;margin-top:20px">
         公告列表
 </el-row>
- <el-button round style="margin-left:600px;margin-bottom:20px">发布公告</el-button>
+ <router-link to="/admin/publish_announcement"><el-button round style="margin-left:600px;margin-bottom:20px">发布公告</el-button></router-link>
         
 <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
           <el-card class="box-card">
-  <div slot="header" class="clearfix">>
+  <div slot="header" class="clearfix">
     <span>搜索框</span>
     <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
   </div>
@@ -22,7 +22,7 @@
     :rules="[
     ]"
   >
-    <el-input type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -35,7 +35,7 @@
     :rules="[
     ]"
   >
-    <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -55,7 +55,7 @@
     :rules="[
     ]"
   >
-    <el-input type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>

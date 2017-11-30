@@ -1,17 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+/*********登录界面输入框&验证********/
 import Login from '@/components/Login'
+/*********登录页面(包含登录界面)********/
 import Start from '@/components/Start'
+/*********管理员导航栏********/
 import Admin from '@/components/Admin'
+/*********管理员主页面********/
 import Index from '../admin_page/Index_page'
+/*********主页面四个通知栏********/
 import Info_bar from '@/components/Info_bar'
+/*********用户管理页面组件********/
 import Manage_id from '../admin_page/Manage_id'
+/*********学生信息显示组件********/
 import Student_table from '@/components/Student_table'
+/*********教师信息显示组件********/
 import Teacher_table from '@/components/Teacher_table'
+/*********公告显示组件********/
 import Announce_table from '@/components/Announce_table'
+/*********讨论区管理页面********/
 import Manage_discussion from '../admin_page/Manage_discussion'
+/*********课程管理页面********/
 import Manage_lesson from '../admin_page/Manage_lesson'
+/*********公告管理页面(教师可用)********/
 import Manage_announce from '../admin_page/Manage_announce'
+/*********公告发布页面(教师可用)********/
+import Publish_announce from '@/components/_Admin/publish_announce'
+/*********添加课程学生页面(教师可用)********/
+import Add_class from '@/components/_Admin/add_class'
 /*********教师********/
 import Teacher from '@/components/Teacher/Teacher'
 import Info_bar_teaacher from '@/components/Teacher/Info_bar_teacher'
@@ -29,11 +45,6 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'test_info',
-      component: Manage_lesson
-    },
-    {
-      path: '/start',
       name: 'Start',
       component: Start
     },
@@ -61,6 +72,16 @@ export default new Router({
       path: '/admin_index',
       name: 'admin_page',
       component: Index
+    },
+    {
+      path: '/admin/publish_announcement',
+      name: 'publish_announcement',
+      component: Publish_announce
+    },
+    {
+      path: '/admin/add_class',
+      name: 'add_class',
+      component: Add_class
     },
     /******************教师页面teacher_page****************** */
     { 
