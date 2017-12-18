@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Start from '@/components/Start'
 import Platform from '@/components/Platform'
+import Carousel from '@/components/Carousel' //首页走马灯
+import Announce from '@/components/Announce' //公告列表
 
 /*********Admin********/
 import Admin from '@/components/Admin'

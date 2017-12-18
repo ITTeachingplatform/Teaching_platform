@@ -84,6 +84,10 @@ export default {
     store,
     data() {
         return {
+            course: '',
+            name: '',
+            t_class: '',
+            number: '',
           tableData: [{
             course: '2016-05-02',
             name: '王小虎',

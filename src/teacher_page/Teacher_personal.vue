@@ -48,6 +48,8 @@
           </el-row>
         </div>
       </el-row>
+      <!-- 编辑器 -->
+      <script id="editor" type="text/plain"></script>
   </div>
 </template>
 
@@ -67,11 +69,21 @@ export default {
           type: [],
           resource: '',
           desc: '',
-          textarea: ''
+          textarea: '',
+          editor:null
         }
       }
     },
+    mounted(){
+      this.editor = UE.getEditor('editor');
+    },
+    destroyed () {
+      this.editor.destroy();
+    },
     methods: {
+      getUeditorContent(){
+        console.log(this.editor.getContent());
+      },
       onSubmit() {
         console.log('submit!');
       }
