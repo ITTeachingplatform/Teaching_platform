@@ -29,9 +29,9 @@
     <el-menu-item index="2-2">选项2</el-menu-item>
     <el-menu-item index="2-3">选项3</el-menu-item>
   </el-submenu> -->
-  <router-link to="/student_announce"><el-menu-item index="2" class="guide_font">查看公告</el-menu-item></router-link>
-  <router-link to="/student_discussion"><el-menu-item index="3" class="guide_font">查看讨论区</el-menu-item></router-link>
-  <router-link to="/student_courses"><el-menu-item index="4" class="guide_font">管理课程</el-menu-item></router-link>
+  <router-link to="/student_study"><el-menu-item index="2" class="guide_font">学习中心</el-menu-item></router-link>
+  <router-link to="/student_resource"><el-menu-item index="3" class="guide_font">资源中心</el-menu-item></router-link>
+  <router-link to="/student_discussion"><el-menu-item index="4" class="guide_font">讨论区</el-menu-item></router-link>
   <router-link to="/student_personal"><el-menu-item index="5" class="guide_font">个人中心</el-menu-item></router-link>
   <router-link to="/student_platform"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
 </el-menu>

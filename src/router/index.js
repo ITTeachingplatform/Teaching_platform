@@ -30,7 +30,8 @@ import Teacher_platform from '../teacher_page/Teacher_platform'
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
 import Student_announce from '../student_page/Student_announce'
-import Student_courses from '../student_page/Student_courses'
+import Student_resource from '../student_page/Student_resource'
+import Student_study from '../student_page/Student_study'
 import Student_discussion from '../student_page/Student_discussion'
 import Student_personal from '../student_page/Student_personal'
 import Student_index from '../student_page/Student_index'
@@ -115,9 +116,14 @@ export default new Router({
       component: Student_index
     },
     { 
-      path: '/student_announce',
-      name: 'Student_announce',
-      component: Student_announce
+      path: '/student_study',
+      name: 'Student_study',
+      component: Student_study
+    },
+    { 
+      path: '/student_resource',
+      name: 'Student_resource',
+      component: Student_resource
     },
     { 
       path: '/student_discussion',
@@ -130,14 +136,14 @@ export default new Router({
       component: Student_personal
     },
     { 
-      path: '/student_courses',
-      name: 'Student_courses',
-      component: Student_courses
-    },
-    { 
       path: '/student_platform',
       name: 'Student_platform',
       component: Student_platform
-    }
+    },
+    { 
+      path: '/student_announce',
+      name: 'Student_announce',
+      component: Student_announce
+    },
   ]
 })

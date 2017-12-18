@@ -1,6 +1,6 @@
 <template>
-  <div id="student_discussion"  align="center">
-      <Student activeIndex='4'></Student>
+  <div id="student_resource"  align="center">
+      <Student activeIndex='3'></Student>
       <div class="container">
       <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
       <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
@@ -170,7 +170,7 @@
 <script>
 import Student from '../components/Student/Student.vue';
 export default {
-    name: 'Student_discussion',
+    name: 'Student_resource',
       components: {
         'Student': Student,
       },
@@ -184,11 +184,11 @@ export default {
           other_condition: '',
         },
         tableData: [{
-          topic: '关于上课的一点疑问',
-          writer: 'XXX',
-          publish_date: '2017/09/10',
-          tag: 'IT项目管理、学习',
-          final_changer: '小葱',
+          topic: '???',
+          writer: '???',
+          publish_date: '???',
+          tag: '???',
+          final_changer: '???',
           vis_num: '155',
           sup_num: '99',
           anw_num: '10'
