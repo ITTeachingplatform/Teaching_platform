@@ -1,7 +1,9 @@
 <template>
   <div id="teacher_announce">
     <Teacher activeIndex='2'></Teacher>
-    <el-row style="font-size:50px">公告列表</el-row>
+    <el-row style="font-size:50px">公告列表
+      <!-- <el-button v-on="back; flag:false" style="float: right; padding: 3px 0;font-size:20px;" type="text">返回</el-button> -->
+    </el-row>
     <el-row type='flex' justify="center">
       <div class="block" style="width:900px;margin-top:10px">
         <el-progress :percentage="100" :show-text="false" ></el-progress>
@@ -55,14 +57,12 @@
                 </el-form>
               </el-col>
             </el-row>
-
             <el-row type="flex" justify="center">
               <el-button style='width:150px' type="primary">搜索</el-button>
-              <el-button style='width:150px;margin-left:40px'>重置</el-button>
+              <el-button style='width:150px;margin-left:40px' v-on:click="resetForm">重置</el-button>
             </el-row>
           </el-card>
         </el-row>
-
         <el-progress :percentage="100" :show-text="false"></el-progress>
       </div>
     </el-row>
@@ -70,15 +70,14 @@
 <!--列表-->
 <el-row type='flex' justify="center">
       <div class="b" style="width:900px;margin-top:10px">
-
-          <el-table
+  <el-table
     :data="tableData"
     style="width: 100%;margin-top:20px;text-align:left;">
     <el-table-column
       label="公告标题"
       width="300px">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.title }}</span>
+      <template slot-scope="scope" >
+        <span style="margin-left: 10px" @click="centerDialogVisible = true">{{ scope.row.title }}</span>
       </template>
     </el-table-column>
 
@@ -107,67 +106,77 @@
         <span style="margin-left: 10px">{{ scope.row.brief_content }}</span>
       </template>
     </el-table-column>
-
-   
-
   </el-table>
-
+        <el-progress :percentage="100" :show-text="false"></el-progress>
   <!--ww-->
       </div>
 </el-row>
-  
 
-
-   
   </el-col>
 </el-row>
-</el-tab-pane>
-      <el-progress :percentage="100" :show-text="false"></el-progress>
 
-
-
-
+  
+<!-- Dialog -->
+<div >
+  <el-dialog
+    title="标题"
+    :visible.sync="centerDialogVisible" :data="tableData"
+    width="80%"
+    center>aaaaa
+    <div >bbbbb
+    <span slot-scope="scope">发布者：{{ scope.row.writer }}</span>
+    <template slot-scope="scope">
+    <span>发布时间：{{ scope.publish_date }}</span>
+    </template>
+    <template slot-scope="scope">
+    <span>{{ scope.brief_content }}</span>
+    </template>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="centerDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+    </span>
+  </el-dialog>
+</div>
+<!-- END Dialog -->
 </div>
 </template>
 
 
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
+import store from '../vuex/teacher/store';
 export default {
     name: 'teacher_announce',
       components: {
         'Teacher': Teacher
       },
+      store,
       data() {
       return {
+        centerDialogVisible: false,
         radio: '1',
         numberValidateForm: {
           title: '',
           writer: '',
           publish_date: '',
-          brief_content: '',
+          brief_content: '',         
         },
-        tableData: [{
-          title: '关于大学课后学习情况调查',
-          writer: '饶浩聪',
-          publish_date: '2017/09/10',
-          brief_content: '临近期末.....大家的复习进度......',
-        }, {
-          title: '关于IT项目管理的注意事项',
-          writer: '饶浩聪',
-          publish_date: '2017/10/10',
-          brief_content: '临近大作业提交，我们需要.....',
-        }]
       }
     },
+    computed: {
+         tableData:{
+          get:function(){
+              return store.state.announce_info
+          }
+         },
+      },
+      mounted () {
+        store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
+      },     
+
     methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
-      submitForm(formName) {
+            submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');

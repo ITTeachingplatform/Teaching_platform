@@ -140,7 +140,7 @@ import store from '../vuex/admin/store'
       components: {
         'Admin': Admin
       },
-      store,
+    store,  
       data() {
         return {
           radio: '1',
