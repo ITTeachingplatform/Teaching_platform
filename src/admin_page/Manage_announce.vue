@@ -22,7 +22,7 @@
     :rules="[
     ]"
   >
-    <el-input type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+    <el-input type="id_word" v-model="numberValidateForm.id_word" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -35,7 +35,7 @@
     :rules="[
     ]"
   >
-    <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -55,7 +55,7 @@
     :rules="[
     ]"
   >
-    <el-input type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+    <el-input type="date" v-model="numberValidateForm.publish_date" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>

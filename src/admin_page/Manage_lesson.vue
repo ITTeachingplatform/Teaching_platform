@@ -22,7 +22,7 @@
     :rules="[
     ]"
   >
-    <el-input type="lesson_name" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
+    <el-input type="lesson_name" v-model="numberValidateForm.lesson_name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -35,7 +35,7 @@
     :rules="[
     ]"
   >
-    <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -51,7 +51,7 @@
     :rules="[
     ]"
   >
-    <el-input type="pub_department" v-model.number="numberValidateForm.pub_department" auto-complete="off"></el-input>
+    <el-input type="pub_department" v-model="numberValidateForm.pub_department" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -63,7 +63,7 @@
     :rules="[
     ]"
   >
-    <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+    <el-input type="other_condition" v-model="numberValidateForm.other_condition" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -75,7 +75,7 @@
     :rules="[
     ]"
   >
-    <el-input type="publish_year" v-model.number="numberValidateForm.publish_year" auto-complete="off"></el-input>
+    <el-input type="publish_year" v-model="numberValidateForm.publish_year" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>

@@ -39,7 +39,8 @@ import Student_discussion from '../student_page/Student_discussion'
 import Student_personal from '../student_page/Student_personal'
 import Student_index from '../student_page/Student_index'
 import Student_platform from '../student_page/Student_platform'
-
+// test
+import Test from '../Test'
 
 Vue.use(Router)
 
@@ -116,6 +117,11 @@ export default new Router({
       path: '/course_page',
       name: 'Course_page',
       component: Course_page
+    },
+    {
+      path:'/test',
+      name:'test',
+      component:Test
     },
     /*******************Student*******************/
     { 

@@ -96,11 +96,11 @@
           </template>
         </el-table-column>
 
-        <el-table-colume
+        <el-table-column
           label="发布者"
           width="70px">
           <template slot-scope="scope">
-            <el-popover trigger"hover" placement="top">
+            <el-popover trigger="hover" placement="top">
               <p>公告者: {{ scope.row.writer }}</p>
               <p>info: 可以显示额外信息</p>
               <div slot="reference" class="name-wrapper">
@@ -108,7 +108,7 @@
               </div>
             </el-popover>
           </template>
-        </el-table-colume>
+        </el-table-column>
 
         <el-table-column label="发布时间" width="150px">
           <template slot-scope="scope">
@@ -137,12 +137,6 @@
         <el-table-column label="回复数" width="100px">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.anw_num }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="支持数" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.sup_num }}</span>
           </template>
         </el-table-column>
         </el-table>
