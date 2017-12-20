@@ -1,51 +1,45 @@
 <template>
 <div id='student_index'>
-<Student activeIndex='1'></Student>
-<el-row type='flex' justify="center">
-  <div class="block" style="width:900px;margin-top:20px">
-    <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
-    <el-carousel height="250px">
-      <el-carousel-item v-for="item in 4" :key="item">
-         <el-row type="flex" justify="end">
-        <el-button round style="margin-right: 20px; margin-top:20px">查看更多</el-button>
-        </el-row>
-        <h3>{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
+  <Student activeIndex='1'></Student>
+  <div v-if="isAnnounce">
+    <!-- 公告列表 -->
+    <announce @hideAnnounce="hide"></announce>
   </div>
-</el-row>
-<el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">学习信息</el-row>
-<Info></Info>
+  <div v-else>
+    <!-- 通知栏 -->
+    <Info @showAnnounce="show"></Info>
+  </div>
 </div>
 </template>
 
 <script>
 import Student from '../components/Student/Student.vue';
 import Info_bar_Student from '../components/Student/Info_bar_Student.vue';
+import Announce from '../components/Announce.vue';
 
 export default {
-      name: 'student_index',
-      components: {
-        'Student': Student,
-        'Info': Info_bar_Student
-      }
+  name: 'student_index',
+  data(){
+    return{
+      isAnnounce:false
+    }
+  },
+  components: {
+    'Student': Student,
+    'Info': Info_bar_Student,
+    'announce':Announce
+  },
+  methods: {
+    show(flag){
+      this.isAnnounce=flag;
+    },
+    hide(flag){
+      this.isAnnounce=flag;
+    }
+  }
 }
 </script>
 
 <style scope>
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
 
-  .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
-  }
 </style>

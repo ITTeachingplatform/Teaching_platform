@@ -14,7 +14,7 @@
 <el-tag id='student_id' class="tag_style">学生账号：201530</el-tag>
     </el-row>
     <el-row>
-<el-tag id='student_name' class="tag_style">学生姓名：志宏</el-tag>
+<el-tag id='student_name' class="tag_style">学生姓名：EDC</el-tag>
     </el-row>
   </el-col>
   </el-row>

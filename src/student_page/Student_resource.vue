@@ -1,207 +1,118 @@
 <template>
-  <div id="student_resource"  align="center">
-      <Student activeIndex='3'></Student>
-      <div class="container">
-      <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
-      <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
-
+  <div id="student_discussion"  align="center">
+    <Student activeIndex='3'></Student>
+    <div class="container">
+      <el-row style="font-size:50px;margin-top:20px">课程资源</el-row>
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <el-row type="flex" justify="center" >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>搜索框</span>
-            <el-button style="float: right;padding: 3px 0" type="text">操作按钮</el-button>
           </div>
-          <el-row type="flex" justify="start">
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item
-                  label="讨论区关键词"
-                  prop="id_word" 
-                  :rules="[]"
-                  >
-                  <el-input type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+          <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <!--row 1-->
+            <el-row type="flex" justify="start" :gutter="20">
+              <el-col :span="16">
+                <el-form-item label="文件关键词" prop="keyword" :rules="[]">
+                  <el-input type="keyword" v-model="ruleForm.keyword" auto-complete="off"></el-input>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="220px" class="demo-ruleForm">
-                <el-form-item
-                  label="讨论区发布者"
-                  prop="name"
-                  :rules="[]"
-                  >
-                  <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="资源类型" prop="resource_type" required="true">
+                  <el-select v-model="ruleForm.resource_type" placeholder="请选择资源类型">
+                    <el-option label="题库" value="bank"></el-option>
+                    <el-option label="教学资源" value="resource"></el-option>
+                  </el-select>
                 </el-form-item>
-              </el-form>
-            </el-col>
-          </el-row>
-
-          <el-row type="flex" justify="start">
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item
-                  label="其他条件"
-                  prop="other_condition"
-                  :rules="[]"
-                  >
-                  <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+              </el-col>
+            </el-row>
+            <!--row 2-->
+            <el-row type="flex" justify="start" :gutter="20">
+              <el-col :span="14">
+                <el-form-item label="课程名称" prop="tag" :rules="[]">
+                  <el-input type="tag" v-model="ruleForm.tag" auto-complete="off"></el-input>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item
-                  label="其他条件"
-                  prop="other_condition"
-                  :rules="[]"
-                  >
-                  <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="课程名称" prop="date" :rule="[]">
+                  <el-date-picker type="date" v-model="ruleForm.date" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
-                <el-form-item
-                  label="公告发布时间"
-                  prop="publish_date"
-                  :rule="[]"
-                  >
-                  <el-input type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-col>
-          </el-row>
+              </el-col>
+            </el-row>
+          </el-form>
 
           <el-row type="flex" justify="center">
-            <el-button style='width:150px' type="primary">搜索</el-button>
-            <el-button style='width:150px;margin-left:40px'>重置</el-button>
+            <el-button style='width:150px' type="primary" @click="submitForm('ruleForm')">搜索</el-button>
+            <el-button style='width:150px;margin-left:40px' @click="resetForm('ruleForm')">重置</el-button>
           </el-row>
         </el-card>
       </el-row>
       <el-progress :percentage="100" :show-text="false"></el-progress>
-
+      <!--Category bar-->
       <el-row type="flex" justify="center" >
-        <el-table
-        :data="tableData"
-        style="width:100%">
-        <el-table-column
-          label="讨论主题"
-          width="200px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{scope.row.topic }}</span>
-          </template>
-        </el-table-column>
+        <el-table :data="tableData" style="width:100%">
 
-        <el-table-colume
-          label="发布者"
-          width="70px">
-          <template slot-scope="scope">
-            <el-popover trigger"hover" placement="top">
-              <p>公告者: {{ scope.row.writer }}</p>
-              <p>info: 可以显示额外信息</p>
-              <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">{{ scope.row.writer }}</el-tag>
-              </div>
-            </el-popover>
-          </template>
-        </el-table-colume>
+          <el-table-column label="标题" width="200px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="发布时间" width="150px">
+            <template slot-scope="scope">
+              <span style="margin-left:10px">{{ scope.row.date }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="发布时间" width="150px">
-          <template slot-scope="scope">
-            <span style="margin-left:10px">{{ scope.row.publish_date }}</span>
-          </template>
-        </el-table-column>
+          <el-table-column label="课程名称" width="180px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.tag }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="标签" width="180px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.tag }}</span>
-          </template>
-        </el-table-column>
+          <el-table-column label="类别" width="100px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.resource_type }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="最后修改者" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.final_changer }}</span>
-          </template>
-        </el-table-column>
+          <el-table-column label="下载数" width="100px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.download_num }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="浏览数" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.vis_num}}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="回复数" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.anw_num }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="支持数" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.sup_num }}</span>
-          </template>
-        </el-table-column>
         </el-table>
       </el-row>
     </div>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
 </template>
 
 <script>
 import Student from '../components/Student/Student.vue';
 export default {
-    name: 'Student_resource',
+    name: 'Student_discussion',
       components: {
         'Student': Student,
       },
-      data() {
+    data() {
       return {
         radio: '1',
-        numberValidateForm: {
-          id_word: '',
-          writer: '',
-          publish_date: '',
-          other_condition: '',
+        ruleForm: {
+          keyword: '',
+          resource_type: '',
+          date: '',
+          tag: '',
         },
         tableData: [{
-          topic: '???',
-          writer: '???',
-          publish_date: '???',
-          tag: '???',
-          final_changer: '???',
-          vis_num: '155',
-          sup_num: '99',
-          anw_num: '10'
+          name: 'xxxx',
+          date: '2017/09/10',
+          tag: 'IT项目管理',
+          resource_type: '题库',
+          download_num: '10'
         }]
       }
     },
     methods: {
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

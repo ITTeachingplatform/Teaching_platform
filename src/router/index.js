@@ -33,13 +33,16 @@ import Course_introduction from '@/components/Teacher/Course_introduction'
 /*********Student********/
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
-import Student_announce from '../student_page/Student_announce'
+import Info_bar_Study from '@/components/Student/Info_bar_Study'
+import Info_bar_Class from '@/components/Student/Info_bar_Class'
+import Student_index from '../student_page/Student_index'
 import Student_resource from '../student_page/Student_resource'
 import Student_study from '../student_page/Student_study'
 import Student_discussion from '../student_page/Student_discussion'
 import Student_personal from '../student_page/Student_personal'
-import Student_index from '../student_page/Student_index'
 import Student_platform from '../student_page/Student_platform'
+import Student_announce from '../student_page/Student_announce'
+import Student_courses from '../student_page/Student_courses'
 
 
 Vue.use(Router)
@@ -153,6 +156,11 @@ export default new Router({
       path: '/student_announce',
       name: 'Student_announce',
       component: Student_announce
+    },
+    { 
+      path: '/student_courses',
+      name: 'Student_courses',
+      component: Student_courses
     },
   ]
 })
