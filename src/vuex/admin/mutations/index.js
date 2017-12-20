@@ -12,16 +12,20 @@ const mutations = {
             name: '饶浩聪',
             department: '软件学院',
             major: '软件工程',
-            class: '4班'
+            class: '4班',
+            is_select: false
           }, {
             id: '2016306126xx',
             name: '小聪',
+            is_select: false
           }, {
             id: '2016306126xx',
             name: '大葱',
+            is_select: false
           }, {
             id: '2016306126xx',
             name: '大聪',
+            is_select: false
           }]
     },
     [teacher.GET_INFO] (state){
