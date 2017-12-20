@@ -59,21 +59,21 @@
         <el-table :data="tableData" style="width: 100%;margin-top:20px;text-align:left;">
           <el-table-column label="公告标题" width="300px">
             <template slot-scope="scope">
-              <span style="margin-left: 10px" @click="centerDialogVisible = true">{{ scope.row.title }}</span></template>
+              <span style="margin-left: 10px" @click="centerDialogVisible = true">{{ scope.row.announcement_title }}</span></template>
           </el-table-column>
           <el-table-column label="发布者" width="100px">
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top">
-                <p>公告者: {{ scope.row.writer }}</p>
+                <p>公告者: {{ scope.row.ann_publisher }}</p>
                 <p>info: 可以显示额外信息</p>
                 <div slot="reference" class="name-wrapper">
-                  <el-tag size="medium">{{ scope.row.writer }}</el-tag></div>
+                  <el-tag size="medium">{{ scope.row.ann_publisher }}</el-tag></div>
               </el-popover>
             </template>
           </el-table-column>
           <el-table-column label="发布时间(年月日)" width="200px">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{ scope.row.publish_date }}</span></template>
+              <span style="margin-left: 10px">{{ scope.row.announcement_date }}</span></template>
           </el-table-column>
           <el-table-column label="内容摘要" width="300px">
             <template slot-scope="scope">

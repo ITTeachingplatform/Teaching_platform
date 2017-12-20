@@ -46,15 +46,21 @@ const mutations = {
     },
     [announce.GET_ITEM] (state){
       state.announce_info = [{
-        title: '关于大学课后学习情况调查',
-        writer: '饶浩聪',
-        publish_date: '2017/09/10',
+        announcement_ID:'',
+        announcement_title: '关于大学课后学习情况调查',
+        announcement_content:'',
+        announcement_date: '2017/09/10',
+        ann_publisher: '饶浩聪',
+        ann_course:'',            //公告所属课程
         brief_content: '临近期末.....大家的复习进度......',
       }, {
-        title: '关于IT项目管理的注意事项',
-        writer: '饶浩聪',
-        publish_date: '2017/10/10',
-        brief_content: '临近大作业提交，我们需要.....',
+        cou_announcement_ID:'',
+        announcement_title: '关于大学课后学习情况调查',
+        announcement_content:'',
+        announcement_date: '2017/09/10',
+        ann_publisher: '饶浩聪',
+        ann_course:'',            //公告所属课程
+        brief_content: '临近期末.....大家的复习进度......',
       }]
     },
   }

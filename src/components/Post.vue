@@ -16,30 +16,31 @@
                     </el-col>
                 </div>
                 </el-card>  -->
-                <div id="topic">
+                <div id="topic" >
                     <el-container>
                         <!-- 帖子标题、标签 -->
-                        <el-header><strong>{{post_title}}</strong><el-tag>{{post_label}}</el-tag></el-header>
+                        <el-header><strong>{{postData.post_title}}</strong><el-tag>{{postData.post_label}}</el-tag></el-header>
                         <el-container>
                             <!-- 个人信息 -->
-                            <el-aside width="200px">{{post_starter}}</el-aside>
+                            <el-aside width="200px">{{postData.post_starter}}</el-aside>
                             <el-container>
                                 <!-- 帖子内容 -->
-                                <el-main>Main</el-main>
+                                <el-main>{{postData.post_content}}</el-main>
                                 <!-- 回复数、浏览数、发帖时间 -->
-                                <el-footer>回复数：{{post_reply_num}} 浏览数：{{post_browse_num}} {{post_time}}</el-footer>
+                                <el-footer>回复数：{{postData.post_reply_num}} 浏览数：{{postData.post_browse_num}} {{postData.post_date}}</el-footer>
                             </el-container>
                         </el-container>
                     </el-container>
                 </div>
-                <div>
+                <div id="reply">
                     <el-container>
                         <!-- <el-header>Header</el-header> -->
                         <!-- <el-container> -->
-                            <el-aside width="200px">Aside</el-aside>
+                            <el-aside width="200px">{{reply_sender}}</el-aside>
                             <el-container>
-                                <el-main>Main</el-main>
-                                <el-footer>Footer</el-footer>
+                                <!-- 回复内容 -->
+                                <el-main>{{reply_content}}</el-main>
+                                <el-footer>{{reply_time}}</el-footer>
                             </el-container>
                         <!-- </el-container> -->
                     </el-container>
@@ -56,6 +57,31 @@ import Editor from './Editor'
 export default {
     components: {
         Editor,
+    },
+    data(){
+        return{
+            postData:{
+                post_ID:'',
+                post_title:'aaaa',
+                post_label:'s',
+                post_content:'hhhhhhh',
+                post_date:'yyyymmdd',
+                post_starter:'ww',
+                post_reply_num:'22',
+                post_browse_num:'22',
+                post_last_reviser:'22',
+            },
+            replyData:[{
+                reply_ID:'',
+                reply_belong:'fff',
+                reply_content:'fff',
+                reply_sender:'fff',
+                reply_time:'tt',
+            }]
+
+        }
+    },
+    computed: {
     }
 }
 </script>
