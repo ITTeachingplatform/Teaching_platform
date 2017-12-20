@@ -5,7 +5,7 @@
           <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span>搜索框</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    <el-button style="float: right; padding: 3px 0" type="text" @click="handleEdit(-1)">添加教师</el-button>
   </div>
 
   <el-row type="flex" justify="start">
@@ -107,7 +107,7 @@
       label="工号"
       width="180px">
       <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.id }}</span>
+         <router-link to=''><span style="margin-left: 10px" @click="show_info(scope.$index)">{{ scope.row.id }}</span></router-link>
       </template>
     </el-table-column>
 
@@ -159,7 +159,102 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-    
+
+ <!-- 弹出信息框 -->
+
+<el-dialog
+  title="教师信息"
+  :visible.sync="info_Visible"
+  width="18%">
+  <el-row>姓名：{{name}}</el-row>
+  <el-row>工号：{{id}}</el-row>
+  <el-row>密码：{{password}}</el-row>
+  <el-row>个人简介：{{introduce}}</el-row>
+  <el-row>入职年份：{{year}}</el-row>
+  <el-row>联系方式：{{email}}</el-row>
+    <el-table :data="gridData">
+    <el-table-column property="subject" label="课程名称" width="60px"></el-table-column>
+    <el-table-column property="school" label="开设学院" width="60px"></el-table-column>
+    <el-table-column property="number" label="学生人数" width="60px"></el-table-column>
+  </el-table>
+  <span></span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="info_Visible = false">取 消</el-button>
+    <el-button type="primary" @click="info_Visible = false">确 定</el-button>
+  </span>
+</el-dialog>
+
+
+<el-dialog
+  title="教师信息"
+  :visible.sync="edit_Visible"
+  width="18%"
+  :before-close="handleClose">
+  <el-row>姓名：<el-input v-model="name"></el-input></el-row>
+  <el-row>工号：<el-input v-model="id"></el-input></el-row>
+  <el-row>密码：<el-input v-model="password"></el-input></el-row>
+  <el-row>个人简介：<el-input v-model="introduce"></el-input></el-row>
+  <el-row>入职年份：<el-input v-model="year"></el-input></el-row>
+  <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
+    <el-table :data="gridData">
+    <el-table-column property="subject" label="课程名称" width="60px"></el-table-column>
+    <el-table-column property="school" label="开设学院" width="60px"></el-table-column>
+    <el-table-column property="number" label="学生人数" width="60px"></el-table-column>
+  </el-table>
+  <span></span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="edit_Visible = false">取 消</el-button>
+    <el-button type="primary" @click="edit_Visible = false">确 定</el-button>
+  </span>
+</el-dialog>
+  
+<el-dialog
+  title="添加教师信息"
+  :visible.sync="add_Visible"
+  width="18%"
+  :before-close="handleClose">
+  <el-row>姓名：<el-input v-model="name"></el-input></el-row>
+  <el-row>工号：<el-input v-model="id"></el-input></el-row>
+  <el-row>密码：<el-input v-model="password"></el-input></el-row>
+  <el-row>个人简介：<el-input v-model="introduce"></el-input></el-row>
+  <el-row>入职年份：<el-input v-model="year"></el-input></el-row>
+  <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="add_Visible = false">取 消</el-button>
+    <el-button type="primary" @click="add_Visible = false; class_Visible =true">确 定</el-button>
+  </span>
+</el-dialog>
+
+<el-dialog
+  title="填写教师课程信息"
+  :visible.sync="class_Visible"
+  width="18%"
+  :before-close="handleClose">
+  <el-row>所属学院： 
+    <el-select v-model="school_value" placeholder="请选择学院">
+    <el-option
+      v-for="item in school_options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+  </el-row>
+  <el-row>课程名称：<el-select v-model="lesson_value" placeholder="请选择课程">
+    <el-option
+      v-for="item in lesson_options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select></el-row>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="class_Visible = false">取 消</el-button>
+    <el-button type="primary" @click="class_Visible = false">确 定</el-button>
+  </span>
+</el-dialog>
+
+
 </div>
 </template>
 
@@ -184,12 +279,49 @@ import store from '../vuex/admin/store'
           department: '',
           major: '',
           take_job_date: ''
-        }
+        },
+        name: '李红',
+        id: 'XXXXX',
+        password: '12345678',
+        introduce:'IT项目管理老师XXXX',
+        school: '软件学院',
+        email: '111222555@qq.com',
+        year:'2008',
+          info_Visible: false,
+          edit_Visible: false,
+          add_Visible: false,
+          class_Visible: false,
+           gridData: [{
+          subject: 'IT项目管理',
+          school: '软件学院',
+          number: '90'       
+        },
+        {
+          subject: '软件架构实践',
+          school: '软件学院',
+          number: '90'       
+        }],
+           school_options: [{
+          value: '软件学院',
+          label: '软件学院'
+        }, {
+          value: '计算机科学学院',
+          label: '计算机科学学院'
+        }],
+          lesson_options: [],
+          lesson_value: '',
+          school_value: '',
       }
     },
     methods: {
       handleEdit(index, row) {
+        if(index == -1){
+          this.add_Visible= true;
+        }
+        else{
+         this.edit_Visible = true;
         console.log(index, row);
+        }
       },
       handleDelete(index, row) {
         console.log(index, row);
@@ -206,6 +338,19 @@ import store from '../vuex/admin/store'
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+       show_info(index){
+        this.info_Visible = true;
+        console.log(index);
+      },
+      handleClose(done) {
+        this.$confirm('确认修改信息？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {
+            done();
+          });
       }
     }
     // 用于测试

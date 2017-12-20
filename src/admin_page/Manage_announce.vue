@@ -81,7 +81,7 @@
       label="公告标题"
       width="280px">
       <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.title }}</span>
+        <span style="margin-left: 10px" @click="show_announce(scope.$index)">{{ scope.row.title }}</span>
       </template>
     </el-table-column>
 
@@ -127,7 +127,40 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-    
+
+
+<!-- 修改公告对话框 -->
+<el-dialog title="修改公告" :visible.sync="dialogFormVisible" :before-close="handleClose">
+  <el-form :model="form">
+    <el-form-item label="公告名称" :label-width="formLabelWidth">
+      <el-input v-model="form.title" auto-complete="off"></el-input>
+    </el-form-item>
+    <el-row type="flex"  justify="start">
+    <el-col :span="10"><el-form-item label="发布者"  :label-width="formLabelWidth">{{author}}</el-form-item></el-col>
+    <el-form-item label="发布时间"  :label-width="formLabelWidth">{{time}}</el-form-item>
+    </el-row>
+    <el-form-item label="公告类型(标签)" :label-width="formLabelWidth">
+      <el-select v-model="form.announce_type" placeholder="请选择公告类型(标签)" style="margin-right:65%;width:300px">
+        <el-option label="系统公告" value="system"></el-option>
+        <el-option label="课程公告" value="lesson"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-input
+  type="textarea"
+  :rows="10"
+  placeholder="请输入内容"
+  v-model="content">
+</el-input>
+
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
+  </div>
+
+</el-dialog>
+
+
 </div>
 </template>
 
@@ -149,7 +182,16 @@ import store from '../vuex/admin/store'
             writer: '',
             publish_date: '',
             brief_content: '',
-          }
+          },
+        dialogFormVisible: false,
+        form: {
+          title: '',
+          announce_type: '',
+        },
+        formLabelWidth: '120px',
+        time: '00:00:00',
+        content: '在此处修改公告内容',
+        author: '管理员/老师'
         }
       },
       computed: {
@@ -164,10 +206,14 @@ import store from '../vuex/admin/store'
       },     
     methods: {
       handleEdit(index, row) {
+        this.dialogFormVisible = true;
         console.log(index, row);
       },
       handleDelete(index, row) {
         console.log(index, row);
+      },
+      show_announce(index){
+        console.log(index);
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -181,6 +227,13 @@ import store from '../vuex/admin/store'
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      handleClose(done) {
+        this.$confirm('确认修改公告？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     }
   }
