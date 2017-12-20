@@ -22,7 +22,11 @@
     :rules="[
     ]"
   >
+<<<<<<< HEAD
     <el-input type="lesson_name" v-model="numberValidateForm.lesson_name" auto-complete="off"></el-input>
+=======
+    <el-input prefix-icon="el-icon-search"type="lesson_name" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
+>>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -35,7 +39,11 @@
     :rules="[
     ]"
   >
+<<<<<<< HEAD
     <el-input type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
+=======
+    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+>>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -51,7 +59,11 @@
     :rules="[
     ]"
   >
+<<<<<<< HEAD
     <el-input type="pub_department" v-model="numberValidateForm.pub_department" auto-complete="off"></el-input>
+=======
+    <el-input prefix-icon="el-icon-search"type="pub_department" v-model.number="numberValidateForm.pub_department" auto-complete="off"></el-input>
+>>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -63,7 +75,11 @@
     :rules="[
     ]"
   >
+<<<<<<< HEAD
     <el-input type="other_condition" v-model="numberValidateForm.other_condition" auto-complete="off"></el-input>
+=======
+    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+>>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -75,7 +91,11 @@
     :rules="[
     ]"
   >
+<<<<<<< HEAD
     <el-input type="publish_year" v-model="numberValidateForm.publish_year" auto-complete="off"></el-input>
+=======
+    <el-input prefix-icon="el-icon-search"type="publish_year" v-model.number="numberValidateForm.publish_year" auto-complete="off"></el-input>
+>>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
