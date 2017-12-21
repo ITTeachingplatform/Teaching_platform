@@ -88,8 +88,8 @@
     <!-- Dialog -->
     <div>
       <el-dialog title="标题" :visible.sync="centerDialogVisible" width="80%" center>
-        <el-row>发布者：</el-row>
-        <el-row>发布时间：</el-row>
+        <el-row>发布者：{{tableData.row.ann_publisher}}</el-row>
+        <el-row>发布时间：{{tableData.row.publish_date}}</el-row>
         <el-row></el-row>
         <span slot="footer" class="dialog-footer">
           <!-- <el-button @click="centerDialogVisible=f alse">取 消</el-button> -->
@@ -114,7 +114,7 @@ export default {
         radio: '1',
         validateForm: {
           keyword: '',
-          cou_ann_publisher: '',
+          ann_publisher: '',
           publish_date: '',
           brief_content: '',
           type: '',         

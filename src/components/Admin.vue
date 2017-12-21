@@ -32,7 +32,7 @@
   <router-link to="/admin/manage_announce"><el-menu-item index="3" class="guide_font">管理公告</el-menu-item></router-link>
   <router-link to="/admin/manage_discussion"><el-menu-item index="4" class="guide_font">管理讨论区</el-menu-item></router-link>
   <router-link to="/admin/manage_lesson"><el-menu-item index="5" class="guide_font">管理课程</el-menu-item></router-link>
-  <router-link to="/platform_info"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
+  <router-link to="/admin/platform_info"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
 </el-menu>
   </el-row>
   <router-view></router-view>  

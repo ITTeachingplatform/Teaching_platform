@@ -4,8 +4,9 @@
 <el-row style="font-size:50px;margin-top:20px">
         课程列表
 </el-row>
- <el-button round style="margin-left:600px;margin-bottom:20px">添加课程</el-button> 
-  
+  <router-link to="/admin/add_class">
+ <el-button round style="margin-left:600px;margin-bottom:20px" @click="dialogFormVisible = true">添加课程</el-button> 
+  </router-link>
 <el-row type="flex" justify="center" style="margin-left:50px;margin-right:50px">
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -22,11 +23,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="lesson_name" v-model="numberValidateForm.lesson_name" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="lesson_name" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -39,11 +36,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -59,11 +52,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="pub_department" v-model="numberValidateForm.pub_department" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="pub_department" v-model.number="numberValidateForm.pub_department" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -75,11 +64,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="other_condition" v-model="numberValidateForm.other_condition" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -91,11 +76,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="publish_year" v-model="numberValidateForm.publish_year" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="publish_year" v-model.number="numberValidateForm.publish_year" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -167,7 +148,42 @@
   </el-col>
 </el-row>
   </el-tab-pane>
-    
+    <!-- 添加课程弹框 -->
+    <!-- <div> -->
+      <!-- Form -->
+      <!-- <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
+      <!-- <el-dialog title="添加课程" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+          <el-form-item label="课程名称" :label-width="formLabelWidth">
+            <el-input v-model="form.course_name" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="任课教师" :label-width="formLabelWidth">
+            <el-select v-model="form.teacher_name" placeholder="">
+              <el-option label="李红" value="teacher_id"></el-option>
+              <el-option label="张某" value="teacher_id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="开设学院" :label-width="formLabelWidth">
+            <el-select v-model="form.faculty_name" placeholder="">
+              <el-option label="软件学院" value="faculty_id"></el-option>
+              <el-option label="XX" value="faculty_id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="课程介绍" prop="course_introduction" :label-width="formLabelWidth">
+          <el-input v-model="form.course_introduction" auto-complete="off" type="textarea":rows="6"></el-input>
+           </el-form-item>                        
+          <span>添加学生</span>
+          <el-form-item label="学生姓名" :label-width="formLabelWidth">
+            <el-input v-model="form.student_name" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
+
+    </div> -->
 </div>
 </template>
 
@@ -189,7 +205,19 @@ import store from '../vuex/admin/store'
           pub_department: '',
           other_condition: '',
           publish_year: ''
-        }
+        },
+        dialogFormVisible: false,
+        form: {
+          course_name: '',
+          teacher_name: '',
+          faculty_name: '',
+          course_introduction: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px'
       }
     },
      computed: {

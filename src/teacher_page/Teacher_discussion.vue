@@ -3,8 +3,7 @@
       <Teacher activeIndex='3'></Teacher>
       <div class="container">
       <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
-      <el-button round style="margin-left:600px;margin-bottom:20px" @click="set_dialog">发布讨论</el-button>
-      <add-post show_dialog="open_add_post"></add-post>
+      <router-link to="/teacher/publish_post"><el-button round style="margin-left:600px;margin-bottom:20px"  >发布讨论</el-button></router-link>
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <el-row type="flex" justify="center" >
         <el-card class="box-card">
@@ -147,17 +146,14 @@
 
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
-import Add_post from '../components/Add_post.vue'
 export default {
     name: 'teacher_discussion',
       components: {
         'Teacher': Teacher,
-        'add-post':Add_post
       },
       data() {
       return {
         radio: '1',
-        open_add_post:false,
         numberValidateForm: {
           id_word: '',
           writer: '',
@@ -177,9 +173,6 @@ export default {
       }
     },
     methods: {
-      set_dialog(){
-        this.open_add_post=true;
-      },
       handleEdit(index, row) {
         console.log(index, row);
       },

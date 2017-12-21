@@ -5,15 +5,11 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 /*********登录页面(包含登录界面)********/
 import Start from '@/components/Start'
-<<<<<<< HEAD
 import Platform from '@/components/Platform'
 import Carousel from '@/components/Carousel' //首页走马灯
 import Announce from '@/components/Announce' //公告列表
 
 /*********Admin********/
-import Admin from '@/components/Admin'
-import Info_bar from '@/components/Info_bar'
-=======
 /*********管理员导航栏********/
 import Admin from '@/components/Admin'
 /*********管理员主页面********/
@@ -23,33 +19,27 @@ import Info_bar from '@/components/Info_bar'
 /*********用户管理页面组件********/
 import Manage_id from '../admin_page/Manage_id'
 /*********学生信息显示组件********/
->>>>>>> refs/remotes/origin/hc_code
 import Student_table from '@/components/Student_table'
 /*********教师信息显示组件********/
 import Teacher_table from '@/components/Teacher_table'
 /*********公告显示组件********/
 import Announce_table from '@/components/Announce_table'
-<<<<<<< HEAD
-import Index from '../admin_page/Index_page'
-import Manage_id from '../admin_page/Manage_id'
-=======
 /*********讨论区管理页面********/
->>>>>>> refs/remotes/origin/hc_code
 import Manage_discussion from '../admin_page/Manage_discussion'
 /*********课程管理页面********/
 import Manage_lesson from '../admin_page/Manage_lesson'
 /*********公告管理页面(教师可用)********/
 import Manage_announce from '../admin_page/Manage_announce'
-<<<<<<< HEAD
-
-/*********Teacher********/
-=======
 /*********公告发布页面(教师可用)********/
 import Publish_announce from '@/components/_Admin/publish_announce'
 /*********添加课程学生页面(教师可用)********/
 import Add_class from '@/components/_Admin/add_class'
+/*********公告发布帖子页面********/
+import Publish_post from '@/components/_Admin/publish_post'
+/*********管理员平台简介页面********/
+import Manage_platform from '../admin_page/Manage_platform'
+
 /*********教师********/
->>>>>>> refs/remotes/origin/hc_code
 import Teacher from '@/components/Teacher/Teacher'
 import Info_bar_teacher from '@/components/Teacher/Info_bar_teacher'
 import Teacher_announce from '../teacher_page/Teacher_announce'
@@ -60,6 +50,8 @@ import Teacher_index from '../teacher_page/Teacher_index'
 import Teacher_platform from '../teacher_page/Teacher_platform'
 import Course_page from '../teacher_page/subpage/Course_page'
 import Course_introduction from '@/components/Teacher/Course_introduction'
+/*********教师发布帖子********/
+import Teacher_publish_post from '../teacher_page/subpage/Teacher_publish_post'
 /*********Student********/
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
@@ -107,9 +99,6 @@ export default new Router({
       name: 'admin_page',
       component: Index
     },
-<<<<<<< HEAD
-    /*******************Teacher*******************/
-=======
     {
       path: '/admin/publish_announcement',
       name: 'publish_announcement',
@@ -120,8 +109,17 @@ export default new Router({
       name: 'add_class',
       component: Add_class
     },
+    {
+      path: '/admin/publish_post',
+      name: 'publish_post',
+      component: Publish_post
+    },
+    {
+      path: '/admin/platform_info',
+      name: 'manage_platform',
+      component: Manage_platform
+    },
     /******************教师页面teacher_page****************** */
->>>>>>> refs/remotes/origin/hc_code
     { 
       path: '/teacher_index',
       name: 'Teacher_index',
@@ -161,6 +159,11 @@ export default new Router({
       path:'/test',
       name:'test',
       component:Test
+    },
+    {
+      path:'/teacher/publish_post',
+      name: 'Teacher_publish_post',
+      component: Teacher_publish_post
     },
     /*******************Student*******************/
     { 

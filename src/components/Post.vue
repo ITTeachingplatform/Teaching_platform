@@ -16,7 +16,7 @@
                     </el-col>
                 </div>
                 </el-card>  -->
-                <div id="topic" >
+                <div id="topic" :data="postData">
                     <el-container>
                         <!-- 帖子标题、标签 -->
                         <el-header><strong>{{postData.post_title}}</strong><el-tag>{{postData.post_label}}</el-tag></el-header>
@@ -82,6 +82,7 @@ export default {
         }
     },
     computed: {
+        
     }
 }
 </script>

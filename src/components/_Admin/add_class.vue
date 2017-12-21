@@ -1,6 +1,6 @@
 <template>
 <div id="add_class">
-              <Admin activeIndex='5'> </Admin>
+  <Admin activeIndex='5'> </Admin>
   <el-row style="font-size:50px;margin-top:20px">
         添加课程(教学班)
 </el-row>
@@ -8,7 +8,7 @@
   <el-card class="box-card" style="margin-left:20%;margin-right:20%;margin-top:15px">
   <div slot="header" class="clearfix">
     <span>课程基本信息</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
   </div>
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
   <el-row type="flex" justify="start">  
@@ -31,11 +31,11 @@
   </el-form-item>
   </el-row>
   <el-form-item label="课程介绍" prop="introduce">
-    <el-row type="flex" justify="end"><el-button round size="small" style="margin-bottom:5px">上传word文档</el-button></el-row>
+    <!-- <el-row type="flex" justify="end"><el-button round size="small" style="margin-bottom:5px">上传word文档</el-button></el-row> -->
     <el-row><el-input type="textarea" :rows="5" v-model="ruleForm.introduce"></el-input></el-row>
   </el-form-item>
   <el-form-item label="教学大纲" prop="plan">
-   <el-row type="flex" justify="end"><el-button round size="small" style="margin-bottom:5px">上传word文档</el-button></el-row>
+   <!-- <el-row type="flex" justify="end"><el-button round size="small" style="margin-bottom:5px">上传word文档</el-button></el-row> -->
     <el-row><el-input type="textarea" :rows="5" v-model="ruleForm.plan"></el-input></el-row>
   </el-form-item>
 </el-form>
@@ -45,7 +45,7 @@
   <el-card class="box-card" style="margin-left:20%;margin-right:20%;margin-top:15px">
   <div slot="header" class="clearfix">
     <span>课程学生列表</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
   </div>
 
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -78,8 +78,10 @@
   </el-row>
 </el-form>
 <Student_table></Student_table>
+  <!-- <el-button round  style="margin-bottom:4%">添加单个学生</el-button> -->
+  <el-button round style="margin-bottom:4%">删除学生</el-button>
   </el-card>
-  
+    <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
 </div>  
 </template>
 <script>
@@ -105,7 +107,7 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('成功发布公告！');
+            alert('成功添加课程！');
           } else {
             alert('请填写完整的相关信息！');
             return false;

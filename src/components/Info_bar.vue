@@ -7,7 +7,9 @@
 <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span style="font-size:30px">近期公告</span>
+    <router-link to="/admin/manage_announce">
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">管理公告</el-button>
+    </router-link>
   </div>
   <div v-for="o in 4" :key="o" class="text item">
     {{'通知 ' + o + "  XXXXXXXXXXXXXXXXXXXXXXXX"}}
@@ -19,7 +21,9 @@
 <el-card class="box-card"  style="margin-left:20px">
   <div slot="header" class="clearfix">
     <span style="font-size:30px">课程信息</span>
+    <router-link to="/admin/manage_lesson">
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">管理课程</el-button>
+    </router-link>
   </div>
   <div v-for="o in 4" :key="o" class="text item">
     {{'通知 ' + o + "  XXXXXXXXXXXXXXXXXXXXXXXX"}}
@@ -37,7 +41,9 @@
 <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span style="font-size:30px">近期讨论区</span>
+    <router-link to="admin/manage_discussion">
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">管理讨论区</el-button>
+    </router-link>
   </div>
   <div v-for="o in 4" :key="o" class="text item">
     {{'讨论 ' + o + "  XXXXXXXXXXXXXXXXXXXXXXXX" }}
@@ -69,7 +75,7 @@
         name: 'Info_bar',
     }
 </script>
-<style>
+<style scoped>
   .text {
     font-size: 20px;
   }
@@ -81,7 +87,7 @@
   .clearfix:before,
   .clearfix:after {
     display: table;
-    content: "";
+    content: ""; 
   }
   .clearfix:after {
     clear: both

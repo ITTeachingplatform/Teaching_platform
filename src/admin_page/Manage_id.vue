@@ -45,7 +45,7 @@ import store from '../vuex/admin/store'
     }
   }
 </script>
-<style>
+<style scoped>
   .box-card {
     width: 700px;
   }

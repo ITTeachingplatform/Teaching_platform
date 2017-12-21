@@ -7,8 +7,8 @@
 </div>
 <div v-else>
   <!-- 走马灯和通知栏 -->
-<carousel></carousel>
-<Info @showAnnounce="show"></Info>
+<!-- <carou/sel></carousel> -->
+<Info ></Info>
 </div>
 </div>
 </template>
@@ -32,12 +32,6 @@ export default {
         'announce':Announce
       },
       methods: {
-        show(flag){
-          this.isAnnounce=flag;
-        },
-        hide(flag){
-          this.isAnnounce=flag;
-        }
       }
 }
 </script>

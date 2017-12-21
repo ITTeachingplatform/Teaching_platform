@@ -4,8 +4,9 @@
 <el-row style="font-size:50px;margin-top:20px">
         讨论区列表
 </el-row>
+<router-link to="/admin/publish_post">
  <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
-      
+</router-link>
   <el-row type="flex" justify="center">
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -22,11 +23,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="id_word" v-model="numberValidateForm.id_word" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -39,11 +36,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -59,11 +52,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="other_condition" v-model="numberValidateForm.other_condition" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -75,11 +64,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="other_condition" v-model="numberValidateForm.other_condition" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>
@@ -91,11 +76,7 @@
     :rules="[
     ]"
   >
-<<<<<<< HEAD
-    <el-input type="date" v-model="numberValidateForm.publish_date" auto-complete="off"></el-input>
-=======
     <el-input prefix-icon="el-icon-search"type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
->>>>>>> refs/remotes/origin/hc_code
   </el-form-item>
 </el-form>
       </el-col>

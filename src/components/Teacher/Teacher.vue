@@ -11,10 +11,10 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='teacher_id' class="tag_style">教师账号：201530</el-tag>
+<el-tag id='teacher_id' class="tag_style">教师账号：{{teacher_ID}}</el-tag>
     </el-row>
     <el-row>
-<el-tag id='teacher_name' class="tag_style">教师姓名：张三</el-tag>
+<el-tag id='teacher_name' class="tag_style">教师姓名：{{teacher_name}}</el-tag>
     </el-row>
   </el-col>
   </el-row>
@@ -41,6 +41,10 @@
 </template>
 <script>
 import Avatar from '../Avatar.vue' 
+// import AdminService from '../../../ServiceModule/AdminService'
+// var admin = new AdminService();
+// var result = new Array();
+// admin.load_one_teacher('TE000001',result);
 export default {
       name: 'Teacher',
       props: ['activeIndex'],
@@ -49,6 +53,8 @@ export default {
       },
       data() {
       return {
+        // teacher_ID:result[0].teacher_ID,
+        // teacher_name:result[0].teacher_name
       };
     },
     methods: {
