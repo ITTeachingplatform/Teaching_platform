@@ -18,7 +18,7 @@
       { type: 'number', message: '学号必须为数字值'}
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="id" v-model.number="numberValidateForm.id" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="id" v-model.number="numberValidateForm.id" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -31,7 +31,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -47,7 +47,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="department" v-model.number="numberValidateForm.department" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="department" v-model.number="numberValidateForm.department" auto-complete="off"></el-input>
   </el-form-item>
   <!-- <el-form-item>
     <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
@@ -64,7 +64,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="major" v-model.number="numberValidateForm.major" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="major" v-model.number="numberValidateForm.major" auto-complete="off"></el-input>
   </el-form-item>
   <!-- <el-form-item>
     <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
@@ -81,7 +81,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="class" v-model.number="numberValidateForm.class" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="class" v-model.number="numberValidateForm.class" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -157,9 +157,7 @@
     </el-table-column>
   </el-table>
    </el-row>
-  </el-col>
-</el-row>
-  </el-tab-pane>
+
     
    <!-- 弹出信息框 -->
 
@@ -342,6 +340,14 @@ import store from '../vuex/admin/store'
               return store.state.student_info
           }
          }
+      },
+      mounted(){
+        this.$http.post('/api/get', {
+                    type: 'student_list'
+                  },{}).then((response) => {
+                    console.log(response.body[0]);
+                  
+                  })
       },
     methods: {
       handleEdit(index, row) {

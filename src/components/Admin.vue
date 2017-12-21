@@ -10,10 +10,10 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='admin_id' class="tag_style">管理员账号：201530</el-tag>
+<el-tag id='admin_id' class="tag_style">管理员账号：{{admin_id}}</el-tag>
     </el-row>
     <el-row>
-<el-tag id='admin_no' class="tag_style">管理员编号：00001</el-tag>
+<!-- <el-tag id='admin_no' class="tag_style">管理员编号：00001</el-tag> -->
     </el-row>
   </el-col>
   </el-row>
@@ -39,7 +39,8 @@
 </div>
 </template>
 <script>
-import Avatar from './Avatar.vue'
+import Avatar from './Avatar.vue';
+  import store from '../vuex/admin/store';
 export default {
       name: 'Admin',
       props: ['activeIndex'],
@@ -48,6 +49,7 @@ export default {
       },
       data() {
       return {
+        admin_id: store.state.admin_id
       };
     },
     methods: {

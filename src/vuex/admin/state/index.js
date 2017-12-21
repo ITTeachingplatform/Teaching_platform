@@ -8,6 +8,7 @@ let page = {
     'cookie': '',
     'login_flag':'False'
 }
+let admin_id = ''
 let student_info = []
 let teacher_info = []
 let announce_info = []
@@ -20,7 +21,8 @@ const state = {
     teacher_info,
     announce_info,
     discussion_info,
-    lesson_info
+    lesson_info,
+    admin_id
 }
 
 export default state

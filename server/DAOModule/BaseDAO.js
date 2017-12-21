@@ -6,7 +6,7 @@ var tableMapId = {
     'teacher':'TE',
     'course':'CO',
     'teacher_class':'TC',
-    'teacher_class_list':'TL',
+    //'teacher_class_list':'TL',
     'class':'CL',
     'faculty':'FA',
     'major':'MA',
@@ -16,7 +16,7 @@ var tableMapId = {
     'post':'PO',
     'reply':'RE',
     'homework':'HO',
-    'homework_scores':'HS',
+    //'homework_scores':'HS',
     'resource':'RE'
 }
 
@@ -311,9 +311,29 @@ class BaseDAO{
         },
             function (error, result) {
                 r.push(content);
+                r.push(true);
             });
     };
-
+    inquireD(sql,r){
+        var query = sql;
+        async.series({
+            one:function(done){
+                connection.query(query, function(err, rows, fields) {
+                    if (err) {
+                        r.push(0);
+                        r.push(false);
+                        throw err;
+                    }
+                    content = rows;
+                    done(null, content);
+                });
+            }
+        },
+            function (error, result) {
+                r.push(content);
+                r.push(true);
+            });
+    };
   };
 
 module.exports = BaseDAO;

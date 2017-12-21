@@ -8,8 +8,10 @@ var TeacherDAO = require('../DAOModule/TeacherDAO.js');
 var teacher = new TeacherDAO();
 var CourseDAO = require('../DAOModule/CourseDAO.js');
 var course = new CourseDAO();
-var Teaching_classDAO = require('../DAOModule/Teaching_classDAO.js');
-var teaching_class = new Teaching_classDAO();
+var Teacher_classDAO = require('../DAOModule/Teacher_classDAO.js');
+var teacher_class = new Teacher_classDAO();
+var Teacher_class_listDAO = require('../DAOModule/Teacher_class_listDAO.js');
+var teacher_class_list = new Teacher_class_listDAO();
 var ClassDAO = require('../DAOModule/ClassDAO.js');
 var _class_ = new ClassDAO();
 var FacultyDAO = require('../DAOModule/FacultyDAO.js');
@@ -39,16 +41,10 @@ var RE = 0;
 var TF = 1;
 var content;
 
-class Student{
-    constructor(id,other = ''){
-        this.id = id;
-        this.other = other;
-        //vuex
+class StudentService{
+    constructor(){
     }
 };
-
-
-
 
 
 module.exports = StudentService;

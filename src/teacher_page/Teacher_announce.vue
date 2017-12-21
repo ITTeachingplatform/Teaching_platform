@@ -59,7 +59,7 @@
         <el-table :data="tableData" style="width: 100%;margin-top:20px;text-align:left;">
           <el-table-column label="公告标题" width="300px">
             <template slot-scope="scope">
-              <span style="margin-left: 10px" @click="centerDialogVisible = true":announcement_ID={{scop.row.announcement_ID}}>{{ scope.row.announcement_title }}</span></template>
+              <span style="margin-left: 10px" @click="centerDialogVisible = true">{{ scope.row.announcement_title }}</span></template>
           </el-table-column>
           <el-table-column label="发布者" width="100px">
             <template slot-scope="scope">
@@ -83,8 +83,8 @@
         <el-progress :percentage="100" :show-text="false"></el-progress>
         <!--ww--></div>
     </el-row>
-    </el-col>
-    </el-row>
+    <!-- </el-col>
+    </el-row> -->
     <!-- Dialog -->
     <div>
       <el-dialog title="标题" :visible.sync="centerDialogVisible" width="80%" center>

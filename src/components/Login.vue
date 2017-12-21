@@ -34,7 +34,8 @@
 
 <script>
   import communication from '../assets/communication';
-  import store from '../vuex/admin/store';
+  import store from '../vuex/admin/store'
+  // import AdminService from '../../../ServiceModule/AdminService'
   export default {
     name: 'Login',
     data() {
@@ -51,7 +52,7 @@
         }, 100);
       };
       var validateAccount = (rule, value, callback) => {
-        let regExp = /^\d+$/;
+        let regExp = /^.+$/;
         if (value === '') {
           callback(new Error('请输入账号'));
         } else if(regExp.test(value) === false) {
@@ -111,11 +112,28 @@
                 alert('成功登录教师入口');
                 return true;
             }
-            else if(this.role === 'admin' && vm.account === store.state.admin_account['id'] && vm.checkPwd === store.state.admin_account['pwd']){
+            else if(this.role === 'admin'){
                 //测试一下state的获取
-                alert('成功登录管理员入口');
-                this.$router.push({path:'/admin_index'});
-                return true;
+                // var Admin = new AdminService();
+                // var Admin_arr = [];
+                // Admin.load_admin(Admin_arr);
+                // console.log(Admin_arr);
+                console.log('Testing');
+                var check = -1;
+                this.$http.post('/api/check', {
+                    admin_id: vm.account,
+                    admin_password: vm.checkPwd
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    check = response.body[1];
+                     if(check === 0){
+                  alert('成功登录管理员入口');
+                  store.state.admin_id = vm.account;
+                  this.$router.push({path:'/admin_index'});
+                }
+                    console.log(check);
+                  })
+          
             }
           } else {
             console.log('error submit!!');

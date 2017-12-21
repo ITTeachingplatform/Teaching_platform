@@ -196,19 +196,36 @@ import store from '../vuex/admin/store';
             writer: '',
             publish_date: '',
             other_condition: '',
-          }
+          },
+          tableData:[]
         }
       },
       mounted () {
-        store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+        // store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+                this.$http.post('/api/get', {
+                    type: 'discuss_list'
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    var dis_list = response.body;
+                    for(var i=0;i<dis_list[0].length;i++){
+                      var t = new Array()
+                      t['writer']=dis_list[0][i].post_starter;
+                      t['publish_date']=dis_list[0][i].post_date;
+                      t['tag']=dis_list[0][i].post_label;
+                      t['final_changer']=dis_list[0][i].post_last_reviser;
+                      t['vis_num']=dis_list[0][i].post_browse_num;
+                      t['anw_num']=dis_list[0][i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
       },      
-      computed: {
-         tableData:{
-          get:function(){
-              return store.state.discussion_info
-          }
-         }
-      },
+      // computed: {
+      //    tableData:{
+      //     get:function(){
+      //         return store.state.discussion_info
+      //     }
+      //    }
+      // },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
