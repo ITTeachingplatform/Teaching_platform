@@ -1,13 +1,13 @@
-<!--学生 查看课程-->
+<!--教师 管理课程-->
 <template>
-  <div id="student_courses">
+  <div id="teacher_courses">
       <!-- 导航栏 -->
-      <Student activeIndex='4'></Student>
+      <Teacher activeIndex='4'></Teacher>
       <div align="center">
         <div class="container">
-        <!-- 原型变了 -->    
+        <!-- 未批改作业 -->    
                 <div style="margin:20px">
-                <span style=" font-size:36px">原型变了</span>
+                <span style=" font-size:36px">未批改作业</span>
                 </div>
                 <el-progress :percentage="100" :show-text="false"></el-progress>
                 <el-table
@@ -32,9 +32,9 @@
                     label="未批改数量">
                 </el-table-column>
                 </el-table>     
-      <!-- 原型变了 -->
+      <!-- 课程选择 -->
                 <div style="margin:20px">
-          <span style="font-size:36px">原型变了</span>
+          <span style="font-size:36px">课程选择</span>
                 </div>
             <el-progress :percentage="100" :show-text="false"></el-progress>
             <el-row :gutter="20">
@@ -42,7 +42,7 @@
                 <el-card class="box-card">
               <div slot="header" class="clearfix">
                 <span>项目管理</span>
-                <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
+                <router-link to="/course_page"><el-button style="float: right; padding: 3px 0" type="text">查看</el-button></router-link>
               </div>
               <div class="text item">
                 <p>课程编号：xxx</p>
@@ -61,6 +61,7 @@
               </div>
             </el-card></div></el-col>
             </el-row>
+            <router-view></router-view>
         </div> 
       </div>
 
@@ -73,14 +74,20 @@
 </template>
 
 <script>
-import Student from '../components/Student/Student.vue';
+import Teacher from '../components/Teacher/Teacher.vue';
+import store from '../vuex/teacher/store'
 export default {
-    name: 'Student_courses',
+    name: 'teacher_courses',
     components: {
-        'Student': Student,
+        'Teacher': Teacher,
     },
+    store,
     data() {
         return {
+            course: '',
+            name: '',
+            t_class: '',
+            number: '',
           tableData: [{
             course: '2016-05-02',
             name: '王小虎',

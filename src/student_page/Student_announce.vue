@@ -134,7 +134,7 @@
 <script>
 import Student from '../components/Student/Student.vue';
 export default {
-    name: 'Student_announce',
+    name: 'student_announce',
       components: {
         'Student': Student
       },
