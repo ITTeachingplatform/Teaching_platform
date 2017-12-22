@@ -3,14 +3,13 @@
       <Teacher activeIndex='3'></Teacher>
       <div class="container">
       <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
-      <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
-
+      <router-link to="/teacher/publish_post"><el-button round style="margin-left:600px;margin-bottom:20px"  >发布讨论</el-button></router-link>
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <el-row type="flex" justify="center" >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>搜索框</span>
-            <el-button style="float: right;padding: 3px 0" type="text">操作按钮</el-button>
+            <!-- <el-button style="float: right;padding: 3px 0" type="text">操作按钮</el-button> -->
           </div>
           <el-row type="flex" justify="start">
             <el-col>
@@ -96,11 +95,11 @@
           </template>
         </el-table-column>
 
-        <el-table-colume
+        <el-table-column
           label="发布者"
           width="70px">
           <template slot-scope="scope">
-            <el-popover trigger"hover" placement="top">
+            <el-popover trigger="hover" placement="top">
               <p>公告者: {{ scope.row.writer }}</p>
               <p>info: 可以显示额外信息</p>
               <div slot="reference" class="name-wrapper">
@@ -108,7 +107,7 @@
               </div>
             </el-popover>
           </template>
-        </el-table-colume>
+        </el-table-column>
 
         <el-table-column label="发布时间" width="150px">
           <template slot-scope="scope">
@@ -139,31 +138,9 @@
             <span style="margin-left: 10px">{{ scope.row.anw_num }}</span>
           </template>
         </el-table-column>
-
-        <el-table-column label="支持数" width="100px">
-          <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.sup_num }}</span>
-          </template>
-        </el-table-column>
         </el-table>
       </el-row>
     </div>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
 </template>
 

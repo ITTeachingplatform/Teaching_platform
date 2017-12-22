@@ -31,8 +31,8 @@ import store from '../vuex/admin/store'
       },
       store,
       mounted() {
-        store.dispatch('get_teacher_info');
-        store.dispatch('get_student_info')
+        // store.dispatch('get_teacher_info');
+        // store.dispatch('get_student_info')
         // console.log(store.state.teacher_info);
       },
        data() {
@@ -45,7 +45,7 @@ import store from '../vuex/admin/store'
     }
   }
 </script>
-<style>
+<style scoped>
   .box-card {
     width: 700px;
   }

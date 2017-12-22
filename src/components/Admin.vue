@@ -10,10 +10,10 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='admin_id' class="tag_style">管理员账号：201530</el-tag>
+<el-tag id='admin_id' class="tag_style">管理员账号：{{admin_id}}</el-tag>
     </el-row>
     <el-row>
-<el-tag id='admin_no' class="tag_style">管理员编号：00001</el-tag>
+<!-- <el-tag id='admin_no' class="tag_style">管理员编号：00001</el-tag> -->
     </el-row>
   </el-col>
   </el-row>
@@ -32,14 +32,15 @@
   <router-link to="/admin/manage_announce"><el-menu-item index="3" class="guide_font">管理公告</el-menu-item></router-link>
   <router-link to="/admin/manage_discussion"><el-menu-item index="4" class="guide_font">管理讨论区</el-menu-item></router-link>
   <router-link to="/admin/manage_lesson"><el-menu-item index="5" class="guide_font">管理课程</el-menu-item></router-link>
-  <router-link to="/platform_info"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
+  <router-link to="/admin/platform_info"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
 </el-menu>
   </el-row>
   <router-view></router-view>  
 </div>
 </template>
 <script>
-import Avatar from './Avatar.vue'
+import Avatar from './Avatar.vue';
+  import store from '../vuex/admin/store';
 export default {
       name: 'Admin',
       props: ['activeIndex'],
@@ -48,6 +49,7 @@ export default {
       },
       data() {
       return {
+        admin_id: store.state.admin_id
       };
     },
     methods: {

@@ -1,9 +1,9 @@
 <!--教师首页的公告卡片-->
 <template>
 <div id="info_bar_teacher">
+  <el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">教学信息</el-row>
 <el-row type="flex" justify="center">
 <el-row type="flex" justify="center">
-
 <el-col>
 <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -70,11 +70,20 @@
 </div>
   
 </template>
-
 <script>
-    export default{
+      export default{
         name: 'Info_bar_teacher',
+        component:{
+        },
+        data(){
+          return{
+            show:true
+          }
+        },
+        methods: {
+        }
     }
+
 </script>
 <style>
   .text {

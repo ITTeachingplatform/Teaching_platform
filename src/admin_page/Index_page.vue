@@ -4,14 +4,6 @@
 <el-row type='flex' justify="center">
   <div class="block" style="width:900px;margin-top:20px">
     <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
-    <el-carousel height="250px">
-      <el-carousel-item v-for="item in 4" :key="item">
-         <el-row type="flex" justify="end">
-        <el-button round style="margin-right: 20px; margin-top:20px">查看更多</el-button>
-        </el-row>
-        <h3>{{ item }}</h3>
-      </el-carousel-item>
-    </el-carousel>
   </div>
 </el-row>
 <el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">平台信息</el-row>

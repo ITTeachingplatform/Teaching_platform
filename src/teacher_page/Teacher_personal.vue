@@ -46,6 +46,11 @@
                 <el-button type="primary" style="margin-top:15px;">确认修改</el-button>
                 </el-col>
           </el-row>
+      <!-- 编辑器 -->
+      <!-- <script id="editor" type="text/plain"></script> -->
+      <editor></editor>
+      <!-- <el-button v-on:click="onSubmit">提交</el-button> -->
+      <!-- END 编辑器 -->
         </div>
       </el-row>
   </div>
@@ -53,6 +58,7 @@
 
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
+import Editor from '../components/Editor.vue'
 export default {
     name: 'teacher_personal',
     data() {
@@ -67,26 +73,55 @@ export default {
           type: [],
           resource: '',
           desc: '',
-          textarea: ''
-        }
+        },
+        textarea: '',
+        editor:null
       }
+    },
+    mounted(){//实例化编辑器
+    //   this.editor = UE.getEditor('editor', {
+    //     toolbars: [//工具栏
+    //         [ 'undo', //撤销
+    //           'redo', //重做
+    //           'bold', //加粗
+    //           'indent', //首行缩进
+    //           'italic', //斜体
+    //           'underline', //下划线
+    //           'strikethrough', //删除线
+    //           'subscript', //下标
+    //           'superscript', //上标
+    //           'formatmatch', //格式刷
+    //           'removeformat', //清除格式
+    //           'fontfamily', //字体
+    //           'fontsize', //字号
+    //           'simpleupload', //单图上传
+    //           'link', //超链接
+    //           'justifyleft', //居左对齐
+    //           'justifyright', //居右对齐
+    //           'justifycenter', //居中对齐
+    //           'justifyjustify', //两端对齐
+    //           'forecolor', //字体颜色
+    //           'backcolor', //背景色
+    //           'attachment', //附件
+    //           'inserttable', //插入表格
+    //           ]
+    //     ],
+    //     autoHeightEnabled: true,
+    //     autoFloatEnabled: true,
+    //     initialFrameHeight:300
+    // });
+    },
+    components: {
+        'Teacher': Teacher,
+        'Editor':Editor,
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
-      }
-    },
-      components: {
-        'Teacher': Teacher,
-      },
-      methods: {
-      handleAvatarSuccess(res, file) {
+        handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
+    beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
-
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!');
         }

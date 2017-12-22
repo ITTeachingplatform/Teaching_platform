@@ -11,10 +11,10 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='teacher_id' class="tag_style">教师账号：201530</el-tag>
+<el-tag id='teacher_id' class="tag_style">教师账号：{{teacher_ID}}</el-tag>
     </el-row>
     <el-row>
-<el-tag id='teacher_name' class="tag_style">教师姓名：张三</el-tag>
+<el-tag id='teacher_name' class="tag_style">教师姓名：{{teacher_name}}</el-tag>
     </el-row>
   </el-col>
   </el-row>
@@ -30,7 +30,7 @@
     <el-menu-item index="2-3">选项3</el-menu-item>
   </el-submenu> -->
   <router-link to="/teacher_announce"><el-menu-item index="2" class="guide_font">查看公告</el-menu-item></router-link>
-  <router-link to="/teacher_discussion"><el-menu-item index="3" class="guide_font">查看讨论区</el-menu-item></router-link>
+  <router-link to="/teacher_discussion"><el-menu-item index="3" class="guide_font">讨论区</el-menu-item></router-link>
   <router-link to="/teacher_courses"><el-menu-item index="4" class="guide_font">管理课程</el-menu-item></router-link>
   <router-link to="/teacher_personal"><el-menu-item index="5" class="guide_font">个人中心</el-menu-item></router-link>
   <router-link to="/teacher_platform"><el-menu-item index="6" class="guide_font">平台介绍</el-menu-item></router-link>
@@ -41,6 +41,10 @@
 </template>
 <script>
 import Avatar from '../Avatar.vue' 
+// import AdminService from '../../../ServiceModule/AdminService'
+// var admin = new AdminService();
+// var result = new Array();
+// admin.load_one_teacher('TE000001',result);
 export default {
       name: 'Teacher',
       props: ['activeIndex'],
@@ -49,6 +53,8 @@ export default {
       },
       data() {
       return {
+        // teacher_ID:result[0].teacher_ID,
+        // teacher_name:result[0].teacher_name
       };
     },
     methods: {

@@ -4,8 +4,9 @@
 <el-row style="font-size:50px;margin-top:20px">
         讨论区列表
 </el-row>
+<router-link to="/admin/publish_post">
  <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
-      
+</router-link>
   <el-row type="flex" justify="center">
           <el-card class="box-card">
   <div slot="header" class="clearfix">
@@ -22,7 +23,7 @@
     :rules="[
     ]"
   >
-    <el-input type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -35,7 +36,7 @@
     :rules="[
     ]"
   >
-    <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -51,7 +52,7 @@
     :rules="[
     ]"
   >
-    <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -63,7 +64,7 @@
     :rules="[
     ]"
   >
-    <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -75,7 +76,7 @@
     :rules="[
     ]"
   >
-    <el-input type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -195,19 +196,36 @@ import store from '../vuex/admin/store';
             writer: '',
             publish_date: '',
             other_condition: '',
-          }
+          },
+          tableData:[]
         }
       },
       mounted () {
-        store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+        // store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+                this.$http.post('/api/get', {
+                    type: 'discuss_list'
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    var dis_list = response.body;
+                    for(var i=0;i<dis_list[0].length;i++){
+                      var t = new Array()
+                      t['writer']=dis_list[0][i].post_starter;
+                      t['publish_date']=dis_list[0][i].post_date;
+                      t['tag']=dis_list[0][i].post_label;
+                      t['final_changer']=dis_list[0][i].post_last_reviser;
+                      t['vis_num']=dis_list[0][i].post_browse_num;
+                      t['anw_num']=dis_list[0][i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
       },      
-      computed: {
-         tableData:{
-          get:function(){
-              return store.state.discussion_info
-          }
-         }
-      },
+      // computed: {
+      //    tableData:{
+      //     get:function(){
+      //         return store.state.discussion_info
+      //     }
+      //    }
+      // },
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
