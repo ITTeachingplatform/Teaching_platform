@@ -1,0 +1,1 @@
+export const GET_INFO = 'get_teacher_info'
