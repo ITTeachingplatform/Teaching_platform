@@ -3,7 +3,9 @@
     <Student activeIndex='4'></Student>
     <div class="container">
       <el-row style="font-size:50px;margin-top:20px">讨论区列表</el-row>
-      <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
+      <router-link to="/student/publish_post">
+        <el-button round style="margin-left:600px;margin-bottom:20px"  >发布讨论</el-button>
+      </router-link>
 
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <el-row type="flex" justify="center" >

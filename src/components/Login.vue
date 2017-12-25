@@ -99,45 +99,71 @@
         console.log(this.role);
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            //   console.log(vm.account + ' ' + vm.checkPwd + ' ' + vm.code);
+            var check = -1;
             if(vm.code !== 'aaaa'){
-                alert('验证码输入错误！');
-                return false;
+              alert('验证码输入错误！');
             }
-            if(this.role === 'student' && vm.account === '11111' && vm.checkPwd === '12345'){
-                alert('成功登录学生入口!');
-                return true;
+            else if(this.role === 'student'){
+              console.log('Student login');
+              this.$http.post('/api/check', {
+                student_id: vm.account,
+                student_password: vm.checkPwd,
+                type: this.role
+              },{}).then((response) => {
+                check = response.body[1];
+                if(check === 0){
+                  alert('学生成功登录');
+                  store.state.student_id = vm.account;
+                  this.$router.push({path:'/student_index'});
+                }
+                else{
+                  alert('账号或密码错误');
+                }
+                console.log(check);
+              })
             }
-            else if(this.role === 'teacher' && vm.account === '22222' && vm.checkPwd === '12345'){
-                alert('成功登录教师入口');
-                return true;
+            else if(this.role === 'teacher'){
+              console.log('Teacher login');
+              this.$http.post('/api/check', {
+                teacher_id: vm.account,
+                teacher_password: vm.checkPwd,
+                type: this.role
+              },{}).then((response) => {
+                check = response.body[1];
+                if(check === 0){
+                  alert('教师成功登录');
+                  store.state.teacher_id = vm.account;
+                  this.$router.push({path:'/teacher_index'});
+                }
+                else{
+                  alert('账号或密码错误');
+                }
+                console.log(check);
+              })
             }
             else if(this.role === 'admin'){
-                //测试一下state的获取
-                // var Admin = new AdminService();
-                // var Admin_arr = [];
-                // Admin.load_admin(Admin_arr);
-                // console.log(Admin_arr);
-                console.log('Testing');
-                var check = -1;
-                this.$http.post('/api/check', {
-                    admin_id: vm.account,
-                    admin_password: vm.checkPwd
-                  },{}).then((response) => {
-                    // console.log(response.body[0]);
-                    check = response.body[1];
-                     if(check === 0){
-                  alert('成功登录管理员入口');
+              console.log('Admin login');
+              this.$http.post('/api/check', {
+                  admin_id: vm.account,
+                  admin_password: vm.checkPwd,
+                  type: this.role
+              },{}).then((response) => {
+                check = response.body[1];
+                if(check === 0){
+                  alert('管理员成功登录');
                   store.state.admin_id = vm.account;
                   this.$router.push({path:'/admin_index'});
                 }
-                    console.log(check);
-                  })
-          
+                else{
+                  alert('账号或密码错误');
+                }
+                console.log(check);
+              })
             }
-          } else {
-            console.log('error submit!!');
-            return false;
+            else {
+              alert('error submit!!');
+              console.log('error submit!!');
+            }
           }
         });
       },

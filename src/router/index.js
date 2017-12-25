@@ -63,10 +63,12 @@ import Student_study from '../student_page/Student_study'
 import Student_discussion from '../student_page/Student_discussion'
 import Student_personal from '../student_page/Student_personal'
 import Student_platform from '../student_page/Student_platform'
+import Student_publish_post from '../student_page/subpage/Student_publish_post'
+import Student_courses_view from '../student_page/subpage/Student_courses_view'
+import Student_announce from '../student_page/Student_announce'
+
 // test
 import Test from '../Test'
-import Student_announce from '../student_page/Student_announce'
-import Student_courses from '../student_page/Student_courses'
 
 
 Vue.use(Router)
@@ -206,10 +208,15 @@ export default new Router({
       name: 'Student_announce',
       component: Student_announce
     },
-    { 
-      path: '/student_courses',
-      name: 'Student_courses',
-      component: Student_courses
+    {
+      path:'/student/publish_post',
+      name: 'Student_publish_post',
+      component: Student_publish_post
+    },
+    {
+      path:'/student/courses_view',
+      name: 'Student_courses_view',
+      component: Student_courses_view
     },
   ]
 })
