@@ -1,0 +1,26 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch qym
+# Your branch is up-to-date with 'origin/qym'.
+#
+# Changes to be committed:
+#	modified:   .babelrc
+#	modified:   package.json
+#	modified:   server/DAOModule/setting.js
+#	new file:   server/package-lock.json
+#	modified:   server/package.json
+#	modified:   src/components/Teacher/Course_introduction.vue
+#	new file:   src/components/Teacher/course_announ.vue
+#	new file:   src/components/Teacher/course_bank.vue
+#	new file:   src/components/Teacher/course_homework.vue
+#	new file:   src/components/Teacher/course_intro.vue
+#	new file:   src/components/Teacher/course_resource.vue
+#	new file:   src/components/Teacher/course_studentTable.vue
+#	new file:   src/components/Teacher/kejian.vue
+#	new file:   src/components/Teacher/student_table.vue
+#	new file:   src/teacher_page/Teacher_it_project.vue
+#	modified:   src/teacher_page/subpage/Course_page.vue
+#	new file:   src/teacher_page/subpage/homework.vue
+#
+
