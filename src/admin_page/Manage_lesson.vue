@@ -68,18 +68,6 @@
   </el-form-item>
 </el-form>
       </el-col>
- <el-col>
-      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
-  <el-form-item
-    label="开设年份"
-    prop="publish_year"
-    :rules="[
-    ]"
-  >
-    <el-input prefix-icon="el-icon-search"type="publish_year" v-model.number="numberValidateForm.publish_year" auto-complete="off"></el-input>
-  </el-form-item>
-</el-form>
-      </el-col>
 
   </el-row>
 
@@ -120,12 +108,6 @@
       </template>
     </el-table-column>
 
-      <el-table-column label="开设年份" width="150px">
-         <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.publish_year }}</span>
-      </template>
-      </el-table-column>
-
             <el-table-column label="任课老师" width="150px">
                <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.name }}</span>
@@ -145,45 +127,6 @@
     </el-table-column>
   </el-table>
    </el-row>
-  </el-col>
-</el-row>
-  </el-tab-pane>
-    <!-- 添加课程弹框 -->
-    <!-- <div> -->
-      <!-- Form -->
-      <!-- <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
-      <!-- <el-dialog title="添加课程" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
-          <el-form-item label="课程名称" :label-width="formLabelWidth">
-            <el-input v-model="form.course_name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="任课教师" :label-width="formLabelWidth">
-            <el-select v-model="form.teacher_name" placeholder="">
-              <el-option label="李红" value="teacher_id"></el-option>
-              <el-option label="张某" value="teacher_id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="开设学院" :label-width="formLabelWidth">
-            <el-select v-model="form.faculty_name" placeholder="">
-              <el-option label="软件学院" value="faculty_id"></el-option>
-              <el-option label="XX" value="faculty_id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="课程介绍" prop="course_introduction" :label-width="formLabelWidth">
-          <el-input v-model="form.course_introduction" auto-complete="off" type="textarea":rows="6"></el-input>
-           </el-form-item>                        
-          <span>添加学生</span>
-          <el-form-item label="学生姓名" :label-width="formLabelWidth">
-            <el-input v-model="form.student_name" auto-complete="off"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-  </div>
-</el-dialog>
-
-    </div> -->
 </div>
 </template>
 
@@ -199,6 +142,7 @@ import store from '../vuex/admin/store'
       store,
       data() {
       return {
+        tableData:[],
         numberValidateForm: {
           lesson_name: '',
           name: '',
@@ -217,18 +161,31 @@ import store from '../vuex/admin/store'
           resource: '',
           desc: ''
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
       }
     },
      computed: {
-         tableData:{
-          get:function(){
-              return store.state.lesson_info
-          }
-         }
+        //  tableData:{
+        //   get:function(){
+        //       return store.state.lesson_info
+        //   }
+        //  }
       },
     mounted () {
-        store.dispatch('get_lesson_item', {'Help_text': '此处获取课程信息'});
+                this.$http.post('/api/get', {
+                    type: 'course_list'
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    var cou_list = response.body;
+                    console.log(cou_list[0]);
+                    for(var i in cou_list[0]){
+                      var t = new Array()
+                      t['lesson_name']=cou_list[0][i].course_name;
+                      t['pub_department']=cou_list[0][i].faculty_belong;
+                      t['name']='aaa';
+                     this.tableData.push(t)
+                    }
+                  })
     },     
     methods: {
       handleEdit(index, row) {
