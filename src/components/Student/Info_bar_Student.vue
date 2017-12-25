@@ -21,7 +21,7 @@
           <el-card class="box-card"  style="margin-left:10px">
             <div slot="header" class="clearfix">
               <span style="font-size:30px">近期课程信息</span>
-              <router-link to="/student_courses">
+              <router-link to="/student/courses_view">
                 <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
               </router-link>
             </div>
@@ -52,7 +52,9 @@
           <el-card class="box-card" style="margin-left:10px">
             <div slot="header" class="clearfix">
               <span style="font-size:30px">最新作业</span>
-              <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
+              <router-link to="/student/courses_view">
+                <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
+              </router-link>
             </div>
             <div v-for="o in 4" :key="o" class="text item">
               {{'教学班' + o + "  作业XXXXXXXXXXXXXXXXXXXX"}}

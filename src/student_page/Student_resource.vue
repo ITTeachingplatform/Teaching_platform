@@ -18,7 +18,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="资源类型" prop="resource_type" required="true">
+                <el-form-item label="资源类型" prop="resource_type" required=true>
                   <el-select v-model="ruleForm.resource_type" placeholder="请选择资源类型">
                     <el-option label="题库" value="bank"></el-option>
                     <el-option label="教学资源" value="resource"></el-option>
