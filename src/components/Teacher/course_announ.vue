@@ -40,19 +40,24 @@
     </el-dialog>
 
     <!-- 查看每个公告的对话框 -->
-    <el-dialog title="查看公告" :visible.sync="dialogFormVisible">
+    <el-dialog title="查看公告" :visible.sync="lookVisible">
       <el-form :model="form">
         <el-form-item label="公告名称" :label-width="formLabelWidth">
-          <el-input v-model="form.title" auto-complate="off"></el-input>
+          <el-input v-model="form.title" auto-complate="off" style="width:300px;;float:left"></el-input>
         </el-form-item>
+
+        <el-form-item label="公告内容" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="6" v-model="textarea" style="width:400px;;float:left"></el-input>
+        </el-form-item>
+
 
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible=false">取消</el-button>
+        <el-button @click="lookVisible=false">取消</el-button>
         <el-button type="primary" @click="dialogFormVisible=false">修改</el-button>
       </div>
-      
+
 
     </el-dialog>
 
@@ -72,6 +77,7 @@ export default {
    data(){
        return{
            dialogFormVisible: false,
+           lookVisible:false,
            formLabelWidth: '120px',
            form: {
           title: '',
@@ -90,7 +96,7 @@ export default {
        },
        methods: {
          handleClick(index,row) {
-           this.dialogFormVisible=true;
+           this.lookVisible=true;
            console.log(index,row);
          },
        }

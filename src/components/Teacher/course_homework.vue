@@ -6,12 +6,13 @@
      <!-- <el-row type="flex" justify="center"> -->
        <el-table :data="tableData" border>
          <el-table-column prop="title" label="标题" width="150">
+           
          </el-table-column>
 
-         <el-table-column prop="publishdate" label="发布日期" width="200">
+         <el-table-column prop="publishdate" label="发布日期" width="180">
          </el-table-column>
 
-         <el-table-column prop="duedate" label="截止日期" width="200">
+         <el-table-column prop="duedate" label="截止日期" width="180">
          </el-table-column>
 
          <el-table-column prop="publisher" label="发布人" width="100">
@@ -20,16 +21,30 @@
           <el-table-column prop="totalnum" label="总人数" width="80">
           </el-table-column>
 
-           <el-table-column prop="handlenum" label="提交人数" width="80">
+           <el-table-column prop="handlenum" label="提交人数" width="50">
            </el-table-column>
 
            <el-table-column type="selection" width="50"></el-table-column>
+
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+               <router-link to="/teacher/homework"><el-button type="text" size="small">查看</el-button></router-link>
+            </template>
+          </el-table-column>
+
+
+
+          
 
   
        </el-table>
 
        <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">发布</el-button>
        
+       
+
+
+
        <el-dialog title="发布作业" :visible.sync="dialogFormVisible">
   <el-form :model="form">
     <el-form-item label="标题" :label-width="formLabelWidth">
@@ -112,7 +127,8 @@ export default {
 
            }
 
-       }
+       },
+      
    }
     
     

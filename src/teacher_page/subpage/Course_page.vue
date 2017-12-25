@@ -3,7 +3,7 @@
     <Teacher></Teacher>
     <div align="center">
       <div class="container">
-        <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">项目管理</el-row>
+        <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">课程:{{lesson_name}}</el-row>
         <el-progress :percentage="100" :show-text="false"></el-progress>
         <!-- 选项卡 -->
         <div>
@@ -43,6 +43,7 @@ export default {
     },
     data() {
       return {
+        lesson_name:'项目管理',
         activeName2: 'first'
       };
     },
