@@ -120,6 +120,7 @@ class BaseDAO{
             one:function(done){
                 connection.query(query, function(err, rows, fields) {
                     if (err) {
+                        //r.push(0);
                         r.push(false);
                         throw err;
                     }
@@ -128,6 +129,7 @@ class BaseDAO{
             }
         },
             function (error, result) {
+                //r.push(0);
                 r.push(true);
             });
     };
@@ -182,14 +184,14 @@ class BaseDAO{
                                 'teacher_name':rows[i].teacher_name,
                                 'faculty_working':rows[i].faculty_working,
                                 'teacher_introduction':rows[i].teacher_introduction,
-                                'teacher_eamil':rows[i].teacher_eamil
+                                'teacher_email':rows[i].teacher_email
                             }
                             break;
                             case 'course':data[i]={
                                 'course_ID':rows[i].course_ID,
                                 'course_name':rows[i].course_name,
                                 'faculty_belong':rows[i].faculty_belong,
-                                'course_introduction':rows[i].course_introduction,
+                                'course_introduction':rows[i].course_introduction
                             }
                             break;
                             case'teacher_class':data[i]={
@@ -257,6 +259,8 @@ class BaseDAO{
                             break;
                             case 'post':data[i]={
                                 'post_ID':rows[i].post_ID,
+                                'post_title':rows[i].post_title,
+                                'post_content':rows[i].post_content,
                                 'post_label':rows[i].post_label,
                                 'post_date':rows[i].post_date,
                                 'post_starter':rows[i].post_starter,
