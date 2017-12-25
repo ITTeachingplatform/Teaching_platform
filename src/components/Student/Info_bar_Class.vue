@@ -12,12 +12,6 @@
         </el-table>
       </el-row>
     </el-row>
-    <div style="margin-top: 20px">
-      <router-link to="/student_courses">
-        <el-button>查看所选课程</el-button>
-      </router-link>
-      <el-button @click="setCurrent()">取消选择</el-button>
-    </div>
   </div>
 </template>
 
@@ -36,11 +30,9 @@
       }
     },
     methods: {
-      setCurrent(row) {
-        this.$refs.singleTable.setCurrentRow(row);
-      },
       handleCurrentChange(val) {
         this.currentRow = val;
+        this.$router.push({path:'/student/courses_view'});
       }
     }
   }
@@ -65,10 +57,5 @@
 
   .box-card {
     width: 440px;
-  }
-  #class_card {
-    width: 230px;
-    height: 230px;
-    margin-bottom: 30px;
   }
 </style>
