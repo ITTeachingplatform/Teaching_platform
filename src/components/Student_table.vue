@@ -215,7 +215,7 @@
 <el-dialog
   title="填写学生信息"
   :visible.sync="add_Visible"
-  width="19%"
+  width="70%"
   :before-close="handleClose">
   <el-row>姓名：<el-input v-model="name"></el-input></el-row>
   <el-row>学号：<el-input v-model="id"></el-input></el-row>
@@ -234,7 +234,7 @@
 <el-dialog
   title="填写学生课程信息"
   :visible.sync="class_Visible"
-  width="19%"
+  width="70%"
   :before-close="handleClose">
   <el-row>所属学院： 
     <el-select v-model="school_value" placeholder="请选择学院">
@@ -279,6 +279,7 @@ import store from '../vuex/admin/store'
       store,
       data() {
       return {
+        tableData:[],
         numberValidateForm: {
           id: '',
           name: '',
@@ -301,7 +302,7 @@ import store from '../vuex/admin/store'
           lesson_name: '',
           lesson_teacher: '',
           lesson_school: '',
-           gridData: [{
+        gridData: [{
           subject: 'IT项目管理',
           school: '软件学院',
           teacher: '李红',
@@ -335,18 +336,20 @@ import store from '../vuex/admin/store'
       }
     },
      computed: {
-         tableData:{
-          get:function(){
-              return store.state.student_info
-          }
-         }
       },
       mounted(){
         this.$http.post('/api/get', {
                     type: 'student_list'
                   },{}).then((response) => {
                     console.log(response.body[0]);
-                  
+                    var stu_list = response.body;
+                    for(var i=0;i<stu_list[0].length;i++){
+                      var t = new Array()
+                      t['id']=stu_list[0][i].student_ID;
+                      t['name']=stu_list[0][i].student_name;
+                      console.log(t);
+                     this.tableData.push(t)
+                    }
                   })
       },
     methods: {
@@ -392,3 +395,7 @@ import store from '../vuex/admin/store'
     }
   }
 </script>
+
+<style>
+
+</style>

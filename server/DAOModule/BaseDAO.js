@@ -116,7 +116,6 @@ class BaseDAO{
     };
     update(id,atr,val,table,key,r){
         var query = "update "+table+" set "+atr+"=\'"+val+"\' where "+key+"=\'"+id+"\'";
-        console.log(query)
         async.series({
             one:function(done){
                 connection.query(query, function(err, rows, fields) {
@@ -192,7 +191,7 @@ class BaseDAO{
                                 'course_ID':rows[i].course_ID,
                                 'course_name':rows[i].course_name,
                                 'faculty_belong':rows[i].faculty_belong,
-                                'course_introduction':rows[i].course_introduction,
+                                'course_introduction':rows[i].course_introduction
                             }
                             break;
                             case'teacher_class':data[i]={

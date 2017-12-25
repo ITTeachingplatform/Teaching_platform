@@ -6,7 +6,7 @@ var baseDAO = new BaseDAO();
 //所有注意大小写
 var table = "post";//表名
 var key = "post_ID";//表主键
-var atrlist = "(post_ID,post_label,post_title,post_conten,post_date,post_starter,post_reply_num,post_browse_num,post_support_num,post_last_reviser)";//表列明 格式(atr1,atr2,atr3,...)
+var atrlist = "(post_ID,post_label,post_title,post_content,post_date,post_starter,post_reply_num,post_browse_num,post_support_num,post_last_reviser)";//表列明 格式(atr1,atr2,atr3,...)
 var atrnum = 10;//表列数
 
 class PostDAO{//表名DAO

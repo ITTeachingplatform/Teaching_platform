@@ -132,7 +132,7 @@
       </template>
             </el-table-column>
 
-            <el-table-column label="最后修改者" width="100px">
+            <el-table-column label="最后评论者" width="100px">
                <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.final_changer }}</span>
       </template>
@@ -150,13 +150,6 @@
       </template>
             </el-table-column>
 
-            <el-table-column label="支持数" width="100px">
-               <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.sup_num }}</span>
-      </template>
-            </el-table-column>
-
-
     <el-table-column label="操作" width="150px">
       <template slot-scope="scope">
         <el-button
@@ -170,10 +163,8 @@
     </el-table-column>
   </el-table>
    </el-row>
-  </el-col>
-</el-row>
-  </el-tab-pane>
-</el-row>  
+
+
     
 </div>
 </template>
@@ -209,6 +200,7 @@ import store from '../vuex/admin/store';
                     var dis_list = response.body;
                     for(var i=0;i<dis_list[0].length;i++){
                       var t = new Array()
+                      t['topic']=dis_list[0][i].post_title;
                       t['writer']=dis_list[0][i].post_starter;
                       t['publish_date']=dis_list[0][i].post_date;
                       t['tag']=dis_list[0][i].post_label;
