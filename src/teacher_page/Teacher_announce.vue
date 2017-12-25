@@ -29,7 +29,7 @@
             <el-row type="flex" justify="start">
               <el-col>
                 <!-- <el-form label-width="150px"> -->
-                  <el-form-item label="公告类型" prop="type" required="true">
+                  <el-form-item label="公告类型" prop="type" required=true>
                     <el-select v-model="validateForm.type" placeholder="公告类型">
                       <el-option label="系统公告" value="system_announcement"></el-option>
                       <el-option label="教学公告" value="course_announcement"></el-option>
@@ -107,11 +107,12 @@ export default {
       components: {
         'Teacher': Teacher
       },
-      store,
+      // store,
       data() {
       return {
         centerDialogVisible: false,
         radio: '1',
+        tableData:[],
         validateForm: {
           keyword: '',
           ann_publisher: '',
@@ -122,14 +123,28 @@ export default {
       }
     },
     computed: {
-         tableData:{
-          get:function(){
-              return store.state.announce_info
-          }
-         },
+        //  tableData:{
+        //   get:function(){
+        //       return store.state.announce_info
+        //   }
+        //  },
       },
       mounted () {
-        store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
+                this.$http.post('/api/get', {
+                    type: 'all_sys_announce'
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    var ann_list = response.body[0];
+                    // console.log(ann_list);
+                    for(var i in ann_list){
+                      var t = new Array()
+                      t['announcement_title']=ann_list[i].announcement_title;
+                      t['ann_publisher']=ann_list[i].sys_ann_publisher;
+                      t['announcement_date']=ann_list[i].announcement_date;
+                      t['brief_content']=ann_list[i].announcement_content;
+                     this.tableData.push(t)
+                    }
+                  })
       },     
 
     methods: {

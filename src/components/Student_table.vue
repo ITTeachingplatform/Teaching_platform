@@ -164,7 +164,7 @@
 <el-dialog
   title="学生信息"
   :visible.sync="info_Visible"
-  width="19%">
+  width="70%">
   <el-row>姓名：{{name}}</el-row>
   <el-row>学号：{{id}}</el-row>
   <el-row>密码：{{password}}</el-row>
@@ -174,10 +174,10 @@
   <el-row>班级：{{grade}}</el-row>
   <el-row>联系方式：{{email}}</el-row>
     <el-table :data="gridData">
-    <el-table-column property="subject" label="课程名称" width="50px"></el-table-column>
-    <el-table-column property="school" label="开设学院" width="50px"></el-table-column>
-    <el-table-column property="teacher" label="任课老师" width="50px"></el-table-column>
-    <el-table-column property="score" label="平时成绩" width="50px"></el-table-column>
+    <el-table-column property="subject" label="课程名称" ></el-table-column>
+    <el-table-column property="school" label="开设学院" ></el-table-column>
+    <el-table-column property="teacher" label="任课老师" ></el-table-column>
+    <el-table-column property="score" label="平时成绩" ></el-table-column>
   </el-table>
   <span></span>
   <span slot="footer" class="dialog-footer">
@@ -189,7 +189,7 @@
 <el-dialog
   title="学生信息"
   :visible.sync="edit_Visible"
-  width="19%"
+  width="70%"
   :before-close="handleClose">
   <el-row>姓名：<el-input v-model="name"></el-input></el-row>
   <el-row>学号：<el-input v-model="id"></el-input></el-row>
@@ -342,12 +342,12 @@ import store from '../vuex/admin/store'
                     type: 'student_list'
                   },{}).then((response) => {
                     console.log(response.body[0]);
-                    var stu_list = response.body;
-                    for(var i=0;i<stu_list[0].length;i++){
+                    var stu_list = response.body[0];
+                    for(var i in stu_list){
                       var t = new Array()
-                      t['id']=stu_list[0][i].student_ID;
-                      t['name']=stu_list[0][i].student_name;
-                      console.log(t);
+                      t['id']=stu_list[i].student_ID;
+                      t['name']=stu_list[i].student_name;
+                      
                      this.tableData.push(t)
                     }
                   })

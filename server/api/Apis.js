@@ -13,7 +13,7 @@ router.post('/check', (req, res) => {
         res.send(result);
     }, 1000)
 });
-
+//最新4条系统公告
 router.post('/get',  (req, res) => {
     var params = req.body;
     if(params.type == 'sys_announce'){
@@ -22,6 +22,17 @@ router.post('/get',  (req, res) => {
     var result = new Array();
     AdminService.load_numLatest_sysannouncement(result);
     setTimeout(function(){
+        res.send(result);
+    }, 1000)
+}
+//所有系统公告
+else if(params.type == 'all_sys_announcement'){
+    console.log('Getting all_sys_announcement');
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_numLatest_sysannouncement(result,100);
+    setTimeout(function(){
+        console.log(result);        
         res.send(result);
     }, 1000)
 }
