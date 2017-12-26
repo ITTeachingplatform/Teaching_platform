@@ -30,6 +30,46 @@ router.post('/check', (req, res) => {
     }
 });
 
+router.post('/get/one_student_BasicInfo',  (req, res) => {
+    var params = req.body;
+    console.log(params.student_id);
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a student\'s basic info');
+        AdminService.load_one_student(params.student_id, result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1500)
+    }
+});
+
+router.post('/get/one_student_allClass',  (req, res) => {
+    var params = req.body;
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a student\'s all Class that attended');
+        AdminService.load_allCourse_one_student(params.student_id,result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1000)
+    }
+});
+
+router.post('/get/one_teacher_BasicInfo',  (req, res) => {
+    var params = req.body;
+    if(params.teacher_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a teacher\'s basic info');
+        AdminService.load_one_teacher(params.teacher_id, result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1000)
+    }
+});
+
 router.post('/get',  (req, res) => {
     var params = req.body;
     if(params.type == 'sys_announce'){
@@ -91,5 +131,22 @@ else if(params.type == 'course_list'){
 }
 });
 
+router.post('/search_announcement', (req, res) => {
+    console.log('Searching announcement');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    var result_2 = new Array();
+    AdminService.find_sysannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result);
+    AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result_2);
+    setTimeout(function(){
+    console.log(result)
+    for(var i in result[0]){
+    result_2[0][i]=result[0][i];
+    }
+    res.send(result_2);
+    }, 1000)
+});
+    
 
 module.exports = router;

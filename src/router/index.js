@@ -214,7 +214,7 @@ export default new Router({
       component: Student_publish_post
     },
     {
-      path:'/student/courses_view',
+      path:'/student/courses_view/:course_id/:t_class_id',
       name: 'Student_courses_view',
       component: Student_courses_view
     },
