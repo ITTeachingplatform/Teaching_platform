@@ -1,56 +1,56 @@
 <template>
-  <div id="student_discussion"  align="center">
+  <div id="student_resource"  align="center">
     <Student activeIndex='3'></Student>
     <div class="container">
       <el-row style="font-size:50px;margin-top:20px">课程资源</el-row>
       <el-row type="flex" justify="center" >
-        <div class="block" style="width:900px;margin-top:10px">
+        <div class="block" style="width:900px;margin-top:10px;margin-bottom:10px">
+          <el-card class="box-card" style='width:900px'>
           <div slot="header" class="clearfix">
             <span>搜索框</span>
           </div>
-          <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form :model="validateForm" ref="validateForm" :rules="rules" label-width="100px" class="demo-ruleForm">
             <!--row 1-->
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="16">
                 <el-form-item label="文件关键词" prop="keyword" :rules="[]">
-                  <el-input type="keyword" v-model="ruleForm.keyword" auto-complete="off"></el-input>
+                  <el-input type="keyword" v-model="validateForm.keyword" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="资源类型" prop="resource_type" :rules="[{required:true}]">
-                  <el-select v-model="ruleForm.resource_type" placeholder="请选择资源类型">
-                    <el-option label="题库" value="bank"></el-option>
-                    <el-option label="教学资源" value="resource"></el-option>
-                  </el-select>
+                <el-form-item label="资源类型" prop="file_type" :rules="[{required:true}]">
+                  <el-radio v-model="validateForm.file_type" label="1">题库</el-radio>
+                  <el-radio v-model="validateForm.file_type" label="2">教学资源</el-radio>
                 </el-form-item>
               </el-col>
             </el-row>
             <!--row 2-->
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="14">
-                <el-form-item label="课程名称" prop="tag" :rules="[]">
-                  <el-input type="tag" v-model="ruleForm.tag" auto-complete="off"></el-input>
+                <el-form-item label="课程名称" prop="course_name" :rules="[]">
+                  <el-input type="course_name" v-model="validateForm.course_name" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
                 <el-form-item label="发布时间" prop="date" :rule="[]">
-                  <el-date-picker type="date" v-model="ruleForm.date" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker type="date" v-model="validateForm.date" placeholder="选择日期" value-format="yyyy-MM-dd" @change="dateChange" auto-complete="off"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
 
           <el-row type="flex" justify="center">
-            <el-button style='width:150px' type="primary" @click="search_resource">搜索</el-button>
-            <el-button style='width:150px;margin-left:40px' @click="resetForm('ruleForm')">重置</el-button>
+            <el-button style='width:150px' type="primary" @click="search_file">搜索</el-button>
+            <el-button style='width:150px;margin-left:40px' @click="resetForm(validateForm)">重置</el-button>
           </el-row>
+          </el-card>
         </div>
       </el-row>
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <!--Category bar-->
       <el-row type="flex" justify="center" >
         <div class="b" style="width:900px;margin-top:10px">
-          <el-table ref="singleTable" :data="tableData"  tooltip-effect="dark" style="width:100%" highlight-current-row @current-change="handleCurrentChange">
+          <el-table ref="singleTable" :data="tableData"  tooltip-effect="dark" style="width:100%margin-top:20px;text-align:left;" highlight-current-row @current-change="handleCurrentChange">
             
             <el-table-column label="标题" width="200px">
               <template slot-scope="scope">
@@ -63,15 +63,15 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="课程名称" prop="tag" width="180px">
+            <el-table-column label="课程名称" prop="course_name" width="180px">
               <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.tag }}</span>
+                <span style="margin-left: 10px">{{ scope.row.course_name }}</span>
               </template>
             </el-table-column>
 
-            <el-table-column label="类别" prop="resource_type" width="100px">
+            <el-table-column label="类别" prop="file_type" width="100px">
               <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.resource_type }}</span>
+                <span style="margin-left: 10px">{{ scope.row.file_type }}</span>
               </template>
             </el-table-column>
 
@@ -86,40 +86,50 @@
                 <span style="margin-left: 10px">{{ scope.row.download_num }}</span>
               </template>
             </el-table-column>
-
+            <el-table-column label="操作" >
+              <template slot-scope="scope">
+                <el-button @click="centerDialogVisible = true" type="primary" size="mini" round>下载</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-row>
-      <div style="margin-top: 20px">
-        <el-button @click="setCurrent(tableData[1])">下载选中项</el-button>
-        <el-button @click="setCurrent()">取消选择</el-button>
-      </div>
     </div>
+    <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%">
+      <span>开始下载！</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Student from '../components/Student/Student.vue';
+import store from '../vuex/student/store';
 export default {
-    name: 'Student_discussion',
+    name: 'student_resource',
       components: {
         'Student': Student,
       },
     data() {
       return {
+        centerDialogVisible: false,
         rules: {
 
         },
         search_date: '',
-        ruleForm: {
+        validateForm: {
           keyword: '',
-          resource_type: '',
+          file_type: '1',
           date: '',
-          tag: '',
+          course_name: '',
         },
         tableData: [],
         currentRow: null
       }
+    },
+    mounted (){
     },
     methods: {
       submitForm(formName) {
@@ -134,13 +144,55 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-      setCurrent(row) {
-        this.$refs.singleTable.setCurrentRow(row);
+        this.search_date=''
       },
       handleCurrentChange(val) {
         this.currentRow = val;
-      }
+      },
+      search_file(){
+        this.tableData=[];
+         console.log(this.search_date);
+         this.$http.post('/api/get/search_file', {
+            student_id: store.state.student_account.id,
+            file_name: this.validateForm.keyword,
+            date: this.search_date,
+            course_name: this.validateForm.course_name,
+            type: this.validateForm.file_type
+          },{}).then((response) => {
+            console.log(response.body[0]);
+            var file_list = response.body[0];
+            if(this.validateForm.file_type === '1'){
+              for(var i in file_list){
+                var t = new Array()
+                t['name']=file_list[i].bank_name;
+                t['date']=file_list[i].bank_up_date;
+                t['course_name']=file_list[i].course_name;
+                t['file_type']='题库';
+                t['size']=file_list[i].bank_size;
+                t['download_num']=file_list[i].bank_download_num;
+                this.tableData.push(t);
+              }
+            }
+            else{
+              for(var i in file_list){
+                var t = new Array()
+                t['name']=file_list[i].resource_name;
+                t['date']=file_list[i].resource_date;
+                t['course_name']=file_list[i].course_name;
+                t['file_type']='教学资源';
+                t['size']=file_list[i].resource_size;
+                t['download_num']=file_list[i].resource_downloads;
+                this.tableData.push(t)
+                }
+            }
+          })
+      },
+      dateChange(val){
+        console.log(val)
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
     }
 
 }
@@ -149,8 +201,5 @@ export default {
 <style scoped>
   .container {
     width:900px;
-  }
-  .box-card{
-    width:100%;
   }
 </style>

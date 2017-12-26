@@ -74,6 +74,125 @@ router.post('/get/one_student_allClass',  (req, res) => {
     }
 });
 
+router.post('/get/one_student_unfinishHomework', (req, res) => {
+    console.log('Getting a student\'s unfinish homework');
+    var params = req.body;
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_UnFinishHomework_one_student(params.student_id,result);
+        setTimeout(function(){
+        // console.log(result)
+            res.send(result);
+        }, 1500)}
+});
+
+router.post('/get/one_Course_allInfo', (req, res) => {
+    console.log('Getting a course\'s all information');
+    var params = req.body;
+    if(params.t_class_ID != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_one_courseMessage(params.t_class_ID,result);
+        setTimeout(function(){
+        // console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/get/search_file', (req, res) => {
+    console.log('Searching resource');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    if(params.type == '1'){
+        AdminService.find_bank_by(params.file_name,params.date,'',params.student_id,params.course_name,result);
+    }
+    else{
+        AdminService.find_resource_by(params.file_name,params.date,'',params.student_id,params.course_name,result);
+    }
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+
+router.post('/get/one_Course_allann', (req, res) => {
+    console.log('Getting a course\'s all announcement');
+    var params = req.body;
+    if(params.course_ID != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.find_couannouncement_by('','','',params.course_ID,result);
+        setTimeout(function(){
+        // console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/get/one_Course_allhomework', (req, res) => {
+    console.log('Getting a course\'s all homework');
+    var params = req.body;
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_allHomework_one_student_one_t_class(params.student_id,params.t_class_id,result);
+        setTimeout(function(){
+            console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/get/one_Course_allres', (req, res) => {
+    console.log('Getting a course\'s all resource');
+    var params = req.body;
+    if(params.course_ID != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.find_resource_by('','',params.t_class_id,params.student_id,'',result);
+        setTimeout(function(){
+            console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/get/one_Course_allbank', (req, res) => {
+    console.log('Getting a course\'s all exercises');
+    var params = req.body;
+    if(params.course_ID != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.find_bank_by('','',params.t_class_id,params.student_id,'',result);
+        setTimeout(function(){
+            console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/load_one_student', (req, res) => {
+    console.log('Getting one student personal');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_one_studentMessage(params.student_id,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
+
+router.post('/modify_one_student', (req, res) => {
+    console.log('Getting modify_one_student');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.modify_one_student(params.student_id,params.student_password,params.student_email,params.student_introduction,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
+
 router.post('/get/one_teacher_BasicInfo',  (req, res) => {
     var params = req.body;
     if(params.teacher_id != null){
@@ -146,6 +265,7 @@ else if(params.type == 'cou_announce'){
     var result = new Array();
     AdminService.load_numLatest_couannouncement(result);
     setTimeout(function(){
+        console.log(result)
         res.send(result);
     }, 1000)
 }

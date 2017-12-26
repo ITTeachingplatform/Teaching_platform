@@ -7,12 +7,26 @@
           <div slot="header" class="clearfix">
             <span>课程基本信息</span>
           </div>
-          <el-form :label-position="top" label-width="100px" :model="class_info">
-            <el-form-item label="课程名称"><div>xxxxxxxxx</div></el-form-item>
-            <el-form-item label="任课教师"><div>xxxxxxxxx</div></el-form-item>
-            <el-form-item label="开设学院"><div>xxxxxxxxx</div></el-form-item>
-            <el-form-item label="课程介绍"><div>xxxxxxxxx</div></el-form-item>
-            <el-form-item label="教学大纲"><div>xxxxxxxxxxxxxx</div></el-form-item>
+          <el-form label-width="100px" :model="CourseInfo">
+            <el-form-item label="课程名称">
+              <el-input type="text" id="textcolor" :disabled="true" v-model="CourseInfo.course_name"></el-input>
+            </el-form-item>
+            <div style="margin: 20px 0;"></div>
+            <el-form-item label="任课教师">
+              <el-input type="text" id="textcolor" :disabled="true" v-model="CourseInfo.teacher_name"></el-input>
+            </el-form-item>
+            <div style="margin: 20px 0;"></div>
+            <el-form-item label="开设学院">
+              <el-input type="text" id="textcolor" :disabled="true" v-model="CourseInfo.faculty_name"></el-input>
+            </el-form-item>
+            <div style="margin: 20px 0;"></div>
+            <el-form-item label="课程介绍">
+              <el-input type="textarea" id="textcolor" autosize :disabled="true" v-model="CourseInfo.course_introduction"></el-input>
+            </el-form-item>
+            <div style="margin: 20px 0;"></div>
+            <el-form-item label="教学大纲">
+              <el-input type="textarea" id="textcolor" autosize :disabled="true" v-model="CourseInfo.sysllabus"></el-input>
+            </el-form-item>
           </el-form>
       </el-card>
       <div style="margin: 20px;"></div>
@@ -50,14 +64,36 @@ export default {
     },
     store,
     data() {
-        return {
-          activeName: 'course_announ',
-        }
-      },
+      return {
+        activeName: 'course_announ',
+        // student_id: store.state.student_account.id,
+        t_class_ID: this.$route.params.t_class_id,
+        CourseInfo:{
+          course_name:'',
+          teacher_name:'',
+          faculty_name:'',
+          course_introduction:'',
+          sysllabus:''
+        },
+      }
+    },
+    mounted (){
+      this.$http.post('/api/get/one_Course_allInfo', {
+        t_class_ID: this.$route.params.t_class_id,
+      },{}).then((response) => {
+        // console.log(response.body[0]);
+        this.CourseInfo.course_name = response.body[0][0].course_name;
+        this.CourseInfo.teacher_name = response.body[0][0].teacher_name;
+        this.CourseInfo.faculty_name = response.body[0][0].faculty_name;
+        this.CourseInfo.course_introduction = response.body[0][0].course_introduction;
+        this.CourseInfo.sysllabus = response.body[0][0].sysllabus;
+        // console.log(this.CourseInfo);
+      })
+    },
     methods: {
-        handleClick(tab, event) {
-          console.log(tab, event);
-        }
+      handleClick(tab, event) {
+        console.log(tab, event);
+      }
     }
 }
 </script>
@@ -80,5 +116,10 @@ export default {
 }
 #card_size{
   width:850px;
+  height: 500px;
+}
+#textcolor{
+  background-color: white;
+  color: black;
 }
 </style>
