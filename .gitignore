@@ -8,7 +8,6 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 server/DAOModule/setting.js
-
 # Editor directories and files
 .idea
 .vscode

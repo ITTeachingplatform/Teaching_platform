@@ -178,7 +178,7 @@
                } catch (error) {
                  
                }         
-            })                        
+            })                 
         },
         data(){
           return {

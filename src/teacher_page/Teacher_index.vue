@@ -15,7 +15,7 @@
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
 import Info_bar_teacher from '../components/Teacher/Info_bar_teacher.vue';
-import Carousel from '../components/Carousel.vue'
+// import Carousel from '../components/Carousel.vue'
 import Announce from '../components/Announce.vue';
 
 export default {
@@ -28,7 +28,7 @@ export default {
       components: {
         'Teacher': Teacher,
         'Info': Info_bar_teacher,
-        'carousel':Carousel,
+        // 'carousel':Carousel,
         'announce':Announce
       },
       methods: {

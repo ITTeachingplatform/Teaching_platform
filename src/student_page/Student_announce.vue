@@ -1,7 +1,8 @@
 <template>
   <div id="student_announce">
-    <Student activeIndex='2'></Student>
-    <el-row style="font-size:50px">公告列表</el-row>
+    <Student activeIndex='1'></Student>
+    <el-row style="font-size:50px">公告列表
+      <!-- <el-button v-on="back; flag:false" style="float: right; padding: 3px 0;font-size:20px;" type="text">返回</el-button> --></el-row>
     <el-row type='flex' justify="center">
       <div class="block" style="width:900px;margin-top:10px">
         <el-progress :percentage="100" :show-text="false"></el-progress>
@@ -17,30 +18,32 @@
                   </el-form-item>
               </el-col>
               <el-col>
-                  <el-form-item label="公告发布者" prop="cou_ann_publisher" :rules="[]">
-                    <el-input type="cou_ann_publisher" v-model="validateForm.cou_ann_publisher" auto-complete="off"></el-input>
+                  <el-form-item label="公告发布者" prop="ann_publisher" :rules="[]">
+                    <el-input type="cou_ann_publisher" v-model="validateForm.ann_publisher" auto-complete="off"></el-input>
                   </el-form-item>
               </el-col>
             </el-row>
             <el-row type="flex" justify="start">
               <el-col>
-                  <el-form-item label="公告类型" prop="type" required="true">
-                    <el-select v-model="validateForm.type" placeholder="公告类型">
-                      <el-option label="系统公告" value="system_announcement"></el-option>
-                      <el-option label="教学公告" value="course_announcement"></el-option>
-                    </el-select>
+                  <el-form-item label="公告类型" prop="type" >
+                    <el-radio v-model="validateForm.type" label="1">系统公告</el-radio>
+                    <el-radio v-model="validateForm.type" label="2">教学公告</el-radio>
+                    <!-- <el-select v-model="validateForm.type" placeholder="公告类型"> -->
+                      <!-- <el-option label="系统公告" value="system_announcement"></el-option> -->
+                      <!-- <el-option label="教学公告" value="course_announcement"></el-option> -->
+                    <!-- </el-select> -->
                   </el-form-item>
               </el-col>
               <el-col>
                   <el-form-item label="公告发布时间" prop="publish_date" :rules="[]">
-                    <el-date-picker type="date" v-model="validateForm.publish_date" auto-complete="off"></el-date-picker>
+                    <el-date-picker type="date" v-model="validateForm.publish_date" value-format="yyyy-MM-dd" @change="dateChange" auto-complete="off"></el-date-picker>
                   </el-form-item>
               </el-col>
             </el-row>
                 </el-form>
             <el-row type="flex" justify="center">
-              <el-button style='width:150px' type="primary">搜索</el-button>
-              <el-button style='width:150px;margin-left:40px' v-on:click="resetForm('validateForm')">重置</el-button></el-row>
+              <el-button style='width:150px' type="primary" @click="search_announcement">搜索</el-button>
+              <el-button style='width:150px;margin-left:40px' v-on:click="reset_form()">重置</el-button></el-row>
           </el-card>
         </el-row>
         <el-progress :percentage="100" :show-text="false"></el-progress>
@@ -52,7 +55,8 @@
         <el-table :data="tableData" style="width: 100%;margin-top:20px;text-align:left;">
           <el-table-column label="公告标题" width="300px">
             <template slot-scope="scope">
-              <span style="margin-left: 10px" @click="centerDialogVisible = true">{{ scope.row.announcement_title }}</span></template>
+              <router-link to=""><span style="margin-left: 10px"  @click="showDialog(scope.$index)">{{ scope.row.announcement_title }}</span></router-link>
+              </template>
           </el-table-column>
           <el-table-column label="发布者" width="100px">
             <template slot-scope="scope">
@@ -74,16 +78,26 @@
           </el-table-column>
         </el-table>
         <el-progress :percentage="100" :show-text="false"></el-progress>
-        </div>
+        <!--ww--></div>
     </el-row>
+    <!-- </el-col>
+    </el-row> -->
+    <!-- Dialog -->
     <div>
-      <el-dialog title="标题" :visible.sync="centerDialogVisible" width="80%" center>
-        <el-row></el-row>
+      <el-form :data="dialogForm">
+        <el-dialog  :visible.sync="centerDialogVisible" width="80%" center>
+        <el-row><h1 align=center>{{dialogForm.title}}</h1></el-row>
+        <el-row>发布者：{{dialogForm.ann_publisher}}</el-row>
+        <el-row>发布时间：{{dialogForm.publish_date}}</el-row>
+        <el-row style="margin:15px">{{dialogForm.content}}</el-row>
         <span slot="footer" class="dialog-footer">
+          <!-- <el-button @click="centerDialogVisible=f alse">取 消</el-button> -->
           <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button></span>
       </el-dialog>
+      </el-form>
     </div>
-  </div>
+    <!-- END Dialog -->
+    </div>
 </template>
 
 <script>
@@ -94,33 +108,46 @@ export default {
       components: {
         'Student': Student
       },
-      store,
+      // store,
       data() {
       return {
         centerDialogVisible: false,
-        radio: '1',
+        search_date: '',
+        tableData:[],
         validateForm: {
           keyword: '',
           ann_publisher: '',
           publish_date: '',
           brief_content: '',
-          type: '',         
-        },
+          type: '1',         
+        },   
+        dialogForm:{
+          title:'',
+          content:'',
+          publish_date: '',      
+        }
       }
     },
     computed: {
-         tableData:{
-          get:function(){
-              return store.state.announce_info
-          }
-         },
+        //  tableData:{
+        //   get:function(){
+        //       return store.state.announce_info
+        //   }
+        //  },
       },
       mounted () {
-        store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
       },     
 
     methods: {
-            submitForm(formName) {
+      showDialog(index){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=this.tableData[index].announcement_title;
+        this.dialogForm.publish_date=this.tableData[index].announcement_date;
+        this.dialogForm.content=this.tableData[index].brief_content;
+        this.dialogForm.ann_publisher=this.tableData[index].ann_publisher;
+        
+      },
+      submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
@@ -130,9 +157,52 @@ export default {
           }
         });
       },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+    reset_form(){
+      this.validateForm={
+            keyword: '',
+            ann_publisher: '',
+            publish_date: '',
+            brief_content: '',
+            type:'1'
+          }
+        this.search_date=''
+      },
+      //前端 Manage_announce.vue
+search_announcement(){
+         this.tableData=[];
+         console.log(this.search_date);
+         console.log(this.validateForm.ann_publisher)
+         this.$http.post('/api/search_announcement', {
+          //  announcement_title,announcement_date,sys_ann_publisher
+                    announcement_title: this.validateForm.keyword,
+                    announcement_date: this.search_date,
+                    sys_ann_publisher:this.validateForm.ann_publisher,
+                  },{}).then((response) => {
+                    console.log(response.body[0]);
+                    var ann_list = response.body[0];
+                    for(var i in ann_list){
+                      var t = new Array()
+                      t['announcement_title']=ann_list[i].announcement_title;
+                      t['ann_publisher']=ann_list[i].sys_ann_publisher;
+                      t['announcement_date']=ann_list[i].announcement_date;
+                      t['brief_content']=ann_list[i].announcement_content;
+                      if(this.validateForm.type === '1' && ann_list[i].sys_announcement_ID)
+                          this.tableData.push(t)
+                      if(this.validateForm.type === '2' && ann_list[i].cou_announcement_ID)                        
+                          {
+                            t['ann_publisher']=ann_list[i].cou_ann_publisher;
+                            this.tableData.push(t)
+                          }
+                    }
+                  })
+      },
+      //日期格式化
+      dateChange(val){
+        console.log(val)
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
     }
   }
 </script>
