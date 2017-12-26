@@ -80,7 +80,7 @@
         ruleForm2: {
           account: '',
           checkPwd: '',
-          code: ''
+          code: 'aaaa'
         },
         rules2: {
           account: [
