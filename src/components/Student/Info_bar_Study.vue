@@ -5,88 +5,128 @@
     <el-row type="flex" justify="center" style="margin-top:10px;margin-bottom:10px">
       <el-row type="flex" justify="center">
         <el-col>
-          <el-card class="box-card"  style="margin-left:20px">
-          <div slot="header" class="clearfix">
-            <span style="font-size:30px">近期课程信息</span>
-            <router-link to="/student/courses_view">
-            <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
-            </router-link>
-          </div>
-          <div class="text item">
-            {{a_1}}
-          </div>
-          <div class="text item">
-            {{a_2}}
-          </div>
-          <div class="text item">
-            {{a_3}}
-          </div>
-          <div class="text item">
-            {{a_4}}
-          </div>
-        </el-card>
+            <el-card class="box-card"  style="margin-left:20px">
+            <div slot="header" class="clearfix">
+              <span style="font-size:30px">近期课程信息</span>
+            </div>
+            <div v-for="i in couann_list_num" :key="i" v-if="i < a.length">
+                <router-link to="#">
+                  <el-button style="float: center; padding: 3px 0;font-size:20px;margin-bottom:10px;" type="text" @click="show_couannounnce(a[i])">{{get_couannounnce_title(i)}}</el-button>
+                </router-link>
+            </div>
+          </el-card>
         </el-col>
 
         <el-col>
           <el-card class="box-card" style="margin-left:20px">
             <div slot="header" class="clearfix">
               <span style="font-size:30px">最新作业</span>
-              <router-link to="/student_courses">
-                <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
-              </router-link>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">
-              {{'科目' + o + "  作业XXXXXXXXXXXXXXXXXXXX"}}
+            <div v-for="i in homework_list_num" :key="i" v-if="i < b.length">
+              <router-link to="#">
+                <el-button style="float: center; padding: 3px 0" type="text;font-size:20px;margin-bottom:10px;" @click="show_homework(b[i])">{{get_homework_title(i)}}</el-button>
+              </router-link>
             </div>
           </el-card>
         </el-col>
       </el-row>
     </el-row>
+
+    <div>
+      <el-form :data="dialogForm">
+        <el-dialog  :visible.sync="centerDialogVisible" width="80%" center>
+        <el-row><h1 align=center>{{dialogForm.title}}</h1></el-row>
+        <el-row>发布者：{{dialogForm.publisher}}</el-row>
+        <el-row>发布时间：{{dialogForm.date}}</el-row>
+        <el-row style="margin:15px">{{dialogForm.content}}</el-row>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button></span>
+      </el-dialog>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
+  import store from '../../vuex/student/store';
   export default{
     name: 'Info_bar_Study',
     data(){
       return{
-        a_1:'',
-        a_2:'',
-        a_3:'',
-        a_4:'',
-        b_1:'',
-        b_2:'',
-        b_3:'',
-        b_4:'',
+        centerDialogVisible:false,
+        dialogForm:{
+          title:'',
+          publisher:'',
+          date:'',
+          content:''
+        },
+        a:[],
+        couann_list_num : 4,
+        b:[],
+        homework_list_num: 4,
       }
     },
     mounted () {
       this.$http.post('/api/get', {
         type: 'cou_announce'
       },{}).then((response) => {
-        console.log(response.body);
-        var b = response.body;
+        // console.log(response.body);
+        var couann_list = response.body[0];
         try {
-          this.a_1=b[0][0].announcement_title;
+          for(var i in couann_list){
+          var t = new Array();
+          t['announcement_title'] = couann_list[i].announcement_title;
+          t['ann_publisher'] = couann_list[i].cou_ann_publisher;
+          t['announcement_date'] = couann_list[i].announcement_date;
+          t['announcement_content'] = couann_list[i].announcement_content;
+          this.a.push(t);
+          }
+          console.log('finish loading course_ann list');
+          // console.log(this.b);
         } catch (error) {
-          
+          console.log('Error when loading course_ann list!!' + error)
         }
+      }),
+      this.$http.post('/api/get/one_student_unfinishHomework', {
+        student_id: store.state.student_account['id']
+      },{}).then((response) => {
+        // console.log(response.body);
+        var homework_list = response.body[0];
         try {
-          this.a_2=b[0][1].announcement_title;
+          for(var i in homework_list){
+            var t = new Array();
+            t['homework_name'] = homework_list[i].homework_name;
+            t['homework_up_date'] = homework_list[i].homework_up_date;
+            t['homework_content'] = homework_list[i].homework_content;
+            this.b.push(t);
+          }
+          console.log('finish loading homework list');
         } catch (error) {
-          
-        }
-        try {
-          this.a_3=b[0][2].announcement_title;
-        } catch (error) {
-          
-        }
-        try {
-          this.a_4=b[0][3].announcement_title; 
-        } catch (error) {
-          
-        }         
+          console.log('Error when loading homework list!!' + error)
+        }       
       })
+    },
+    methods: {
+      get_couannounnce_title(index){
+        return this.a[index].announcement_title;
+      },
+      show_couannounnce(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.announcement_title;
+        this.dialogForm.publisher=temp.ann_publisher;
+        this.dialogForm.date=temp.announcement_date;
+        this.dialogForm.content=temp.announcement_content;            
+      },
+      get_homework_title(index){
+        return this.b[index].homework_name;
+      },
+      show_homework(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.homework_name;
+        this.dialogForm.publisher='None';
+        this.dialogForm.date=temp.homework_up_date;
+        this.dialogForm.content=temp.homework_content;            
+      },
     },
   }
 </script>

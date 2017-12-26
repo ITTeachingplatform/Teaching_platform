@@ -57,6 +57,49 @@ router.post('/get/one_student_allClass',  (req, res) => {
     }
 });
 
+router.post('/get/one_student_unfinishHomework', (req, res) => {
+    console.log('Getting a student\'s unfinish homework');
+    var params = req.body;
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_UnFinishHomework_one_student(params.student_id,result);
+        setTimeout(function(){
+        // console.log(result)
+            res.send(result);
+        }, 1500)}
+});
+
+router.post('/get/one_Course_allInfo', (req, res) => {
+    console.log('Getting a course\'s all information');
+    var params = req.body;
+    if(params.t_class_ID != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_one_courseMessage(params.t_class_ID,result);
+        setTimeout(function(){
+        // console.log(result)
+            res.send(result);
+        }, 1000)}
+});
+
+router.post('/get/search_file', (req, res) => {
+    console.log('Searching resource');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    if(params.type == '1'){
+        AdminService.find_bank_by(params.file_name,params.date,params.student_id,'',result);
+    }
+    else{
+        AdminService.find_resource_by(params.file_name,params.date,params.student_id,'',result);
+    }
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+
 router.post('/get/one_teacher_BasicInfo',  (req, res) => {
     var params = req.body;
     if(params.teacher_id != null){
@@ -107,6 +150,7 @@ else if(params.type == 'cou_announce'){
     var result = new Array();
     AdminService.load_numLatest_couannouncement(result);
     setTimeout(function(){
+        console.log(result)
         res.send(result);
     }, 1000)
 }
@@ -145,7 +189,7 @@ router.post('/search_announcement', (req, res) => {
     result_2[0][i]=result[0][i];
     }
     res.send(result_2);
-    }, 1000)
+    }, 1500)
 });
     
 

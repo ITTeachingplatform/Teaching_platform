@@ -4,7 +4,7 @@
     <el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">课程选择</el-row>
     <el-row type="flex" justify="center" style="margin-top:20px">
       <el-row type="flex" justify="center">
-        <el-table ref="singleTable" :data="allClass" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
+        <el-table ref="singleTable" :data="allClass" highlight-current-row @current-change="handleCurrentChange" style="float: center;width: 100%">
           <el-table-column type="index" width="50"></el-table-column>
           <el-table-column label="本学期课程" width="500">
             <template slot-scope="scope">
@@ -18,9 +18,14 @@
           </el-table-column>
           <el-table-column label="所属学院" width="200">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{ scope.row.faculty_belong }}</span>
+              <span style="margin-left: 10px">{{ scope.row.faculty_name }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="操作" >
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+            </template>
+         </el-table-column>
         </el-table>
       </el-row>
     </el-row>
@@ -49,10 +54,7 @@
           t['course_name']=class_list[i].course_name;
           t['teacher_name']=class_list[i].teacher_name;
           t['faculty_name']=class_list[i].faculty_name;
-          t['course_introduction']=class_list[i].course_introduction;
-          t['sysllabus']=class_list[i].sysllabus;
           t['t_class_ID']=class_list[i].t_class_ID;
-          t['course_ID']=class_list[i].course_ID;
           this.allClass.push(t);
         }
       })
@@ -60,9 +62,12 @@
     methods: {
       handleCurrentChange(index) {
         this.currentRow = index;
-        console.log('index: '+index);
-        this.$router.push({name:'Student_courses_view', params: {t_class_id:allClass[index].t_class_ID}});
         // this.$router.params.id;
+      },
+      handleClick(row) {
+        console.log(row.t_class_ID,row);
+        const one_t_class_id = row.t_class_ID;
+        this.$router.push({name:'Student_courses_view', params: {t_class_id: one_t_class_id}});
       },
     }
   }
