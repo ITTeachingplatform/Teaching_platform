@@ -9,7 +9,7 @@
           </div>
           <el-form label-width="100px" :model="CourseInfo">
             <el-form-item label="课程名称">
-              <el-input type="text" id="textcolor" :disabled="true" v-model="CourseInfo.course_name"></el-input>
+              <el-input type="text" id="textcolor" :disabled="true" v-model="this.CourseInfo.course_name"></el-input>
             </el-form-item>
             <div style="margin: 20px 0;"></div>
             <el-form-item label="任课教师">

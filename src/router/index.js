@@ -162,11 +162,11 @@ export default new Router({
       name: 'Teacher_platform',
       component: Teacher_platform
     },
-    {
-      path: '/course_page',
-      name: 'Course_page',
-      component: Course_page
-    },
+    // {
+    //   path: '/course_page',
+    //   name: 'Course_page',
+    //   component: Course_page
+    // },
     // {
     //   path:'/test/:post_id',//动态路由
     //   name:'test',
@@ -176,6 +176,11 @@ export default new Router({
       path:'/teacher/post/:post_id',
       name:'teacher_post',
       component:Teacher_view_post
+    },    
+    {
+      path:'/teacher/course_page/:t_class_id',
+      name:'course_page',
+      component:Course_page
     },
     {
       path:'/teacher/publish_post',

@@ -84,7 +84,8 @@
         </el-table-column>
          <el-table-column label="操作" >
           <template slot-scope="scope">
-            <el-button type="primary" round size="small">查 看</el-button>
+            <router-link :to="{name:'course_page',params:{t_class_id:scope.row.t_class_id,course_id:scope.row.course_id}}"><el-button type="primary" round size="small">查 看</el-button></router-link>
+            <!-- <el-button type="primary" round size="small">查 看</el-button> -->
           </template>
         </el-table-column>
         </el-table>

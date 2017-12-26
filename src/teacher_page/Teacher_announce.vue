@@ -55,7 +55,7 @@
         <el-table :data="tableData" style="width: 100%;margin-top:20px;text-align:left;">
           <el-table-column label="公告标题" width="300px">
             <template slot-scope="scope">
-              <router-link to=""><span style="margin-left: 10px"  @click="showDialog(scope.$index)">{{ scope.row.announcement_title }}</span></router-link>
+              <router-link to="#"><span style="margin-left: 10px"  @click="showDialog(scope.$index)">{{ scope.row.announcement_title }}</span></router-link>
               </template>
           </el-table-column>
           <el-table-column label="发布者" width="100px">

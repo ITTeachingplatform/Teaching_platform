@@ -3,7 +3,7 @@
     <Teacher></Teacher>
     <div align="center">
       <div class="container">
-        <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">课程:{{lesson_name}}</el-row>
+        <el-row type="flex" justify="center" style="font-size:40px;margin-top:20px;margin-bottom:10px;">课程:{{CourseInfo.course_name}}</el-row>
         <el-progress :percentage="100" :show-text="false"></el-progress>
         <!-- 选项卡 -->
         <div>
@@ -43,16 +43,40 @@ export default {
     },
     data() {
       return {
-        lesson_name:'项目管理',
-        activeName2: 'first'
+        t_class_id:'',
+        activeName2: 'first',
+          CourseInfo:{
+          course_name:'',
+          teacher_name:'',
+          faculty_name:'',
+          course_introduction:'',
+          sysllabus:''
+        },
+
       };
     },
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
       }
+    },
+    mounted(){
+      this.t_class_id=this.$route.params.t_class_id;
+      // console.log(this.$route.params);
+      // console.log(this.t_class_id);
+      this.$http.post('/api/get/one_Course_allInfo', {
+        t_class_ID: this.$route.params.t_class_id
+      },{}).then((response) => {
+        console.log(response.body[0]);
+        this.CourseInfo.course_name = response.body[0][0].course_name;
+        console.log(this.CourseInfo.course_name);
+        // this.CourseInfo.teacher_name = response.body[0][0].teacher_name;
+        // this.CourseInfo.faculty_name = response.body[0][0].faculty_name;
+        // this.CourseInfo.course_introduction = response.body[0][0].course_introduction;
+        // this.CourseInfo.sysllabus = response.body[0][0].sysllabus;
+        // console.log(this.CourseInfo);
+      })
     }
-
 }
 </script>
 

@@ -142,7 +142,18 @@ router.post('/get/one_Course_allhomework', (req, res) => {
             res.send(result);
         }, 1000)}
 });
-
+router.post('/get/one_teacher_one_Course_allhomework', (req, res) => {
+    console.log('Getting a course\'s all homework');
+    var params = req.body;
+    if(params.teacher_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_allHomework_one_teacher_one_t_class(params.teacher_id,params.t_class_id,result);
+        setTimeout(function(){
+            console.log(result)
+            res.send(result);
+        }, 1000)}
+});
 router.post('/get/one_Course_allres', (req, res) => {
     console.log('Getting a course\'s all resource');
     var params = req.body;
@@ -180,7 +191,17 @@ router.post('/load_one_student', (req, res) => {
         res.send(result);
     }, 1000)
 });
-
+router.post('/load_one_course_allstudent', (req, res) => {
+    console.log('Getting one teacher course all students');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allStudent_one_course_teacher(params.course_id,params.teacher_id,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
 router.post('/modify_one_student', (req, res) => {
     console.log('Getting modify_one_student');    
     var params = req.body;
@@ -374,4 +395,5 @@ router.post('/post_replay', (req, res) => {
         res.send(result);
     }, 1000)
 });
+
 module.exports = router;
