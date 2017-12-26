@@ -182,7 +182,7 @@ import store from '../vuex/admin/store'
           tableData: [],
           radio: '1',
           numberValidateForm: {
-            title: '',
+            id_word: '',
             writer: '',
             publish_date: '',
             brief_content: '',
@@ -261,7 +261,7 @@ import store from '../vuex/admin/store'
          this.tableData=[];
          this.$http.post('/api/search_announcement', {
           //  announcement_title,announcement_date,sys_ann_publisher
-                    announcement_title: this.numberValidateForm.title,
+                    announcement_title: this.numberValidateForm.id_word,
                     announcement_date: this.search_date,
                     sys_ann_publisher:this.numberValidateForm.writer,
                   },{}).then((response) => {
@@ -285,6 +285,7 @@ import store from '../vuex/admin/store'
                           this.tableData.push(t)
                       }
                     }
+                    this.search_date=''
                   })
       },
       //重置表格

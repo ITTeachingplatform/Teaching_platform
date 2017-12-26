@@ -159,11 +159,11 @@
   <el-row>密码：{{password}}</el-row>
   <el-row>个人简介：{{introduce}}</el-row>
   <el-row>联系方式：{{email}}</el-row>
-    <el-table :data="gridData">  
+    <!-- <el-table :data="gridData">  
     <el-table-column property="subject" label="课程名称" width="60px"></el-table-column>
     <el-table-column property="school" label="开设学院" width="60px"></el-table-column>
     <el-table-column property="number" label="学生人数" width="60px"></el-table-column>
-  </el-table>
+  </el-table> -->
   <span></span>
   <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="info_Visible = false">确 定</el-button>
@@ -181,11 +181,11 @@
   <el-row>密码：<el-input v-model="password"></el-input></el-row>
   <el-row>个人简介：<el-input v-model="introduce"></el-input></el-row>
   <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
-    <el-table :data="gridData">
+    <!-- <el-table :data="gridData">
     <el-table-column property="subject" label="课程名称" width="60px"></el-table-column>
     <el-table-column property="school" label="开设学院" width="60px"></el-table-column>
     <el-table-column property="number" label="学生人数" width="60px"></el-table-column>
-  </el-table>
+  </el-table> -->
   <span></span>
   <span slot="footer" class="dialog-footer">
     <el-button @click="edit_Visible = false">取 消</el-button>
@@ -423,11 +423,12 @@ import store from '../vuex/admin/store'
       },
       // modify_one_teacher(teacher_id,passwd,teacher_eamil,teacher_introduction,result)
       modify_teacher(id){
+        console.log(this.email)
          this.$http.post('/api/modify_teacher', {
                   teacher_id: id,
                    passwd: this.password,
                    teacher_introduction: this.introduce,
-                   teahcer_eamil:this.email
+                   teahcer_email:this.email
                   },{}).then((response) => {
                     var result = response.body;
                     console.log(result);

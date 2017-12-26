@@ -36,7 +36,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="name" v-model="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -172,7 +172,7 @@ import store from '../vuex/admin/store';
           search_date: '',
           numberValidateForm: {
             id_word: '',
-            writer: '',
+            name: '',
             publish_date: '',
             label: '',
           },
@@ -235,16 +235,16 @@ import store from '../vuex/admin/store';
       },
       //讨论区搜索
       search_post(){
-        if(this.numberValidateForm.id_word===''&&this.search_date===''&&this.numberValidateForm.writer===''&&this.numberValidateForm.label==='')
+        if(this.numberValidateForm.id_word===''&&this.search_date===''&&this.numberValidateForm.name===''&&this.numberValidateForm.label==='')
           return;
          this.tableData=[];
             //  find_post_by(post_title,post_date,post_starter_ID,result)
-          console.log(this.search_date)
+          console.log(this.numberValidateForm)
          this.$http.post('/api/search_post', {
           // post_title,post_starter,post_label,post_date
                    post_title: this.numberValidateForm.id_word,
                    post_date: this.search_date,
-                    post_starter:this.numberValidateForm.writer,
+                    post_starter:this.numberValidateForm.name,
                     post_label: this.numberValidateForm.label
                   },{}).then((response) => {
                     // console.log(response.body[0]);
@@ -266,7 +266,7 @@ import store from '../vuex/admin/store';
       reset_form(){
       this.numberValidateForm={
             id_word: '',
-            writer: '',
+            name: '',
             publish_date: '',
             label: '',
           }
