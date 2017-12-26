@@ -3,6 +3,7 @@
 var BaseDAO = require('./BaseDAO.js');
 var baseDAO = new BaseDAO();
 
+var DEALTIME = 100;
 //所有注意大小写
 var table = "student";//表名
 var key = "student_ID";//表主键
@@ -12,7 +13,6 @@ var atrnum = 6;//表列数
 class StudentDAO{//表名DAO
     constructor(){
     };
-    //以下函数所有Student->对应表名
     getNewStudentId(result){
         baseDAO.getNewId(table,key,result);
     };
@@ -20,7 +20,7 @@ class StudentDAO{//表名DAO
         this.getNewStudentId(id);
         setTimeout(function(){
             baseDAO.create(id,table,atrlist,atrnum,result);
-        },100)
+        },DEALTIME)
     };
     updateStudent(id,atr,val,result){
         baseDAO.update(id,atr,val,table,key,result);
@@ -39,17 +39,19 @@ class StudentDAO{//表名DAO
 };
 
 //以下为测试代码 请把student改成对应表名 注意大小写
-//var student = new StudentDAO();
-//var id = new Array();
-//var result = new Array();
+/*var student = new StudentDAO();
+var id = new Array();
+var result = new Array();
+student.createStudent(id,result);
+setTimeout(function(){
+    console.log(id);
+    console.log(result);
+},100*2)*/
+
 //student.getNewStudentId(id);
 //student.createStudent(id,result);
 //student.updateStudent("AD000001","student_email","853822587@qq.com",result);
 //student.deleteStudent("AD000001",result);
 //student.inquireStudent(result);
-//setTimeout(function(){
-//    console.log(result);
-//},100)
-
 //这里不要忘记改
 module.exports = StudentDAO;
