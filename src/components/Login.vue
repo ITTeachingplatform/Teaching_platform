@@ -13,11 +13,11 @@
   </el-form-item>
   </el-row>
 
-  <el-row type="flex" justify="start">
+  <!-- <el-row type="flex" justify="start">
   <el-form-item label="验证码" prop="code">
     <el-input v-model="ruleForm2.code" style="width:100px"></el-input>
   </el-form-item>
-</el-row>
+</el-row> -->
 
   <el-row type="flex" justify="start">
   <el-col :span='13'>
@@ -100,6 +100,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             //   console.log(vm.account + ' ' + vm.checkPwd + ' ' + vm.code);
+            vm.code='aaaa'
             if(vm.code !== 'aaaa'){
                 alert('验证码输入错误！');
                 return false;

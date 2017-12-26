@@ -52,6 +52,10 @@ export default {
         admin_id: store.state.admin_id
       };
     },
+    mounted(){
+      if(store.state.admin_id==='')
+        this.$router.replace('/')
+    },
     methods: {
       handleSelect(key, keyPath) {
         //此处可写点击不同页面要执行的操作
