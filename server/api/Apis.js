@@ -59,6 +59,7 @@ router.post('/search_announcement', (req, res) => {
     var AdminService = new Admin();
     var result = new Array();
     var result_2 = new Array();
+    console.log(params)
     AdminService.find_sysannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result);
     AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,'',result_2);
     setTimeout(function(){
@@ -159,9 +160,9 @@ router.post('/search_post', (req, res) => {
     var params = req.body;
     var AdminService = new Admin();
     var result = new Array();
+    console.log(params)
     AdminService.find_post_by(params.post_title,params.post_starter,params.post_label,params.post_date,result);
     setTimeout(function(){
-        console.log(result)
         res.send(result);
     }, 1000)
 });
@@ -173,6 +174,7 @@ router.post('/search_course', (req, res) => {
     var params = req.body;
     var AdminService = new Admin();
     var result = new Array();
+    console.log(params)
     AdminService.find_course_by(params.course_name,params.faculty_name,params.teacher_name,result);
     setTimeout(function(){
         console.log(result)
@@ -311,7 +313,7 @@ router.post('/modify_teacher', (req, res) => {
     var params = req.body;
     var AdminService = new Admin();
     var result = new Array();
-    AdminService.modify_one_teacher(params.teacher_id,params.passwd,params.teacher_eamil,params.teacher_introduction,result);
+    AdminService.modify_one_teacher(params.teacher_id,params.passwd,params.teacher_email,params.teacher_introduction,result);
     setTimeout(function(){
         res.send(result);
     }, 1000)

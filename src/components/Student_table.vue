@@ -172,12 +172,12 @@
   <el-row>专业：{{major}}</el-row>
   <el-row>班级：{{grade}}</el-row>
   <el-row>联系方式：{{email}}</el-row>
-    <el-table :data="gridData">
+    <!-- <el-table :data="gridData">
     <el-table-column property="subject" label="课程名称" width="50px"></el-table-column>
     <el-table-column property="school" label="开设学院" width="50px"></el-table-column>
     <el-table-column property="teacher" label="任课老师" width="50px"></el-table-column>
     <el-table-column property="score" label="平时成绩" width="50px"></el-table-column>
-  </el-table>
+  </el-table> -->
   <span></span>
   <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="info_Visible = false">确 定</el-button>
@@ -197,12 +197,12 @@
   <el-row>专业：<el-input v-model="major" :disabled="true"></el-input></el-row>
   <el-row>班级：<el-input v-model="grade" :disabled="true"></el-input></el-row>
   <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
-    <el-table :data="gridData">
+    <!-- <el-table :data="gridData">
     <el-table-column property="subject" label="课程名称" width="50px"></el-table-column>
     <el-table-column property="school" label="开设学院" width="50px"></el-table-column>
     <el-table-column property="teacher" label="任课老师" width="50px"></el-table-column>
     <el-table-column property="score" label="平时成绩" width="50px"><el-input v-model="gridData.score"></el-input></el-table-column>
-  </el-table>
+  </el-table> -->
   <span></span>
   <span slot="footer" class="dialog-footer">
     <el-button @click="edit_Visible = false">取 消</el-button>
@@ -378,7 +378,7 @@ import store from '../vuex/admin/store'
                       this.major=this.tableData[index].major,
                       this.introduce=stu_info[0].student_introduction;
                      this.password=stu_info[0].passwd;
-                      this.email=stu_info[0].student_eamil;
+                      this.email=stu_info[0].student_email;
                       this.edit_Visible = true;
                   })
         }
@@ -427,7 +427,7 @@ import store from '../vuex/admin/store'
                       this.major=this.tableData[index].major,
                       this.introduce=stu_info[0].student_introduction;
                      this.password=stu_info[0].passwd;
-                      this.email=stu_info[0].student_eamil;
+                      this.email=stu_info[0].student_email;
                       this.info_Visible = true;
                   })
         console.log(index);
@@ -487,7 +487,7 @@ import store from '../vuex/admin/store'
                    major_name:'MA000001',
                    class_name: 'CL000001',
                    student_introduction: this.introduce,
-                   student_eamil:this.email
+                   student_email:this.email
                   },{}).then((response) => {
                     var result = response.body;
                     console.log(result);

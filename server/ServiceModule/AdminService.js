@@ -1575,7 +1575,7 @@ class AdminService{
     //          2 :修改两个参数
     //          3 :修改三个参数
     //result[RE] undefined
-    modify_one_teacher(teacher_id,passwd,teacher_eamil,teacher_introduction,result){ 
+    modify_one_teacher(teacher_id,passwd,teacher_email,teacher_introduction,result){ 
         result[TF] = 0;
         var result3 = new Array();
         result3.push(0);
@@ -1590,7 +1590,7 @@ class AdminService{
             result3.push(0);
         }
         if(teacher_eamil != ''){
-            teacher.updateTeacher(teacher_id,'teacher_email',teacher_eamil,result1);
+            teacher.updateTeacher(teacher_id,'teacher_email',teacher_email,result1);
         }
         else{
             result1.push(0);

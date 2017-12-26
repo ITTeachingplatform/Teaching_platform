@@ -215,12 +215,10 @@ import store from '../vuex/admin/store'
       },
       //重置表格
       reset_form(){
-     numberValidateForm={
+     this.numberValidateForm={
           lesson_name: '',
           name: '',
           pub_department: '',
-          other_condition: '',
-          publish_year: ''
         }
       },
       show_all(){
