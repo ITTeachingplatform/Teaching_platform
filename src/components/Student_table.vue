@@ -15,7 +15,6 @@
     label="学号"
     prop="id"
     :rules="[
-      { type: 'number', message: '学号必须为数字值'}
     ]"
   >
     <el-input prefix-icon="el-icon-search" type="id" v-model.number="numberValidateForm.id" auto-complete="off"></el-input>
@@ -90,8 +89,8 @@
 
   <el-row type="flex" justify="center">
 
-    <el-button style='width:150px' type="primary">提交</el-button>
-    <el-button style='width:150px;margin-left:40px'>重置</el-button>
+    <el-button style='width:150px' type="primary" @click="search_student">搜索</el-button>
+    <el-button style='width:150px;margin-left:40px' @click="reset_form">重置</el-button>
 
   </el-row>
 
@@ -112,7 +111,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column
+    <el-table-column 
       label="姓名"
       width="150px">
       <template slot-scope="scope">
@@ -181,7 +180,6 @@
   </el-table>
   <span></span>
   <span slot="footer" class="dialog-footer">
-    <el-button @click="info_Visible = false">取 消</el-button>
     <el-button type="primary" @click="info_Visible = false">确 定</el-button>
   </span>
 </el-dialog>
@@ -191,13 +189,13 @@
   :visible.sync="edit_Visible"
   width="19%"
   :before-close="handleClose">
-  <el-row>姓名：<el-input v-model="name"></el-input></el-row>
-  <el-row>学号：<el-input v-model="id"></el-input></el-row>
+  <el-row>姓名：<el-input v-model="name" :disabled="true"></el-input></el-row>
+  <el-row>学号：<el-input v-model="id" :disabled="true"></el-input></el-row>
   <el-row>密码：<el-input v-model="password"></el-input></el-row>
   <el-row>个人简介：<el-input v-model="introduce"></el-input></el-row>
-  <el-row>学院：<el-input v-model="school"></el-input></el-row>
-  <el-row>专业：<el-input v-model="major"></el-input></el-row>
-  <el-row>班级：<el-input v-model="grade"></el-input></el-row>
+  <el-row>学院：<el-input v-model="school":disabled="true"></el-input></el-row>
+  <el-row>专业：<el-input v-model="major":disabled="true"></el-input></el-row>
+  <el-row>班级：<el-input v-model="grade":disabled="true"></el-input></el-row>
   <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
     <el-table :data="gridData">
     <el-table-column property="subject" label="课程名称" width="50px"></el-table-column>
@@ -208,17 +206,16 @@
   <span></span>
   <span slot="footer" class="dialog-footer">
     <el-button @click="edit_Visible = false">取 消</el-button>
-    <el-button type="primary" @click="edit_Visible = false">确 定</el-button>
+    <el-button type="primary" @click="modify_student(id)">确 定</el-button>
   </span>
 </el-dialog>
 
 <el-dialog
   title="填写学生信息"
   :visible.sync="add_Visible"
-  width="70%"
+  width="18%"
   :before-close="handleClose">
   <el-row>姓名：<el-input v-model="name"></el-input></el-row>
-  <el-row>学号：<el-input v-model="id"></el-input></el-row>
   <el-row>密码：<el-input v-model="password"></el-input></el-row>
   <el-row>个人简介：<el-input v-model="introduce"></el-input></el-row>
   <el-row>学院：<el-input v-model="school"></el-input></el-row>
@@ -227,11 +224,11 @@
   <el-row>联系方式：<el-input v-model="email"></el-input></el-row>
   <span slot="footer" class="dialog-footer">
     <el-button @click="add_Visible = false">取 消</el-button>
-    <el-button type="primary" @click="add_Visible = false; class_Visible = true">确 定</el-button>
+    <el-button type="primary" @click="add_student">确 定</el-button>
   </span>
 </el-dialog>
 
-<el-dialog
+<!-- <el-dialog
   title="填写学生课程信息"
   :visible.sync="class_Visible"
   width="70%"
@@ -266,7 +263,7 @@
     <el-button @click="class_Visible = false">取 消</el-button>
     <el-button type="primary" @click="class_Visible = false">确 定</el-button>
   </span>
-</el-dialog>
+</el-dialog> -->
 
 </div>
 </template>
@@ -291,10 +288,10 @@ import store from '../vuex/admin/store'
         id: '201530612644',
         password: '221135',
         introduce:'刻苦学习的攻城狮',
-        school: '软件学院',
+        school: '计算机科学与工程学院',
         email: '56830220@qq.com',
-        grade:'大三',
-        major:'软件工程',
+        grade:'1班',
+        major:'计算机科学与技术系',
           info_Visible: false,
           edit_Visible: false,
           add_Visible: false,
@@ -341,13 +338,17 @@ import store from '../vuex/admin/store'
         this.$http.post('/api/get', {
                     type: 'student_list'
                   },{}).then((response) => {
-                    console.log(response.body[0]);
+                    // console.log(response.body[0]);
                     var stu_list = response.body;
-                    for(var i=0;i<stu_list[0].length;i++){
+                    for(var i in stu_list[0]){
                       var t = new Array()
+                      // id,name,department,major,class,
                       t['id']=stu_list[0][i].student_ID;
                       t['name']=stu_list[0][i].student_name;
-                      console.log(t);
+                      t['department']=stu_list[0][i].faculty_name;
+                      t['major']=stu_list[0][i].major_name;
+                      t['class']=stu_list[0][i].class_name;
+                      // console.log(t);
                      this.tableData.push(t)
                     }
                   })
@@ -355,10 +356,31 @@ import store from '../vuex/admin/store'
     methods: {
       handleEdit(index, row) {
         if(index === -1){
+        this.name='',
+        this.password='',
+        this.introduce='',
+        this.school= '计算机科学与工程学院',
+        this.email='',
+        this.grade='1班',
+        this.major='计算机科学与技术系',
           this.add_Visible = true;
         }
         else{
-          this.edit_Visible = true;
+        this.$http.post('/api/student_all_info', {
+                   id: this.tableData[index].id
+                  },{}).then((response) => {
+                    var stu_info = response.body;
+                      // id,name,department,major,class,
+                       this.name=this.tableData[index].name,
+                      this.id=this.tableData[index].id,
+                      this.school= this.tableData[index].department,
+                      this.grade=this.tableData[index].class,
+                      this.major=this.tableData[index].major,
+                      this.introduce=stu_info[0].student_introduction;
+                     this.password=stu_info[0].passwd;
+                      this.email=stu_info[0].student_eamil;
+                      this.edit_Visible = true;
+                  })
         }
         console.log(index, row);
       },
@@ -379,7 +401,28 @@ import store from '../vuex/admin/store'
         this.$refs[formName].resetFields();
       },
       show_info(index){
-        this.info_Visible = true;
+        this.name='',
+        this.password='',
+        this.introduce='',
+        this.school= '',
+        this.email='',
+        this.grade='',
+        this.major='',
+         this.$http.post('/api/student_all_info', {
+                   id: this.tableData[index].id
+                  },{}).then((response) => {
+                    var stu_info = response.body;
+                      // id,name,department,major,class,
+                       this.name=this.tableData[index].name,
+                      this.id=this.tableData[index].id,
+                      this.school= this.tableData[index].department,
+                      this.grade=this.tableData[index].class,
+                      this.major=this.tableData[index].major,
+                      this.introduce=stu_info[0].student_introduction;
+                     this.password=stu_info[0].passwd;
+                      this.email=stu_info[0].student_eamil;
+                      this.info_Visible = true;
+                  })
         console.log(index);
       },
        handleClose(done) {
@@ -390,6 +433,81 @@ import store from '../vuex/admin/store'
           .catch(_ => {
             done();
           });
+      },
+      // 搜索学生+重置表格
+      search_student(){
+        if(this.numberValidateForm.id===''&&this.numberValidateForm.name===''&&this.numberValidateForm.department===''&&this.numberValidateForm.major===''&&this.numberValidateForm.class==='')
+          return;
+        this.tableData=[];
+        console.log(this.numberValidateForm);
+         this.$http.post('/api/search_student', {
+                    student_ID: this.numberValidateForm.id,
+                    student_name: this.numberValidateForm.name,
+                    faculty_name:this.numberValidateForm.department,
+                    major_name:this.numberValidateForm.major,
+                    class_name:this.numberValidateForm.class,
+                  },{}).then((response) => {
+                    console.log(response.body[0]);
+                    var stu_list = response.body;
+                    for(var i in stu_list[0]){
+                      var t = new Array()
+                      // id,name,department,major,class,
+                      t['id']=stu_list[0][i].student_ID;
+                      t['name']=stu_list[0][i].student_name;
+                      t['department']=stu_list[0][i].faculty_name;
+                      t['major']=stu_list[0][i].major_name;
+                      t['class']=stu_list[0][i].class_name;
+                      console.log(t);
+                     this.tableData.push(t)
+                    }
+                  })
+      },
+      reset_form(){
+         this.numberValidateForm={
+          id: '',
+          name: '',
+          department: '',
+          major: '',
+          class: ''
+        }
+      },
+      // add_one_student(student_name,passwd,faculty_name,major_name,class_name,student_introduction,student_email,result)
+      add_student(){
+          this.$http.post('/api/add_student', {
+                   student_name: this.name,
+                   passwd: this.password,
+                   faculty_name: 'FA000001',
+                   major_name:'MA000001',
+                   class_name: 'CL000001',
+                   student_introduction: this.introduce,
+                   student_eamil:this.email
+                  },{}).then((response) => {
+                    var result = response.body;
+                    console.log(result);
+                    if(result[1]==0)
+                      alert('新增学生成功，学号为：' + result[0]);
+                    else
+                      alert('新增学生失败，请确认信息填写无漏！')
+                     this.add_Visible = false; 
+                  })
+      },
+      // modify_one_student(student_id,passwd,student_email,student_introduction,result)
+      modify_student(id){
+        console.log(this.email)
+        this.$http.post('/api/modify_student', {
+                   student_id: id,
+                   passwd: this.password,
+                   student_introduction: this.introduce,
+                   student_email:this.email
+                  },{}).then((response) => {
+                    var result = response.body;
+                    console.log(result);
+                    if(result[1]!==0)
+                      alert('修改学生信息成功！');
+                    else
+                      alert('修改学生失败，请稍后再试！')
+                     this.edit_Visible = false; 
+                  })
       }
 
     }

@@ -13,7 +13,7 @@ class Homework_scoresDAO{//表名DAO
     constructor(){
     };
     createHomework_scores(student_submit_homework,homework_ID_score,result){//id = new Array(),result = true/false
-        baseDAO.create(table,atrlist,atrnum,student_submit_homework,homework_ID_score,result);
+        baseDAO.createHT(table,atrlist,atrnum,student_submit_homework,homework_ID_score,result);
     };
     updateHomework_scores(id,atr,val,result){
         baseDAO.update(id,atr,val,table,key,result);

@@ -1,5 +1,7 @@
 'use strict';
 
+var BaseDAO = require('..//DAOModule/BaseDAO.js');
+var base = new BaseDAO();
 var AdminDAO = require('../DAOModule/AdminDAO.js');
 var admin = new AdminDAO();
 var StudentDAO = require('../DAOModule/StudentDAO.js');
@@ -37,12 +39,59 @@ var resource = new ResourceDAO();
 
 var async = require('async');
 
-var RE = 0;
-var TF = 1;
+var RE = 0;//map result 
+var TF = 1;//map flag
+var DEALTIME = 100;
 var content;
+
+//DAO类可用函数
+/*
+createAdmin(id,result);
+updateAdmin(id,atr,val,result);
+deleteAdmin(id,result);
+default_fn(val);
+inquireAdmin(result,fn = this.default_fn);
+*/
 
 class StudentService{
     constructor(){
+    }
+    //可调用函数
+    //函数名格式:操作+相关对象
+//////////////////////////////////////////////////////////////////////////////
+//1.load_obj 可提供筛选条件 参数列表：(result,condition_fn)
+//load 参数不应该为空，默认num == 4
+//加载一个学生的全部课程
+    load_allCourse_one_student(student_id,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success load
+        //result[TF] = 1 :load fail
+        //result[TF] = 2 :student_ID not exist 
+        var sql = "select course_ID,faculty_belong,course_name,course_introduction "
+            +"from course,teacher_class,teacher_class_list where teacher_class.course_ID_t_class = course.course_ID "
+            +"and teacher_class.t_class_ID = teacher_class_list.t_class_ID_list";
+        if(student_id != ''){
+            sql += " and teacher_class_list.student_ID_list = \'"+student_id+"\'";
+        }
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'course_ID':result[RE][i].course_ID,
+                    'course_name':result[RE][i].course_name,
+                    'faculty_belong':result[RE][i].faculty_belong,
+                    'course_introduction':result[RE][i].course_introduction
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME);
     }
 };
 

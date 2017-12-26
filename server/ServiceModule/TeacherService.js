@@ -1,5 +1,7 @@
 'use strict';
 
+var BaseDAO = require('..//DAOModule/BaseDAO.js');
+var base = new BaseDAO();
 var AdminDAO = require('../DAOModule/AdminDAO.js');
 var admin = new AdminDAO();
 var StudentDAO = require('../DAOModule/StudentDAO.js');
@@ -37,12 +39,27 @@ var resource = new ResourceDAO();
 
 var async = require('async');
 
-var RE = 0;
-var TF = 1;
+var RE = 0;//map result 
+var TF = 1;//map flag
+var DEALTIME = 100;
 var content;
+
+//DAO类可用函数
+/*
+createAdmin(id,result);
+updateAdmin(id,atr,val,result);
+deleteAdmin(id,result);
+default_fn(val);
+inquireAdmin(result,fn = this.default_fn);
+*/
 
 class TeacherService{
     constructor(){
     }
+    //可调用函数
+    //函数名格式:操作+相关对象
+//////////////////////////////////////////////////////////////////////////////
+//1.load_obj 可提供筛选条件 参数列表：(result,condition_fn)
+//load 参数不应该为空，默认num == 4
 };
 module.exports = TeacherService;

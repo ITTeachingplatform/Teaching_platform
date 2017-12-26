@@ -9,13 +9,10 @@
                 <el-form :model="form" :rules="rules" ref="form" style="margin-top:20px" class="demo-ruleForm">
                     <el-row >
                         <el-form-item label="标题" prop="title" :label-width="formLabelWidth" style="float:left">
-                        <el-input v-model="form.tital" auto-complete="off" style="width:300px"></el-input>
+                        <el-input v-model="form.title" auto-complete="off" style="width:300px"></el-input>
                         </el-form-item>
                         <el-form-item label="标签" prop="tab" :label-width="formLabelWidth"style="float:left">
-                        <el-select v-model="form.tab" placeholder="请选择标签">
-                            <el-option label="课程1" value="tab1"></el-option>
-                            <el-option label="课程2" value="tab2"></el-option>
-                        </el-select>
+                        <el-input v-model="form.tab" auto-complete="off" style="width:300px"></el-input>
                         </el-form-item>                       
                     </el-row>
                     <el-row>
@@ -42,16 +39,13 @@ export default {
         form: {
           title: '',
           tab: '',
-          type: [],
           content:''
         },
         rules: {
           title: [
-            { required: true, message: '请输入标题', trigger: 'blur' },
-            { min: 5, max: 25, message: '长度在 5 到 25 个字符', trigger: 'blur' }
           ],
           tab: [
-            { required: true, message: '请选择标签', trigger: 'change' }
+            { required: true, message: '请填写标签', trigger: 'change' }
           ],
           content: [
             { required: true, message: '请填写正文内容', trigger: 'blur' },
@@ -69,9 +63,25 @@ export default {
         submitForm(formName){
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                alert('成功发布讨论！');
+                 // add_one_post(post_label,post_title,post_content,post_starter,result)
+           this.$http.post('/api/add_post', {
+                   post_title: this.form.title,
+                    post_content:this.form.content,
+                    post_label: this.form.tab,
+                    post_starter:'管理员'
+                  },{}).then((response) => {
+                    var result = response.body;
+                    if(result[1] === 0){
+                        alert('成功发布讨论，ID号为：' + result[0]);
+                        
+                    }
+                    else{
+                        alert('发布讨论失败，请确认信息是否填写正确！');
+                    }
+                    return true;
+                  })
             } else {
-                alert('请填写完整的信息！');
+                alert('请填写完整的信息再发布！');
                 return false;
             }
             });

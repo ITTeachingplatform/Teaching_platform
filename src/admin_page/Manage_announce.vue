@@ -31,11 +31,11 @@
       <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="250px" class="demo-ruleForm">
   <el-form-item
     label="公告发布者(教师名称/编号/管理员)"
-    prop="name"
+    prop="writer"
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.writer" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -55,7 +55,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="date" @change="dateChange" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -64,8 +64,8 @@
 
   <el-row type="flex" justify="center">
 
-    <el-button style='width:150px' type="primary">搜索</el-button>
-    <el-button style='width:150px;margin-left:40px'>重置</el-button>
+    <el-button style='width:150px' type="primary" @click="search_announcement">搜索</el-button>
+    <el-button style='width:150px;margin-left:40px' @click="reset_form">重置</el-button>
 
   </el-row>
 
@@ -176,6 +176,7 @@ import store from '../vuex/admin/store'
     store,  
       data() {
         return {
+          tableData: [],
           radio: '1',
           numberValidateForm: {
             title: '',
@@ -186,26 +187,69 @@ import store from '../vuex/admin/store'
         dialogFormVisible: false,
         form: {
           title: '',
-          announce_type: '',
+          announce_type: 'system',
         },
         formLabelWidth: '120px',
         time: '00:00:00',
         content: '在此处修改公告内容',
-        author: '管理员/老师'
+        author: '管理员/老师',
+        search_date: ''
         }
       },
-      computed: {
-         tableData:{
-          get:function(){
-              return store.state.announce_info
-          }
-         }
-      },
+      // computed: {
+      //    tableData:{
+      //     get:function(){
+      //         return store.state.announce_info
+      //     }
+      //    }
+      // },
+      // mounted () {
+      //   store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
+      // },     
       mounted () {
-        store.dispatch('get_announce_item', {'Help_text': '此处获取公告信息'});
+
+                this.$http.post('/api/get', {
+
+                    type: 'all_sys_announcement'
+
+                  },{}).then((response) => {
+
+                    // console.log(response.body);
+
+                    var ann_list = response.body[0];
+
+                    // console.log(ann_list);
+
+                    for(var i in ann_list){
+
+                      var t = new Array()
+
+                      t['title']=ann_list[i].announcement_title;
+
+                      t['writer']=ann_list[i].sys_ann_publisher;
+
+                      t['publish_date']=ann_list[i].announcement_date;
+
+                      t['brief_content']=ann_list[i].announcement_content;
+                      if(this.radio === '1' && ann_list[i].sys_announcement_ID)
+                          this.tableData.push(t)
+                      if(this.radio === '2' && ann_list[i].cou_announcement_ID)
+                          this.tableData.push(t)
+
+                    }
+
+                  })
+
       },     
     methods: {
       handleEdit(index, row) {
+        this.time = this.tableData[index].publish_date,
+        this.content=this.tableData[index].brief_content,
+        this.author=this.tableData[index].writer,
+        this.form = {
+          title:this.tableData[index].title ,
+          announce_type: 'system',
+        },
         this.dialogFormVisible = true;
         console.log(index, row);
       },
@@ -234,7 +278,53 @@ import store from '../vuex/admin/store'
             done();
           })
           .catch(_ => {});
-      }
+      },
+      search_announcement(){
+         this.tableData=[];
+         console.log(this.search_date);
+         this.$http.post('/api/search_announcement', {
+          //  announcement_title,announcement_date,sys_ann_publisher
+                    announcement_title: this.numberValidateForm.title,
+                    announcement_date: this.search_date,
+                    sys_ann_publisher:this.numberValidateForm.writer,
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    var ann_list = response.body[0];
+                    for(var i in ann_list){
+
+                      var t = new Array()
+
+                      t['title']=ann_list[i].announcement_title;
+
+                      t['writer']=ann_list[i].sys_ann_publisher;
+
+                      t['publish_date']=ann_list[i].announcement_date;
+
+                      t['brief_content']=ann_list[i].announcement_content;
+                      if(this.radio === '1' && ann_list[i].sys_announcement_ID)
+                          this.tableData.push(t)
+                      if(this.radio === '2' && ann_list[i].cou_announcement_ID){
+                          t['writer']=ann_list[i].cou_ann_publisher;
+                          this.tableData.push(t)
+                      }
+                    }
+                  })
+      },
+      //重置表格
+      reset_form(){
+      this.numberValidateForm={
+            title: '',
+            writer: '',
+            publish_date: '',
+            brief_content: '',
+          }
+      },
+      //日期格式化
+      dateChange(val){
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
     }
   }
 </script>

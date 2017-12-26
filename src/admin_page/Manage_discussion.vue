@@ -47,27 +47,16 @@
        <el-col>
       <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
   <el-form-item
-    label="其他条件"
-    prop="other_condition"
+    label="标签"
+    prop="label"
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.label" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
-        <el-col>
-      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-  <el-form-item
-    label="其他条件"
-    prop="other_condition"
-    :rules="[
-    ]"
-  >
-    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
-  </el-form-item>
-</el-form>
-      </el-col>
+
  <el-col>
       <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
   <el-form-item
@@ -76,7 +65,7 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search"type="date"  @change="dateChange" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
       </el-col>
@@ -85,8 +74,8 @@
 
   <el-row type="flex" justify="center">
 
-    <el-button style='width:150px' type="primary">搜索</el-button>
-    <el-button style='width:150px;margin-left:40px'>重置</el-button>
+    <el-button style='width:150px' type="primary" @click="search_post">搜索</el-button>
+    <el-button style='width:150px;margin-left:40px'@click="reset_form">重置</el-button>
 
   </el-row>
 
@@ -108,7 +97,7 @@
 
     <el-table-column
       label="发布者"
-      width="70px">
+      width="120px">
       <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
           <p>公告者: {{ scope.row.writer }}</p>
@@ -182,11 +171,12 @@ import store from '../vuex/admin/store';
       data() {
         return {
           radio: '1',
+          search_date: '',
           numberValidateForm: {
             id_word: '',
             writer: '',
             publish_date: '',
-            other_condition: '',
+            label: '',
           },
           tableData:[]
         }
@@ -196,7 +186,7 @@ import store from '../vuex/admin/store';
                 this.$http.post('/api/get', {
                     type: 'discuss_list'
                   },{}).then((response) => {
-                    console.log(response.body);
+                    // console.log(response.body);
                     var dis_list = response.body;
                     for(var i=0;i<dis_list[0].length;i++){
                       var t = new Array()
@@ -237,7 +227,52 @@ import store from '../vuex/admin/store';
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
+      //讨论区搜索
+      search_post(){
+        if(this.numberValidateForm.id_word===''&&this.search_date===''&&this.numberValidateForm.writer===''&&this.numberValidateForm.label==='')
+          return;
+         this.tableData=[];
+            //  find_post_by(post_title,post_date,post_starter_ID,result)
+          // console.log(this.search_date)
+         this.$http.post('/api/search_post', {
+          // post_title,post_starter,post_label,post_date
+                   post_title: this.numberValidateForm.id_word,
+                   post_date: this.search_date,
+                    post_starter:this.numberValidateForm.writer,
+                    post_label: this.numberValidateForm.label
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    var dis_list = response.body[0];
+                    for(var i in dis_list){
+                      var t = new Array()
+                      t['topic']=dis_list[i].post_title;
+                      t['writer']=dis_list[i].post_starter;
+                      t['publish_date']=dis_list[i].post_date;
+                      t['tag']=dis_list[i].post_label;
+                      t['final_changer']=dis_list[i].post_last_reviser;
+                      t['vis_num']=dis_list[i].post_browse_num;
+                      t['anw_num']=dis_list[i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
+      },
+      //重置表格
+      reset_form(){
+      this.numberValidateForm={
+            id_word: '',
+            writer: '',
+            publish_date: '',
+            label: '',
+          }
+        this.search_date = ''
+      },
+      //日期格式化
+      dateChange(val){
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
     }
   }
 </script>
