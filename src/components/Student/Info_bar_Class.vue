@@ -6,42 +6,64 @@
       <el-row type="flex" justify="center">
         <el-table ref="singleTable" :data="allClass" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
           <el-table-column type="index" width="50"></el-table-column>
-          <el-table-column property="course_name" label="本学期课程" width="500"></el-table-column>
-          <el-table-column property="teacher_name" label="任课教师" width="120"></el-table-column>
-          <el-table-column property="faculty_name" label="所属学院" width="200"></el-table-column>
+          <el-table-column label="本学期课程" width="500">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.course_name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="任课教师" width="120">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.teacher_name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="所属学院" width="200">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.faculty_belong }}</span>
+            </template>
+          </el-table-column>
         </el-table>
       </el-row>
     </el-row>
-    <div style="margin-top: 20px">
-      <router-link to="/student_courses">
-        <el-button>查看所选课程</el-button>
-      </router-link>
-      <el-button @click="setCurrent()">取消选择</el-button>
-    </div>
   </div>
 </template>
 
 <script>
+  import store from '../../vuex/student/store';
   export default{
     name: 'Info_bar_Class',
+    components: {
+    },
     data() {
       return {
-        allClass: [
-          {course_name: 'aaaaa', teacher_name: 'XXX', faculty_name: 'xxxxxx'},
-          {course_name: 'bbbbbb', teacher_name: 'XXX', faculty_name: 'xxxxxx'},
-          {course_name: 'ccccc', teacher_name: 'XXX', faculty_name: 'xxxxxx'},
-          {course_name: 'dddd', teacher_name: 'XXX', faculty_name: 'xxxxxx'},
-          {course_name: 'dddd', teacher_name: 'XXX', faculty_name: 'xxxxxx'}
-        ],
+        allClass: [],
       }
     },
+    mounted (){
+      this.$http.post('/api/get/one_student_allClass', {
+        student_id: store.state.student_account['id']
+      },{}).then((response) => {
+        console.log(response.body);
+        var class_list = response.body[0];
+        for(var i in class_list){
+          var t = new Array()
+          t['course_name']=class_list[i].course_name;
+          t['teacher_name']=class_list[i].teacher_name;
+          t['faculty_name']=class_list[i].faculty_name;
+          t['course_introduction']=class_list[i].course_introduction;
+          t['sysllabus']=class_list[i].sysllabus;
+          t['t_class_ID']=class_list[i].t_class_ID;
+          t['course_ID']=class_list[i].course_ID;
+          this.allClass.push(t);
+        }
+      })
+    },
     methods: {
-      setCurrent(row) {
-        this.$refs.singleTable.setCurrentRow(row);
+      handleCurrentChange(index) {
+        this.currentRow = index;
+        console.log('index: '+index);
+        this.$router.push({name:'Student_courses_view', params: {t_class_id:allClass[index].t_class_ID}});
+        // this.$router.params.id;
       },
-      handleCurrentChange(val) {
-        this.currentRow = val;
-      }
     }
   }
 </script>
@@ -65,10 +87,5 @@
 
   .box-card {
     width: 440px;
-  }
-  #class_card {
-    width: 230px;
-    height: 230px;
-    margin-bottom: 30px;
   }
 </style>

@@ -53,6 +53,10 @@ import Course_introduction from '@/components/Teacher/Course_introduction'
 /*********教师发布帖子********/
 import Teacher_publish_post from '../teacher_page/subpage/Teacher_publish_post'
 import Teacher_view_post from '../teacher_page/subpage/Teacher_view_post'
+
+// 教师作业子页面
+import Teacher_homework from '../teacher_page/subpage/Teacher_homework'
+
 /*********Student********/
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
@@ -178,6 +182,12 @@ export default new Router({
       name: 'Teacher_publish_post',
       component: Teacher_publish_post
     },
+
+    {
+      path:'/teacher/homework',
+      name:'Teacher_homework',
+      component: Teacher_homework
+    },
     /*******************Student*******************/
     { 
       path: '/student_index',
@@ -220,7 +230,7 @@ export default new Router({
       component: Student_publish_post
     },
     {
-      path:'/student/courses_view',
+      path:'/student/courses_view/:course_id/:t_class_id',
       name: 'Student_courses_view',
       component: Student_courses_view
     },

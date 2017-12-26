@@ -11,7 +11,7 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='teacher_id' class="tag_style">教师账号：{{teacher_ID}}</el-tag>
+<el-tag id='teacher_id' class="tag_style">教师账号：{{teacher_id}}</el-tag>
     </el-row>
     <el-row>
 <el-tag id='teacher_name' class="tag_style">教师姓名：{{teacher_name}}</el-tag>
@@ -50,10 +50,8 @@ export default {
       },
       data() {
       return {
-        // teacher_ID:result[0].teacher_ID,
-        // teacher_name:result[0].teacher_name
-        teacher_ID: store.state.teacher_account['id'],
-        teacher_name: store.state.teacher_accoount['name'],
+        teacher_id : store.state.teacher_account['id'],
+        teacher_name : store.state.teacher_account['name'],
       };
     },
     methods: {

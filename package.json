@@ -13,7 +13,7 @@
     "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
-    "element-ui": "^2.0.5",
+    "element-ui": "^2.0.8",
     "fs": "^0.0.1-security",
     "mysql": "^2.15.0",
     "net": "^1.0.2",

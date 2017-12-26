@@ -34,7 +34,10 @@
 
 <script>
   import communication from '../assets/communication';
-  import store from '../vuex/admin/store'
+  import store_ad from '../vuex/admin/store'
+  import store_stu from '../vuex/student/store'
+  import store_tea from '../vuex/teacher/store'
+
   // import AdminService from '../../../ServiceModule/AdminService'
   export default {
     name: 'Login',
@@ -92,7 +95,9 @@
         }
       };
     },
-    store,
+    store_ad,
+    store_stu,
+    store_tea,
     methods: {
       submitForm(formName) {
         var vm = this.ruleForm2;
@@ -113,8 +118,15 @@
                 check = response.body[1];
                 if(check === 0){
                   alert('学生成功登录');
-                  store.state.student_id = vm.account;
-                  this.$router.push({path:'/student_index'});
+                  this.$http.post('/api/get/one_student_BasicInfo', {
+                    student_id: vm.account
+                  },{}).then((response) => {
+                    if(response.body[1] === 0){
+                      store_stu.state.student_account['name'] = response.body[0].student_name;
+                      store_stu.state.student_account['id'] = vm.account;
+                      this.$router.push({path:'/student_index'});
+                    }
+                  });
                 }
                 else{
                   alert('账号或密码错误');
@@ -132,8 +144,15 @@
                 check = response.body[1];
                 if(check === 0){
                   alert('教师成功登录');
-                  store.state.teacher_id = vm.account;
-                  this.$router.push({path:'/teacher_index'});
+                  this.$http.post('/api/get/one_teacher_BasicInfo', {
+                    teacher_id: vm.account
+                  },{}).then((response) => {
+                    if(response.body[1] === 0){
+                      store_tea.state.teacher_account['name'] = response.body[0].teacher_name;
+                      store_tea.state.teacher_account['id'] = vm.account;
+                      this.$router.push({path:'/teacher_index'});
+                    }
+                  });
                 }
                 else{
                   alert('账号或密码错误');
@@ -151,7 +170,7 @@
                 check = response.body[1];
                 if(check === 0){
                   alert('管理员成功登录');
-                  store.state.admin_id = vm.account;
+                  store_ad.state.admin_id = vm.account;
                   this.$router.push({path:'/admin_index'});
                 }
                 else{
@@ -161,8 +180,8 @@
               })
             }
             else {
-              alert('error submit!!');
-              console.log('error submit!!');
+              alert('Error !!!');
+              console.log('Error !!!');
             }
           }
         });

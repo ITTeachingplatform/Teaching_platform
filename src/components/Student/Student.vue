@@ -11,10 +11,10 @@
 
   <el-col :span="1">
     <el-row>
-<el-tag id='student_id' class="tag_style">学生账号：201530</el-tag>
+<el-tag id='student_id' class="tag_style">学生账号：{{student_id}}</el-tag>
     </el-row>
     <el-row>
-<el-tag id='student_name' class="tag_style">学生姓名：EDC</el-tag>
+<el-tag id='student_name' class="tag_style">学生姓名：{{student_name}}</el-tag>
     </el-row>
   </el-col>
   </el-row>
@@ -41,6 +41,7 @@
 </template>
 <script>
 import Avatar from '../Avatar.vue' 
+import store from '../../vuex/student/store'
 export default {
       name: 'Student',
       props: ['activeIndex'],
@@ -49,6 +50,8 @@ export default {
       },
       data() {
       return {
+        student_id: store.state.student_account['id'],
+        student_name: store.state.student_account['name'],
       };
     },
     methods: {

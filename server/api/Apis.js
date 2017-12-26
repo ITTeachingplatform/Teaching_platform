@@ -47,7 +47,46 @@ router.post('/search_announcement', (req, res) => {
     }, 1000)
 });
 
-//最新4条系统公告
+router.post('/get/one_student_BasicInfo',  (req, res) => {
+    var params = req.body;
+    console.log(params.student_id);
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a student\'s basic info');
+        AdminService.load_one_student(params.student_id, result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1500)
+    }
+});
+
+router.post('/get/one_student_allClass',  (req, res) => {
+    var params = req.body;
+    if(params.student_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a student\'s all Class that attended');
+        AdminService.load_allCourse_one_student(params.student_id,result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1000)
+    }
+});
+
+router.post('/get/one_teacher_BasicInfo',  (req, res) => {
+    var params = req.body;
+    if(params.teacher_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        console.log('Getting a teacher\'s basic info');
+        AdminService.load_one_teacher(params.teacher_id, result);
+        setTimeout(function(){
+            res.send(result);
+        }, 1000)
+    }
+});
+
 router.post('/get',  (req, res) => {
     var params = req.body;
     if(params.type == 'sys_announce'){
@@ -129,17 +168,6 @@ else if(params.type == 'course_list'){
         res.send(result);
     }, 1000)
 }
-else if(params.type == 'allCourse_one_teacher'){
-    console.log('Getting allCourse_one_teacher');
-    var params = req.body;
-    var AdminService = new Admin();
-    var result = new Array();
-    AdminService.load_allCourse_one_teacher(params.teacher_id,result);
-    setTimeout(function(){
-        console.log(result);
-        res.send(result);
-    }, 1000)
-}
 });
 //教师首页 未批改作业
 router.post('/get_UnCorrectHomework_one_teacher', (req, res) => {
@@ -148,6 +176,42 @@ router.post('/get_UnCorrectHomework_one_teacher', (req, res) => {
     var AdminService = new Admin();
     var result = new Array();
     AdminService.load_UnCorrectHomework_one_teacher(params.teacher_id,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
+//修改教师个人信息
+router.post('/modify_one_teacher', (req, res) => {
+    console.log('Getting modify_one_teacher');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.modify_one_teacher(params.teacher_id,params.teacher_password,params.teacher_emal,params.teacher_introduction,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
+//获取教师
+router.post('/load_one_teacher', (req, res) => {
+    console.log('Getting one teacher personal');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_one_teacher(params.teacher_id,result);
+    setTimeout(function(){
+        console.log(result);
+        res.send(result);
+    }, 1000)
+});
+//获取一个教师的所有教学班
+router.post('/get/load_allCourse_one_teacher', (req, res) => {
+    console.log('Getting one teacher all courses');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allCourse_one_teacher(params.teacher_id,result);
     setTimeout(function(){
         console.log(result);
         res.send(result);
