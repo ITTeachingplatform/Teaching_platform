@@ -12,18 +12,18 @@
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多公告</el-button>
     </router-link>
   </div>
-  <div class="text item">
+  <router-link to=" "><div class="text item">
    {{a_1}}
-  </div>
-    <div class="text item">
+  </div></router-link>
+    <router-link to=" "><div class="text item">
    {{a_2}}
-  </div>
-    <div class="text item">
+  </div></router-link>
+    <router-link to=" "><div class="text item">
    {{a_3}}
-  </div>
-    <div class="text item">
+  </div></router-link>
+    <router-link to=" "><div class="text item">
    {{a_4}}
-  </div>
+  </div></router-link>
 </el-card>
 </el-col>
 
@@ -35,17 +35,17 @@
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">管理课程</el-button>
     </router-link>
   </div>
-  <div class="text item">
+  <router-link to=" "><div class="text item">
    {{c_1}}
+  </div></router-link>
+    <div class="text item">
+   <router-link to=" ">{{c_2}}</router-link>
   </div>
     <div class="text item">
-   {{c_2}}
+   <router-link to=" ">{{c_3}}</router-link>
   </div>
     <div class="text item">
-   {{c_3}}
-  </div>
-    <div class="text item">
-   {{c_4}}
+   <router-link to=" ">{{c_4}}</router-link>
   </div>
 </el-card>
 </el-col>
@@ -65,16 +65,16 @@
         </router-link>
   </div>
   <div class="text item">
-   {{d_1}}
+   <router-link to=" ">{{d_1}}</router-link>
   </div>
     <div class="text item">
-   {{d_2}}
+   <router-link to=" ">{{d_2}}</router-link>
   </div>
     <div class="text item">
-   {{d_3}}
+   <router-link to=" ">{{d_3}}</router-link>
   </div>
     <div class="text item">
-   {{d_4}}
+   <router-link to=" ">{{d_4}}</router-link>
   </div>
 </el-card>
 </el-col>
@@ -86,7 +86,7 @@
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">批改作业</el-button>
   </div>
   <div v-for="o in 4" :key="o" class="text item">
-    {{'教学班 ' + o + "  作业XXXXXXXXXXXXXXXXXXXX"}}
+    <router-link to=" ">{{'教学班 ' + o + "  作业XXXXXXXXXXXXXXXXXXXX"}}</router-link>
   </div>
 </el-card>
 </el-col>

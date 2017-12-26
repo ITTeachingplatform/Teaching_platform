@@ -52,6 +52,7 @@ import Course_page from '../teacher_page/subpage/Course_page'
 import Course_introduction from '@/components/Teacher/Course_introduction'
 /*********教师发布帖子********/
 import Teacher_publish_post from '../teacher_page/subpage/Teacher_publish_post'
+import Teacher_view_post from '../teacher_page/subpage/Teacher_view_post'
 /*********Student********/
 import Student from '@/components/Student/Student'
 import Info_bar_Student from '@/components/Student/Info_bar_Student'
@@ -162,10 +163,15 @@ export default new Router({
       name: 'Course_page',
       component: Course_page
     },
+    // {
+    //   path:'/test/:post_id',//动态路由
+    //   name:'test',
+    //   component:Test
+    // },
     {
-      path:'/test',
-      name:'test',
-      component:Test
+      path:'/teacher/post/:post_id',
+      name:'teacher_post',
+      component:Teacher_view_post
     },
     {
       path:'/teacher/publish_post',

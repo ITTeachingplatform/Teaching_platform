@@ -33,10 +33,10 @@
                 </el-table-column>
                 </el-table>     
       <!-- 课程选择 -->
-                <div style="margin:20px">
+        <div style="margin:20px">
           <span style="font-size:36px">课程选择</span>
-                </div>
-            <el-progress :percentage="100" :show-text="false"></el-progress>
+        </div>
+        <el-progress :percentage="100" :show-text="false"></el-progress>
             <el-row :gutter="20">
               <el-col :span="8"><div class="grid-content bg-purple">
                 <el-card class="box-card">
@@ -64,11 +64,6 @@
             <router-view></router-view>
         </div> 
       </div>
-
-
-</el-row>
-
-
 
   </div>
 </template>

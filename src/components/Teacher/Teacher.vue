@@ -41,10 +41,7 @@
 </template>
 <script>
 import Avatar from '../Avatar.vue' 
-// import AdminService from '../../../ServiceModule/AdminService'
-// var admin = new AdminService();
-// var result = new Array();
-// admin.load_one_teacher('TE000001',result);
+import store from '../../vuex/teacher/store';
 export default {
       name: 'Teacher',
       props: ['activeIndex'],
@@ -55,6 +52,8 @@ export default {
       return {
         // teacher_ID:result[0].teacher_ID,
         // teacher_name:result[0].teacher_name
+        teacher_ID: store.state.teacher_account['id'],
+        teacher_name: store.state.teacher_accoount['name'],
       };
     },
     methods: {

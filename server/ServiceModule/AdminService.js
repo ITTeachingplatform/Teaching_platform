@@ -42,7 +42,6 @@ var async = require('async');
 var RE = 0;//map result 
 var TF = 1;//map flag
 var DEALTIME = 100;
-var content;
 
 //DAO类可用函数
 /*
@@ -105,6 +104,45 @@ class AdminService{
             }
         },DEALTIME);
     }
+    //加载学生个人特定信息 
+    //student_ID,passwd,class_name,major_name,faculty_name,student_name,student_introduction,student_email
+    load_one_studentMessage(id,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success load
+        //result[TF] = 1 :load fail
+        //result[TF] = 2 :student_ID not exist
+        if(id == ''){
+            result[RE] = 0;
+            result[TF] = 1;
+            return;
+        }
+        var sql = "select student_ID,passwd,class_name,major_name,faculty_name,student_name,student_introduction,student_email "
+            +"from student,class,major,faculty where student.class_staying = class.class_ID and class.major_belong = major.major_ID "
+            +"and major.faculty_belong = faculty.faculty_ID and student.student_ID = \'"+id+"\' "
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'student_ID':result[RE][i].student_ID,
+                    'passwd':result[RE][i].passwd,
+                    'class_name':result[RE][i].class_name,
+                    'major_name':result[RE][i].major_name,
+                    'faculty_name':result[RE][i].faculty_name,
+                    'student_name':result[RE][i].student_name,
+                    'student_introduction':result[RE][i].student_introduction,
+                    'student_email':result[RE][i].student_email
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME);
+    }
     //加载教师个人信息 id一般是调用者id
     load_one_teacher(id,result){//result[TF]-> 0/1/2
         //result[TF] = 0 :success load
@@ -124,16 +162,73 @@ class AdminService{
             }
         },DEALTIME);
     }
-    //加载一个教师的全部课程
-    load_allCourse_one_teacher(teacher_id,result){//result[TF]-> 0/1/2
-        //result[TF] = 0 :success load
-        //result[TF] = 1 :load fail
-        //result[TF] = 2 :teacher_ID not exist 
-        var sql = "select course_ID,faculty_belong,course_name,course_introduction "
-            +"from course,teacher_class where teacher_class.course_ID_t_class = course.course_ID";
-        if(teacher_id != ''){
-            sql += " and teacher_class.teacher_ID_t_class = \'"+teacher_id+"\'";
-        }
+
+    //加载全部学生 V
+    //student_ID,student_name,faculty_name,major_name,class_name
+    load_allStudent(result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success find
+        //result[TF] = 1 :find fail
+        //result[TF] = 2 :Obj not exist 
+        var sql = "select student_ID,student_name,faculty_name,major_name,class_name "
+            +"from student,class,major,faculty where student.class_staying = class.class_ID "
+            +"and class.major_belong = major.major_ID and major.faculty_belong = faculty.faculty_ID "
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'student_ID':result[RE][i].student_ID,
+                    'class_name':result[RE][i].class_name,
+                    'major_name':result[RE][i].major_name,
+                    'faculty_name':result[RE][i].faculty_name,
+                    'student_name':result[RE][i].student_name
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+    }
+    //加载全部教师 V
+    //teacher_ID,teacher_name,faculty_name
+    load_allTeacher(result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success find
+        //result[TF] = 1 :find fail
+        //result[TF] = 2 :Obj not exist 
+        var sql = "select teacher_ID,teacher_name,faculty_name "
+            +"from teacher,faculty where teacher.faculty_working = faculty.faculty_ID "
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'teacher_ID':result[RE][i].teacher_ID,
+                    'teacher_name':result[RE][i].teacher_name,
+                    'faculty_name':result[RE][i].faculty_name
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME);
+
+    }
+    //加载全部课程 V
+    //course_ID,course_name,faculty_name,teacher_name
+    load_allCourse(result){
+        var sql = "select course_ID,course_name,faculty_name,teacher_name "
+            +"from course,teacher_class,teacher,faculty where teacher_class.course_ID_t_class = course.course_ID"
+            +" and teacher_class.teacher_ID_t_class = teacher.teacher_id and course.faculty_belong = faculty.faculty_ID"
         base.inquireD(sql,result);
         setTimeout(function(){
             var data = {};
@@ -141,8 +236,8 @@ class AdminService{
                 data[i]={
                     'course_ID':result[RE][i].course_ID,
                     'course_name':result[RE][i].course_name,
-                    'faculty_belong':result[RE][i].faculty_belong,
-                    'course_introduction':result[RE][i].course_introduction
+                    'faculty_name':result[RE][i].faculty_name,
+                    'teacher_name':result[RE][i].teacher_name
                 }
                 result[TF] = 3;
             }
@@ -155,17 +250,53 @@ class AdminService{
             result[RE] = data;
         },DEALTIME);
     }
-    //加载一个学生的全部课程
-    load_allCourse_one_student(student_id,result){//result[TF]-> 0/1/2
+    //加载全部讨论区 V
+    //post_ID,post_title,post_starter,post_label,date,
+    //post_last_reviser,post_reply_num,post_browse_num
+    load_allPost(result){
+        var sql = "select post_ID,post_title,post_starter,post_date,post_label,post_last_reviser,"
+            +"post_reply_num,post_browse_num from post"
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'post_ID':result[RE][i].post_ID,
+                    'post_title':result[RE][i].post_title,
+                    'post_starter':result[RE][i].post_starter,
+                    'post_date':result[RE][i].post_date,
+                    'post_label':result[RE][i].post_label,
+                    'post_last_reviser':result[RE][i].post_last_reviser,
+                    'post_reply_num':result[RE][i].post_reply_num,
+                    'post_browse_num':result[RE][i].post_browse_num,
+                }
+                result[TF] = 3;
+               }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME);
+    }
+
+
+    //加载一个教师的全部课程
+    //course_ID,course_name,faculty_name,teacher_name
+    load_allCourse_one_teacher(teacher_id,result){//result[TF]-> 0/1/2
         //result[TF] = 0 :success load
         //result[TF] = 1 :load fail
-        //result[TF] = 2 :student_ID not exist 
-        var sql = "select course_ID,faculty_belong,course_name,course_introduction "
-            +"from course,teacher_class,teacher_class_list where teacher_class.course_ID_t_class = course.course_ID "
-            +"and teacher_class.t_class_ID = teacher_class_list.t_class_ID_list";
-        if(student_id != ''){
-            sql += " and teacher_class_list.student_ID_list = \'"+student_id+"\'";
+        //result[TF] = 2 :teacher_ID not exist 
+        if(id == ''){
+            result[RE] = 0;
+            result[TF] = 1;
+            return;
         }
+        var sql = "select course_ID,course_name,faculty_name,teacher_name "
+            +"from course,teacher_class,teacher where teacher_class.course_ID_t_class = course.course_ID";
+            +" and teacher_class.teacher_ID_t_class = \'"+teacher_id+"\'";
         base.inquireD(sql,result);
         setTimeout(function(){
             var data = {};
@@ -186,6 +317,44 @@ class AdminService{
                 result[TF] = 0;
             result[RE] = data;
         },DEALTIME);
+    }//to be finished
+    //加载一个学生的全部课程（教学班）及相关信息 V
+    load_allCourse_one_student(student_id,result){//result[TF]-> 0/1/2
+    // result[TF] = 0 :success load
+    // result[TF] = 1 :load fail
+    // result[TF] = 2 :student_ID not exist 
+    // result[RE] = (course_ID,faculty_name,course_name,course_introduction,teacher_ID_t_class,t_class_ID,teacher_name,sysllabus)
+        var sql = "select course_ID,faculty_name,course_name,course_introduction,teacher_ID_t_class,t_class_ID,teacher_name,sysllabus "
+            +"from course,teacher_class,teacher_class_list,teacher,faculty where teacher_class.course_ID_t_class = course.course_ID "
+            +"and teacher_class.t_class_ID = teacher_class_list.t_class_ID_list and teacher_class.teacher_ID_t_class = teacher.teacher_ID "
+            +"and course.faculty_belong = faculty.faculty_ID";
+        if(student_id != ''){
+            sql += " and teacher_class_list.student_ID_list = \'"+student_id+"\'";
+        }
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'course_ID':result[RE][i].course_ID,
+                    'course_name':result[RE][i].course_name,
+                    'faculty_name':result[RE][i].faculty_name,
+                    'course_introduction':result[RE][i].course_introduction,
+                    'teacher_ID_t_class':result[RE][i].teacher_ID_t_class,
+                    't_class_ID':result[RE][i].t_class_ID,
+                    'teacher_name':result[RE][i].teacher_name,
+                    'sysllabus':result[RE][i].sysllabus
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
     }
     //加载一门课程的所有教师
     load_allTeacher_one_course(course_id,result){//result[TF]-> 0/1/2
@@ -221,7 +390,7 @@ class AdminService{
             result[RE] = data;
         },DEALTIME);
     }
-    //加载一门课程下一个老师的全部学生
+    //加载一门课程下一个老师的全部学生(一个教学班的全部学生)
     load_allStudent_one_course_teacher(course_id,teacher_ID,result){//result[TF]-> 0/1/2
         //result[TF] = 0 :success load
         //result[TF] = 1 :load fail
@@ -259,7 +428,8 @@ class AdminService{
         },DEALTIME);
 
     }
-    //加载近期num条系统公告
+    //加载近期num条系统公告 
+    //sys_announcement_ID,announcement_label,announcement_title,announcement_content,announcement_date,sys_ann_publisher,sys_ann_path
     load_numLatest_sysannouncement(result,num = 4){//result[TF]-> 0/1/2
         //result[TF] = num :success load
         //result[TF] = -1 :load fail
@@ -329,7 +499,7 @@ class AdminService{
 
     }
     //加载近期num条讨论区
-    load_numLatest_post(result,num = 4){//result[TF]-> 0/1/2
+    load_numLatest_post(result,num = 4){//result[TF]-> -1/...
         //result[TF] = num :success load
         //result[TF] = -1 :load fail
         //result[TF] < num :not enough post
@@ -364,7 +534,7 @@ class AdminService{
 
     }
     //加载最新num条作业 
-    load_numLatest_homework(result,num = 4){//result[TF]-> 0/1/2
+    load_numLatest_homework(result,num = 4){//result[TF]-> -1/...
         //result[TF] = num :success load
         //result[TF] = -1 :load fail
         //result[TF] < num :not enough homework
@@ -397,18 +567,247 @@ class AdminService{
                 result[TF] = count;
         },DEALTIME);
     }
-    //加载一个教学班最新num条作业
+    //加载一个教学班所有作业
     //需要find_teacher_class_to_homework
-    load_numLatest_homework_by_one_tclass(){
+    load_allHomework_one_tclass(course_id,teacher_ID,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success load
+        //result[TF] = 1 :load fail
+        //result[TF] = 2 :course_ID or teacher_ID not exist 
 
     }//to be finished
-    //加载一个学生最新num条作业 
-    //需要find_student_to_teacher_class
-    //需要find_teacher_class_to_homework
-    load_numLatest_homework_by_one_student(){
-    }//to be finished
-    //加载一个教师未批改的作业
+    //加载一个学生的所有作业
+    load_allHomework__one_student(student_ID,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success load
+        //result[TF] = 1 :load fail
+        //result[TF] = 2 :student_ID not exist/student no homework
+        var sql = "select homework_ID,homework_name,homework_up_date,homework_down_date,homework_total_num,"
+            +"homework_submit_num,homework_content,homework_t_class_belong from homework,teacher_class,teacher_class_list,"
+            +"student where homework.homework_t_class_belong = teacher_class.t_class_ID and  teacher_class.t_class_ID = "
+            +"teacher_class_list.t_class_ID_list and teacher_class_list.student_ID_list = student.student_ID"
+        if(student != ''){
+            sql += " and student.student_ID = \'"+student_ID+"\'";
+        }
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'homework_ID':result[RE][i].homework_ID,
+                    'homework_name':result[RE][i].homework_name,
+                    'homework_up_date':result[RE][i].homework_up_date,
+                    'homework_down_date':result[RE][i].homework_down_date,
+                    'homework_total_num':result[RE][i].homework_total_num,
+                    'homework_submit_num':result[RE][i].homework_submit_num,
+                    'homework_content':result[RE][i].homework_content,
+                    'homework_t_class_belong':result[RE][i].homework_t_class_belong
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+    }
+    
+    //加载一个学生一个课程(教学班)的所有作业（包括成绩及答题内容） V
+    //input:student_id
+    //result[TF] = 0 成功加载
+    //             1 
+    //             2 没有结果
+    //result[RE][i] = (homework_ID,homework_name,homework_up_date,homework_down_date,
+    //  homework_total_num,homework_submit_num,homework_content,homework_t_class_belong,s_homework_score,s_homework_content)
+    load_allHomework_one_student_one_t_class(student_id,t_class_id,result){
+        var sql = "select homework_ID,homework_name,homework_up_date,homework_down_date,"
+        +"homework_total_num,homework_submit_num,homework_content,homework_t_class_belong,s_homework_score,s_homework_content "
+        +"from homework,student,homework_scores,teacher_class where student.student_id = homework_scores.student_submit_homework "
+        +"and homework.homework_id = homework_scores.homework_ID_score and homework.homework_t_class_belong = teacher_class.t_class_ID "
+        +"and student.student_id = \'"+student_id+"\' "
+        if(t_class_id != '')
+            sql +="and teacher_class.t_class_ID = \'"+t_class_id+"\' "
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'homework_ID':result[RE][i].homework_ID,
+                    'homework_name':result[RE][i].homework_name,
+                    'homework_up_date':result[RE][i].homework_up_date,
+                    'homework_down_date':result[RE][i].homework_down_date,
+                    'homework_total_num':result[RE][i].homework_total_num,
+                    'homework_submit_num':result[RE][i].homework_submit_num,
+                    'homework_content':result[RE][i].homework_content,
+                    'homework_t_class_belong':result[RE][i].homework_t_class_belong,
+                    's_homework_score':result[RE][i].s_homework_score,
+                    's_homework_content':result[RE][i].s_homework_content
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+    }
+    //加载一个学生未过期且未完成作业 V
+    //input:student_id
+    //result[TF] = 0
+    //             1
+    //             2 没有结果
+    //result[RE][i] = homework 
+    load_UnFinishHomework_one_student(student_id,result){
+        var date = new Date();
+        var da  = ''+date.getFullYear();
+        if(date.getMonth()<=9)
+            da += '0';
+        da += date.getMonth()+1;
+        if(date.getDate()<=9)
+            da += '0';
+        da += date.getDate();
+        var sql = "select homework_ID,homework_name,homework_up_date,homework_down_date,"
+        +"homework_total_num,homework_submit_num,homework_content,homework_t_class_belong "
+        +"from homework,student,homework_scores where student.student_id = homework_scores.student_submit_homework "
+        +"and homework.homework_id = homework_scores.homework_ID_score and s_homework_content = NULL and homework_down_date >= \'"+da+"\' "
+        +"and student.student_id = \'"+student_id+"\'"
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'homework_ID':result[RE][i].homework_ID,
+                    'homework_name':result[RE][i].homework_name,
+                    'homework_up_date':result[RE][i].homework_up_date,
+                    'homework_down_date':result[RE][i].homework_down_date,
+                    'homework_total_num':result[RE][i].homework_total_num,
+                    'homework_submit_num':result[RE][i].homework_submit_num,
+                    'homework_content':result[RE][i].homework_content,
+                    'homework_t_class_belong':result[RE][i].homework_t_class_belong
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+
+    }
+
+    //加载一个教师一个课程（教学班）的所有作业 V
+    //input:teacher_id,course_id
+    //result[TF] = 0
+    //             1
+    //             2 没有结果
+    //result[RE][i] = (?) "
+    load_allHomework_one_teacher_one_t_class(teacher_id,course_id,result){
+        var sql = "select *"
+        +"from homework,teacher,homework_scores,teacher_class,course where teacher.teacher_id = teacher_class.teacher_ID_t_class "
+        +"and course.course_id = teacher_class.course_ID_t_class "
+        +"and homework.homework_id = homework_scores.homework_ID_score and homework.homework_t_class_belong = teacher_class.t_class_ID "
+        +"and teacher.teacher_id = \'"+teacher_id+"\' "
+        if(course_id != '')
+            sql += "and course.course_id = \'"+course_id+"\' "
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'homework_ID':result[RE][i].homework_ID,
+                    'homework_name':result[RE][i].homework_name,
+                    'homework_up_date':result[RE][i].homework_up_date,
+                    'homework_down_date':result[RE][i].homework_down_date,
+                    'homework_total_num':result[RE][i].homework_total_num,
+                    'homework_submit_num':result[RE][i].homework_submit_num,
+                    'homework_content':result[RE][i].homework_content,
+                    'homework_t_class_belong':result[RE][i].homework_t_class_belong,
+                    's_homework_score':result[RE][i].s_homework_score,
+                    's_homework_content':result[RE][i].s_homework_content
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+    }
+
+    //加载一个教师的未批改作业 V
+    //input:teacher_id
+    //result[TF] = 0
+    //             1
+    //             2 没有结果
+    //result[RE][i] = (homework_ID,homework_name,homework_up_date,homework_down_date,homework_total_num,
+    //      homework_submit_num,homework_content,homework_t_class_belong,s_homework_content) "
+    load_UnCorrectHomework_one_teacher(teacher_id,result){
+        var sql = "select homework_ID,homework_name,homework_up_date,homework_down_date,"
+        +"homework_total_num,homework_submit_num,homework_content,homework_t_class_belong,s_homework_content "
+        +"from homework,teacher,teacher_class,homework_scores where teacher.teacher_ID = teacher_class.teacher_ID_t_class "
+        +"and homework.homework_id = homework_scores.homework_ID_score "
+        +"and s_homework_score = NULL "
+        +"and homework.homework_t_class_belong = teacher_class.t_class_ID "
+        +"and teacher.teacher_id = \'"+teacher_id+"\'"
+        console.log(sql)
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'homework_ID':result[RE][i].homework_ID,
+                    'homework_name':result[RE][i].homework_name,
+                    'homework_up_date':result[RE][i].homework_up_date,
+                    'homework_down_date':result[RE][i].homework_down_date,
+                    'homework_total_num':result[RE][i].homework_total_num,
+                    'homework_submit_num':result[RE][i].homework_submit_num,
+                    'homework_content':result[RE][i].homework_content,
+                    'homework_t_class_belong':result[RE][i].homework_t_class_belong,
+                    's_homework_content':result[RE][i].s_homework_content
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME*2);
+    }
+
     //
+    //加载一个讨论区的所有回复 
+    load_allReply_one_post(post_id,result){//result[TF]-> -1/...
+        //result[TF] = x :success load x reply
+        //result[TF] = -1 :load fail
+        reply.inquireReply(result);
+        setTimeout(function(){
+            result[TF] = -1;
+            var temp = new Array();
+            for(var i in result[RE]){
+                if(result[TF] == -1)
+                    result[TF] =0;
+                if(result[RE][i].reply_belong == post_id){
+                    temp.push(result[RE][i]);
+                    result[TF] += 1;
+                }
+            }
+            result[RE]=temp;
+        },DEALTIME);
+    }
+    
 
 //////////////////////////////////////////////////////////////////////////////
 //2.find_obj(_by_sth)  参数列表：(id,result)
@@ -650,34 +1049,33 @@ class AdminService{
             }
         },DEALTIME);
     }
-    //教师搜索 (teacher_name,faculty_working,result)
-    //需要find_faculty_by(faculty_name,result) faculty_name->faculty_working
-    //空值传入''
-    find_teacher_by(teacher_name,faculty_working,result){//result[TF]-> 0/1/2
+    //教师搜索 V
+    //teacher_ID,teacher_name,faculty_name
+    find_teacher_by(teacher_ID,teacher_name,faculty_name,result){//result[TF]-> 0/1/2
         //result[TF] = 0 :success find
         //result[TF] = 1 :find fail
         //result[TF] = 2 :Obj not exist 
-        var sql = "select *from teacher";
-        if(teacher_name != '' || faculty_working != ''){
-            sql += " where "; 
-            if(teacher_name != '')
-                sql += "teacher_name = \'"+teacher_name+"\'";
-            if(teacher_name != ''&&faculty_working != '')
-                sql += " and ";
-            if(faculty_working != '')
-                sql += "faculty_working = \'"+faculty_working+"\'";
+        var sql = "select teacher_ID,teacher_name,faculty_name "
+        +"from teacher,faculty where teacher.faculty_working = faculty.faculty_ID "
+        if(teacher_ID != ''){
+            sql += "and teacher_ID = \'"+teacher_ID+"\'"
+        }
+        else{
+            if(teacher_name != ''){
+                sql += "and teacher_name like \'"+ teacher_name +"\'"
+            }
+            if(faculty_name != ''){
+                sql += "and faculty_name like \'"+ faculty_name +"\'"
+            }
         }
         base.inquireD(sql,result);
         setTimeout(function(){
             var data = {};
             for(var i=0; i < result[RE].length; i++) {
                 data[i]={
-                        'teacher_ID':result[RE][i].teacher_ID,
-                        'passwd':result[RE][i].passwd,
-                        'teacher_name':result[RE][i].teacher_name,
-                        'faculty_working':result[RE][i].faculty_working,
-                        'teacher_introduction':result[RE][i].teacher_introduction,
-                        'teacher_eamil':result[RE][i].teacher_eamil
+                    'teacher_ID':result[RE][i].teacher_ID,
+                    'teacher_name':result[RE][i].teacher_name,
+                    'faculty_name':result[RE][i].faculty_name
                 }
                 result[TF] = 3;
             }
@@ -720,35 +1118,38 @@ class AdminService{
             }
         },DEALTIME);
     }
-    //学生搜索 (student_name,class_staying,major_ID,faculty_ID)
-    //需要find_major_by(major_name,result) major_name->major_ID
-    //需要find_faculty_by(faculty_name,result) faculty_name->faculty_ID
-    //需要find_class_by(class_name,result) class_name->class_staying
-    //空值传入''
-    find_student_by(student_name,class_staying,major_ID,faculty_ID,result){
-        var sql = "select student.student_ID,student.passwd,student.class_staying,student.student_name,"
-            +"student.student_introduction,student.student_email "
+    //学生搜索 V
+    //student_ID,student_name,faculty_name,major_name,class_name
+    find_student_by(student_ID,student_name,faculty_name,major_name,class_name,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success find
+        //result[TF] = 1 :find fail
+        //result[TF] = 2 :Obj not exist 
+        var sql = "select student_ID,student_name,faculty_name,major_name,class_name "
             +"from student,class,major,faculty where student.class_staying = class.class_ID "
-            +"and class.major_belong = major.major_id and major.faculty_belong = faculty.faculty_ID ";
-        if(student_name != '')
-            sql += "and student_name = \'"+student_name+"\'";
-        if(class_staying != '')
-            sql += "and class_staying = \'"+class_staying+"\'";
-        if(major_ID != '')
-            sql += "and major_ID = \'"+major_ID+"\'";
-        if(faculty_ID != '')
-            sql += "and faculty_ID = \'"+faculty_ID+"\'";
+            +"and class.major_belong = major.major_ID and major.faculty_belong = faculty.faculty_ID "
+        if(student_ID != ''){
+            sql += "and student_ID = \'"+student_ID+"\'"
+        }
+        else{
+            if(student_name != '')
+                sql += "and student_name like \'%"+student_name+"%\'";
+            if(faculty_name != '')
+                sql += "and faculty_name like \'%"+faculty_name+"%\'";
+            if(major_name != '')
+                sql += "and major_name like \'%"+major_name+"%\'";
+            if(class_name != '')
+                sql += "and class_name like \'%"+class_name+"%\'";
+        }
         base.inquireD(sql,result);
         setTimeout(function(){
             var data = {};
             for(var i=0; i < result[RE].length; i++) {
                 data[i]={
                     'student_ID':result[RE][i].student_ID,
-                    'passwd':result[RE][i].passwd,
-                    'class_staying':result[RE][i].class_staying,
-                    'student_name':result[RE][i].student_name,
-                    'student_introduction':result[RE][i].student_introduction,
-                    'student_email':result[RE][i].student_email
+                    'class_name':result[RE][i].class_name,
+                    'major_name':result[RE][i].major_name,
+                    'faculty_name':result[RE][i].faculty_name,
+                    'student_name':result[RE][i].student_name
                 }
                 result[TF] = 3;
             }
@@ -761,23 +1162,28 @@ class AdminService{
             result[RE] = data;
         },DEALTIME);
     }
-    //课程搜索 (course_name,faculty_belong,teaher_ID)
-    //需要find_teacher_by(teacher_name,'',result) teacher_name->teaher_ID
-    //需要find_faculty_by(faculty_name,result) faculty_name->faculty_belong
-    //空值传入''
-    find_course_by(course_name,faculty_belong,teaher_ID,result){
-        var sql = "select course_ID,faculty_belong,course_name,course_introduction from course,teacher,teacher_class "
-            + "where course.faculty_belong = teacher.faculty_working "
-            + "and teacher.teacher_ID = teacher_class.teacher_ID_t_class "
-            + "and course.course_ID = teacher_class.course_ID_t_class ";
+    //课程搜索 V
+    //course_ID,course_name,faculty_name,teacher_name
+    find_course_by(course_name,faculty_name,teacher_name,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success find
+        //result[TF] = 1 :find fail
+        //result[TF] = 2 :Obj not exist 
+        if(course_name == '' && faculty_name == '' && teacher_name == ''){
+            result[RE] = {};
+            result[TF] = 1;
+            return;
+        }
+        var sql = "select course_ID,course_name,faculty_name,teacher_name "
+        +"from course,teacher_class,teacher,faculty where teacher_class.course_ID_t_class = course.course_ID "
+        +"and teacher_class.teacher_ID_t_class = teacher.teacher_id and course.faculty_belong = faculty.faculty_ID "
         if(course_name != ''){
-            sql += "and course.course_name = \'"+course_name+"\'";
+            sql += "and course.course_name = \'"+course_name+"\' ";
         }
-        if(faculty_belong != ''){
-            sql += "and course.faculty_belong = \'"+faculty_belong+"\'";
+        if(faculty_name != ''){
+            sql += " and faculty.faculty_name = \'"+faculty_name+"\' ";
         }
-        if(teaher_ID != ''){
-            sql += "and teacher.teacher_ID = \'"+teaher_ID+"\'";
+        if(teacher_name != ''){
+            sql += " and teacher.teacher_name = \'"+teacher_name+"\' ";
         }
         base.inquireD(sql,result);
         setTimeout(function(){
@@ -785,9 +1191,9 @@ class AdminService{
             for(var i=0; i < result[RE].length; i++) {
                 data[i]={
                     'course_ID':result[RE][i].course_ID,
-                    'faculty_belong':result[RE][i].faculty_belong,
                     'course_name':result[RE][i].course_name,
-                    'course_introduction':result[RE][i].course_introduction
+                    'faculty_name':result[RE][i].faculty_name,
+                    'teacher_name':result[RE][i].teacher_name
                 }
                 result[TF] = 3;
             }
@@ -800,6 +1206,63 @@ class AdminService{
             result[RE] = data;
         },DEALTIME);
     }
+    //讨论区搜索 V ***忽略post_starter
+    //post_ID,post_title,post_starter,post_label,post_date,
+    //post_last_reviser,post_reply_num,post_browse_num
+    find_post_by(post_title,post_starter,post_label,post_date,result){//result[TF]-> 0/1/2
+        //result[TF] = 0 :success find
+        //result[TF] = 1 :find fail
+        //result[TF] = 2 :Obj not exist 
+        var sql = "select post_ID,post_title,post_starter,post_date,post_label,post_last_reviser,"
+            +"post_reply_num,post_browse_num from post "
+        if(post_title == '' && post_label == '' &&post_date ==''){
+            result[RE] = 0;
+            result[TF] = 1;
+            return;
+        }
+        if(post_title != ''){
+            sql += "post_title like \'%"+post_title+"%\' ";
+            if(post_label != ''){
+                sql += "and post_label like \'%"+post_label+"%\' ";
+            }
+            if(post_date != '')
+                sql += "and post_date = \'"+post_date+"\'";
+        }
+        else{
+            if(post_label != ''){
+                sql += "post_label like \'%"+post_label+"%\' ";
+                if(post_date != '')
+                    sql += "and post_date = \'"+post_date+"\' ";
+            }
+            else if(post_date != '')
+                sql += "post_date = \'"+post_date+"\' ";
+        }
+        base.inquireD(sql,result);
+        setTimeout(function(){
+            var data = {};
+            for(var i=0; i < result[RE].length; i++) {
+                data[i]={
+                    'post_ID':result[RE][i].post_ID,
+                    'post_title':result[RE][i].post_title,
+                    'post_starter':result[RE][i].post_starter,
+                    'post_date':result[RE][i].post_date,
+                    'post_label':result[RE][i].post_label,
+                    'post_last_reviser':result[RE][i].post_last_reviser,
+                    'post_reply_num':result[RE][i].post_reply_num,
+                    'post_browse_num':result[RE][i].post_browse_num,
+                }
+                result[TF] = 3;
+            }
+            if(result[TF] == false)
+                result[TF] = 1;
+            else if(result[RE].length == 0)
+                result[TF] = 2;
+            else if(result[TF] == 3)
+                result[TF] = 0;
+            result[RE] = data;
+        },DEALTIME);
+    }
+
     //系统公告搜索 (announcement_title,announcement_date,sys_ann_publisher,result)
     find_sysannouncement_by(announcement_title,announcement_date,sys_ann_publisher,result){//result[TF]-> 0/1/2
         //result[TF] = 0 :success find
@@ -851,7 +1314,7 @@ class AdminService{
             result[RE] = data;
         },DEALTIME);
     }
-    //教学公告搜索
+    //教学公告搜索 
     //需要find_teacher_by(teacher_name,'',result) teacher_name->cou_ann_publisher
     //空值传入''
     find_couannouncement_by(announcement_title,announcement_date,cou_ann_publisher,result){//result[TF]-> 0/1/2
@@ -892,63 +1355,6 @@ class AdminService{
                     'announcement_date':result[RE][i].announcement_date,
                     'cou_ann_publisher':result[RE][i].cou_ann_publisher,
                     'cou_ann_course':result[RE][i].cou_ann_course
-                }
-                result[TF] = 3;
-            }
-            if(result[TF] == false)
-                result[TF] = 1;
-            else if(result[RE].length == 0)
-                result[TF] = 2;
-            else if(result[TF] == 3)
-                result[TF] = 0;
-            result[RE] = data;
-        },DEALTIME);
-    }
-    //讨论区搜索
-    //需要find_student_by(student_name,'','','',result) student_name -> post_starter_ID
-    //需要find_teacher_by(teacher_name,'',result) teacher_name -> post_starter_ID
-    //空值传入''
-    find_post_by(post_title,post_date,post_starter_ID,result){//result[TF]-> 0/1/2
-        //result[TF] = 0 :success find
-        //result[TF] = 1 :find fail
-        //result[TF] = 2 :Obj not exist 
-        var sql ="select post_ID,post_label,post_title,post_content,post_date,post_starter,"
-            +"post_reply_num,post_browse_num,post_support_num,post_last_reviser from post ";
-        if(post_title != ''){
-            sql += " where post_title like \'%"+post_title+"%\' ";
-            if(post_date != ''){
-                sql += "and post_date = \'"+post_date+"\' ";
-            }
-            if(post_starter_ID != ''){
-                sql += "and post_starter_ID = \'"+post_starter_ID+"\' ";
-            }
-        }
-        else{
-            if(post_date != ''){
-                sql += " where post_date = \'"+post_date+"\' ";
-                if(post_starter_ID != ''){
-                    sql += "and post_starter_ID = \'"+post_starter_ID+"\' ";
-                }
-            }
-            else if(post_starter_ID != ''){
-                sql += " where post_starter_ID = \'"+post_starter_ID+"\' ";
-            }
-        }
-        base.inquireD(sql,result);
-        setTimeout(function(){
-            var data = {};
-            for(var i=0; i < result[RE].length; i++) {
-                data[i]={
-                    'post_ID':result[RE][i].post_ID,
-                    'post_label':result[RE][i].post_label,
-                    'post_title':result[RE][i].post_title,
-                    'post_content':result[RE][i].post_conten,
-                    'post_date':result[RE][i].post_date,
-                    'post_starter':result[RE][i].post_starter,
-                    'post_reply_num':result[RE][i].post_reply_num,
-                    'post_browse_num':result[RE][i].post_browse_num,
-                    'post_support_num':result[RE][i].post_support_num,
-                    'post_last_reviser':result[RE][i]. post_last_reviser
                 }
                 result[TF] = 3;
             }
@@ -1059,70 +1465,379 @@ class AdminService{
     modify_one_homework_scores(homework_id,student_id,score,result){
 
     }//to be finished
-    modify_one_teacher(id,teacher_eamil,teacher_introduction,result){//result[TF]=0/1/2
+    modify_one_teacher(teacher_id,passwd,teacher_eamil,teacher_introduction,result){//result[TF]=0/1/2
     //result[TF] = 0 :没有修改
     //result[TF] = 1 :修改一个参数
-    //result[TF] = 2 :修改两个参数 
+    //result[TF] = 2 :修改两个参数
+    //result[TF] = 3 :修改三个参数 
         result[TF] = 0;
+        var result3 = new Array();
+        result3.push(0);
         var result1 = new Array();
         result1.push(0);
         var result2 = new Array();
         result2.push(0);
+        if(passwd != ''){
+            teacher.updateTeacher(teacher_id,'passwd',passwd,result3);
+        }
+        else{
+            result3.push(0);
+        }
         if(teacher_eamil != ''){
-            teacher.updateTeacher(id,'teacher_email',teacher_eamil,result1);
+            teacher.updateTeacher(teacher_id,'teacher_email',teacher_eamil,result1);
         }
         else{
             result1.push(0);
         }
         if(teacher_introduction != ''){
-            teacher.updateTeacher(id,'teacher_introduction',teacher_introduction,result2);
+            teacher.updateTeacher(teacher_id,'teacher_introduction',teacher_introduction,result2);
         }
         else{
             result2.push(0);
         }
         setTimeout(function(){
-            result[TF] += +result1[TF]+ +result2[TF];
-        },DEALTIME);
+            result[TF] += +result1[TF]+ +result2[TF]+result3[TF];
+        },DEALTIME*4);
     }
-    modify_one_student(id,student_email,student_introduction,result){//result[TF]=0/1/2
-        //result[TF] = 0 :没有修改
-        //result[TF] = 1 :修改一个参数
-        //result[TF] = 2 :修改两个参数 
+    modify_one_student(student_id,passwd,student_email,student_introduction,result){//result[TF]=0/1/2
+    //result[TF] = 0 :没有修改
+    //result[TF] = 1 :修改一个参数
+    //result[TF] = 2 :修改两个参数 
+    //result[TF] = 3 :修改三个参数 
             result[TF] = 0;
             var result1 = new Array();
             result1.push(0);
             var result2 = new Array();
             result2.push(0);
+            var result3 = new Array();
+            result3.push(0);
+            if(passwd != ''){
+                student.updateStudent(student_id,'passwd',passwd,result3);
+            }
+            else{
+                result3.push(0);
+            }
             if(student_email != ''){
-                student.updateStudent(id,'student_email',student_email,result1);
+                student.updateStudent(student_id,'student_email',student_email,result1);
             }
             else{
                 result1.push(0);
             }
             if(student_introduction != ''){
-                student.updateStudent(id,'student_introduction',student_introduction,result2);
+                student.updateStudent(student_id,'student_introduction',student_introduction,result2);
             }
             else{
                 result2.push(0);
             }
             setTimeout(function(){
-                result[TF] += +result1[TF]+ +result2[TF];
-            },DEALTIME);
+                result[TF] += +result1[TF]+ +result2[TF]+result3[TF];
+            },DEALTIME*4);
     }
 //////////////////////////////////////////////////////////////////////////////
 //4.add_obj 参数列表：(id,result)
 //          参数列表：(obj,result) obj = {1:'',2:''...}
+    //新增一名学生 V
+    //input:student_name,passwd,faculty_id,major_id,class_id,student_introduction,student_email
+    //result[TF] = 0 新增成功且无错误
+    //             1 新增失败
+    //             2 学生名未更新 必填
+    //             3 密码未更新 必填
+    //             学院\专业\班级必须输入处理 否则返回9
+    //             4 学院未更新/不存在 必填
+    //             5 专业未更新/不存在 必填
+    //             6 班级未更新/不存在 必填
+    //             7 学生简介未更新
+    //             8 学生邮箱未更新
+    //             9 必填项有缺失
+    //result[RE] = new student ID
+    add_one_student(student_name,passwd,faculty_id,major_id,class_id,student_introduction,student_email,result){
+        if(faculty_id == '' || major_id == '' || class_id == '' || passwd == '' || student_name == ''){
+            result[TF] = 9;
+            return;
+        }
+        //检查faculty_id,major_id,class_id合法性
+        // if(faculty_id != ''){
+            //     if(major_id != ''){
+            //         if(class_id != ''){
+            //             var r = new Array();
+            //             var sql = "select faculty_ID,major_ID,class_ID from faculty,major,class "
+            //             +"where faculty.faculty_ID = major.faculty_belong and major.major_ID = class.major_belong "
+            //             +"and faculty.faculty_id = \'"+faculty_id+"\' and major.major_id = \'"+major_id+"\'"
+            //             +" and class.class_id = \'"+class_id+"\'"
+            //             base.inquireD(sql,r);
+            //             setTimeout(function(){
+            //                 var data = {};
+            //                 console.log(r[RE].length)
+            //                 for(var i=0; i < r[RE].length; i++) {
+            //                     data[i]={
+            //                         'class_ID':r[RE][i].class_ID,
+            //                     }
+            //                 }
+            //                 if(r[TF] == false || data == {}){
+            //                     result[TF] = 4; 
+            //                 }
+            //                 else{
+            //                     r[RE] = data;
+            //                     console.log(r[RE])
+            //                     var rr = new Array();
+            //                     student.updateStudent(id,'class_staying',r[RE][0].class_ID,rr);
+            //                     setTimeout(function(){
+            //                         if(rr[0] == false)
+            //                             result[TF] = 4;
+            //                     },DEALTIME);
+            //                 }
+            //             },DEALTIME*3);
+            //         }
+            //     }
+            //     else{
+            //         if(class_id != '')
+            //             result[TF] = 5;
+            //     }
+            // }
+            // else if(major_id != '' || class_id != '')
+            //     result[TF] = 4;
+        var id = new Array();
+        student.createStudent(id,result);
+        setTimeout(function(){
+            if(result[0] == false)
+                 result[TF] = 1;
+            else
+                 result[TF] = 0;
+            result[RE] = id[0];
+            if(student_name != ''){
+                var r = new Array();
+                student.updateStudent(id,'student_name',student_name,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 2;
+
+                    }
+                },DEALTIME);
+            }
+            if(passwd != ''){
+                var r = new Array();
+                student.updateStudent(id,'passwd',passwd,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 3;
+                    }
+                },DEALTIME);
+            }
+            if(student_introduction != ''){
+                var r =new Array();
+                student.updateStudent(id,'student_introduction',student_introduction,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 7;
+                    }
+                },DEALTIME);
+            }
+            if(student_email != ''){
+                var r =new Array();
+                student.updateStudent(id,'student_email',student_email,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 8;
+                    }
+                },DEALTIME);
+            }
+        },DEALTIME*8);
+    }
+    //新增一名教师 V
+    //input:teacher_name,passwd,faculty_working,teacher_introduction,teacher_email
+    //result[TF] = 0 新增成功且无错误
+    //             1 新增失败
+    //             2 教师名未更新 必填
+    //             3 密码未更新 必填
+    //             4 学院未更新/不存在 必填
+    //             5 教师简介未更新
+    //             6 教师邮箱未更新
+    //             7 必填项有缺失
+    //result[RE] = new teacher ID
+    add_one_teacher(teacher_name,passwd,faculty_working,teacher_introduction,teacher_email,result){
+        if(faculty_working == '' || passwd == '' || teacher_name == ''){
+            result[TF] = 9;
+            return;
+        }
+        var id = new Array();
+        teacher.createTeacher(id,result);
+        setTimeout(function(){
+            if(result[0] == false)
+                 result[TF] = 1;
+            else
+                 result[TF] = 0;
+            result[RE] = id[0];
+            if(teacher_name != ''){
+                var r = new Array();
+                teacher.updateTeacher(id,'teacher_name',teacher_name,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 2;
+
+                    }
+                },DEALTIME);
+            }
+            if(faculty_working != ''){
+                var r = new Array();
+                teacher.updateTeacher(id,'faculty_working',faculty_working,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 4;
+
+                    }
+                },DEALTIME);
+            }
+            if(passwd != ''){
+                var r = new Array();
+                teacher.updateTeacher(id,'passwd',passwd,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 3;
+                    }
+                },DEALTIME);
+            }
+            if(teacher_introduction != ''){
+                var r =new Array();
+                teacher.updateTeacher(id,'teacher_introduction',teacher_introduction,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 5;
+                    }
+                },DEALTIME);
+            }
+            if(teacher_email != ''){
+                var r =new Array();
+                teacher.updateTeacher(id,'teacher_email',teacher_email,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 6;
+                    }
+                },DEALTIME);
+            }
+        },DEALTIME*6);
+    }
+
+    add_one_homework_by_course(teacher_ID,course_ID){
+
+    }//to be finished
+    
+    //新增讨论区 V
+    //input:post_label,post_title,post_content,post_starter,
+    //other value:post_date,post_reply_num,post_browse_num,post_support_num,post_last_reviser
+    //result[TF] = 0 新增成功且无错误
+    //             1 新增失败
+    //             2 post_label更新失败
+    //             3 post_title更新失败 必填
+    //             4 post_content更新失败 
+    //             5 post_starter更新失败 必填
+    //             6 other value更新失败
+    //             7 必填项有缺失
+    //result[RE] = new post ID
+    add_one_post(post_label,post_title,post_content,post_starter,result){
+        if(post_starter == '' || post_title == ''){
+            result[TF] = 7;
+            return;
+        }
+        var id = new Array();
+        post.createPost(id,result);
+        setTimeout(function(){
+            if(result[0] == false)
+                 result[TF] = 1;
+            else
+                 result[TF] = 0;
+            result[RE] = id[0];
+
+            if(1){
+                var r = new Array();
+                post.updatePost(id,'post_title',post_title,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 3;
+                    }
+                },DEALTIME);
+            }
+            if(1){
+                var r = new Array();
+                post.updatePost(id,'post_starter',post_starter,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 5;
+                    }
+                },DEALTIME);
+            }
+            if(post_label != ''){
+                var r = new Array();
+                post.updatePost(id,'post_content',post_content,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 4;
+                    }
+                },DEALTIME);
+            }
+            if(post_label != ''){
+                var r = new Array();
+                post.updatePost(id,'post_label',post_label,r);
+                setTimeout(function(){
+                    if(r[0] == false){
+                        result[TF] = 2;
+                    }
+                },DEALTIME);
+            }
+            //post_date,post_reply_num,post_browse_num,post_support_num,post_last_reviser
+            var t = new Array();
+            var date = new Date();
+            var da  = ''+date.getFullYear();
+            if(date.getMonth()<=9)
+                da += '0';
+            da += date.getMonth()+1;
+            if(date.getDate()<=9)
+                da += '0';
+            da += date.getDate();
+            post.updatePost(id,'post_date',da,t);
+            post.updatePost(id,'post_reply_num',0,t);
+            post.updatePost(id,'post_browse_num',0,t);
+            post.updatePost(id,'post_support_num',0,t);
+        },DEALTIME*6);
+    }//to be finished
+
+    all_one_reply_by_one_post(){
+
+    }//to be finished
 
 //////////////////////////////////////////////////////////////////////////////
 //5.delete_obj 参数列表(id,result)
-    delete_one_post(){
-
+    //删除一条回复
+    delete_one_reply(reply_id,result){//result[TF]-> 0/1
+        //result[TF] = 0 :success delete
+        //result[TF] = 1 :delete fail
+        reply.deleteReply(reply_id,result);
+        setTimeout(function(){
+                if(result[0] == true)
+                    result[TF] = 0;
+                else
+                    result[TF] = 1;
+        },DEALTIME);
+    }
+    //删除一个讨论区（包括其所有回复）
+    delete_one_post(post_id,result){//result[TF]-> 0/1
+        //result[TF] = 0 :success delete
+        //result[TF] = 1 :delete fail
+        this.load_allReply_one_post(post_id,result);
+        setTimeout(function(){
+            for(var i in result[RE])
+                this.delete_one_reply(result[RE][i].reply_id,result)
+            post.deletePost(post_id,result);
+            setTimeout(function(){
+                if(result[0] == true)
+                    result[TF] = 0;
+                else
+                    result[TF] = 1;
+            },DEALTIME);
+        },DEALTIME);
     }//to be finished
-    delete_one_reply(){
-
-    }//to be finished
+    //从教学班中删除一个学生
     delete_one_student_from_teacher_class(){
-
+        
     }//to be finished
 //////////////////////////////////////////////////////////////////////////////
 //6.other: 其他操作
@@ -1200,39 +1915,46 @@ class AdminService{
         },DEALTIME);
     }
 
+    //学生提交作业
+    //教师批改作业
+    //教学班添加
 }
 
-//var test = new AdminService();
-//var result = new Array();
-//test.login_admin('AD000001','passwd',result);
-//test.load_one_admin('AD000002',result)
-//test.load_one_student('ST000001',result);
-//test.load_numLatest_sysannouncement(result);
-//test.load_numLatest_couannouncement(result);
-//test.load_numLatest_post(result);
-//test.load_numLatest_homework(result)
-//test.find_all_table('AD000001',result)
-//test.find_teacher_by('','',result)
-//test.find_faculty_by('Food Science',result)
-//test.find_class_by('3班',result)
-//test.find_student_by('Michael','','','')
-//test.find_sysannouncement_by('','20171201','',result)
-//test.find_couannouncement_by('','','TE000001',result)
-//test.find_course_by('','FA000001','TE000001',result)
-//test.modify_one_teacher('TE000001','','123',result)
-//test.modify_one_student('ST000001','853822587@qq.com','',result)
-//test.load_one_teacher('TE000001',result)
-//test.load_allCourse_one_teacher('TE000001',result)
-//test.load_allCourse_one_student('ST000001',result)
-//test.find_post_by('le10','','',result)
-//test.load_allTeacher_one_course('CO000001',result)
-//test.load_allStudent_one_course_teacher('CO000001','TE000002',result)
-//test.find_bank_by('','','CO000001',result)
-//test.find_resource('','','CO000001',result)
-/*setTimeout(function(){
-        console.log(result[TF]);
-        console.log(result[RE]);
-    },1000);*/
+var test = new AdminService();
+var result = new Array();
+var id = new Array();
+//test.load_allCourse(result)
+//test.find_course_by('机器学习','','',result)
+//test.load_allStudent(result)
+//test.find_student_by('','','','','',result)
+//test.load_allTeacher(result)
+//test.find_teacher_by('TE000001','','',result)
+//test.load_allPost(result);
+//test.find_post_by('关于','','','',result)
 
+//student_name,passwd,faculty_id,major_id,class_id,student_introduction,student_email,result
+//test.add_one_student('','','','','','','',result)
+
+//teacher_name,passwd,faculty_working,teacher_introduction,teacher_email
+//faculty_working is ID
+//test.add_one_teacher('','','','','',result)
+
+//post_label,post_title,post_content,post_starter
+//test.add_one_post('','请教一个哲学问题','RT','ST000001',result)
+
+//student_id,passwd,student_email,student_introduction
+//test.modify_one_student('ST000004','11111','853822587@qq.com','',result)
+
+//test.modify_one_teacher('TE000004','11112','4598236@163.com','A good teacher',result);
+
+//test.load_allCourse_one_student('ST000001',result)
+//test.load_allHomework_one_student_one_t_class('ST000002','TC000001',result)
+//test.load_allHomework_one_teacher_one_t_class('TE000001','CO000001',result)
+// test.load_UnCorrectHomework_one_teacher('TE000001',result)
+
+// setTimeout(function(){
+//         console.log(result[TF]);
+//         console.log(result[RE]);
+// },DEALTIME*10);
 
 module.exports = AdminService;

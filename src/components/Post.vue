@@ -2,24 +2,10 @@
     <div id="post" >
         <el-row type='flex' justify="center">
             <div style="width:900px;">
-               <!-- <el-card class="box-card" style="margin-top:10px">
-                <div slot="header" class="clearfix">
-                    <span style="float:left">卡片名称</span>
-                    <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
-                <!-- </div> -->
-                <!-- <div class="text item">
-                    <el-col>
-                        <el-row>XXX</el-row>
-                    </el-col>
-                    <el-col>
-                        <span>XXXXXXXXXXXXXXXXXX</span>
-                    </el-col>
-                </div>
-                </el-card>  -->
                 <div id="topic" :data="postData">
                     <el-container>
                         <!-- 帖子标题、标签 -->
-                        <el-header><strong>{{postData.post_title}}</strong><el-tag>{{postData.post_label}}</el-tag></el-header>
+                        <el-header><strong>{{postData.post_ID}}</strong><el-tag>{{postData.post_label}}</el-tag></el-header>
                         <el-container>
                             <!-- 个人信息 -->
                             <el-aside width="200px">{{postData.post_starter}}</el-aside>
@@ -62,7 +48,7 @@ export default {
         return{
             postData:{
                 post_ID:'',
-                post_title:'aaaa',
+                post_title:'',
                 post_label:'s',
                 post_content:'hhhhhhh',
                 post_date:'yyyymmdd',
@@ -78,11 +64,15 @@ export default {
                 reply_sender:'fff',
                 reply_time:'tt',
             }]
-
         }
     },
     computed: {
-        
+        // dynamicSegment () {
+        //         return this.$route.params.post_id
+        //     },
+    },
+    mounted(){
+        this.postData.post_ID=this.$route.params.post_id;
     }
 }
 </script>

@@ -35,14 +35,43 @@ class BaseDAO{
                 connection.query(query, function(err, rows, fields) {
                     var data = {}
                     for(var i=0; i < rows.length; i++) {
-                        data[i]={
-                            a:+rows[i].admin_ID.substring(2,8)
+                        switch(table){
+                            case 'admin':data[i]=+rows[i].admin_ID.substring(2,8)
+                            break;
+                            case 'student':data[i]=+rows[i].student_ID.substring(2,8)
+                            break;
+                            case 'teacher':data[i]=+rows[i].teacher_ID.substring(2,8)
+                            break;
+                            case 'course':data[i]=+rows[i].course_ID.substring(2,8)
+                            break;
+                            case'teacher_class':data[i]=+rows[i].teacher_class_ID.substring(2,8)
+                            break;
+                            case 'class':data[i]=+rows[i].class_ID.substring(2,8)
+                            break;
+                            case 'faculty':data[i]=+rows[i].faculty_ID.substring(2,8)
+                            break;
+                            case 'major':data[i]=+rows[i].major_ID.substring(2,8)
+                            break;
+                            case 'bank':data[i]=+rows[i].bank_ID.substring(2,8)
+                            break;
+                            case 'course_announcement':data[i]=+rows[i].course_announcement_ID.substring(2,8)
+                            break;
+                            case 'system_announcement':data[i]=+rows[i].system_announcement_ID.substring(2,8)
+                            break;
+                            case 'post':data[i]=+rows[i].post_ID.substring(2,8)
+                            break;
+                            case 'reply':data[i]=+rows[i].reply_ID.substring(2,8)
+                            break;
+                            case 'homework':data[i]=+rows[i].homework_ID.substring(2,8)
+                            break;
+                            case 'resource':data[i]=+rows[i].resource_ID.substring(2,8)
+                            break;
                         }
                     }
                     var num = 1;
-                    for (var key of Object.keys(data).sort()) {
-                        if(data[key].a == num){
-                            //console.log(num);
+                    //for (var key of Object.keys(data).sort()) {
+                    for (var key in data) {
+                        if(data[key] == num){
                             num += 1;
                             continue;
                         }
@@ -51,7 +80,7 @@ class BaseDAO{
                         }
                     }
                     var id = tableMapId[table];
-                    for(var k = 100000 ;num < k-1;k = k/10)
+                    for(var k = 100000 ;num <= k-1;k = k/10)
                         id += '0';
                     id = id + num;
                     content = id;
@@ -63,7 +92,7 @@ class BaseDAO{
                 r.push(content);
             });
     };
-    create(id,table,atrlist,artnum,r){//not homework_scores`teacher_class_list
+    create(id,table,atrlist,artnum,r){//not homework_scores`& teacher_class_list
         var query = "insert into "+table+atrlist+"values";
         var value = "(\'"+id+"\'";
         for(var i=0;i<artnum-1;i++)
@@ -72,9 +101,11 @@ class BaseDAO{
         query += value;
         async.series({
             one:function(done){
-                connection.query(query, function(err, rows, fields) {
+                connection.query(query, function(err, rows) {
                     if (err) {
+                        //r.push(0);
                         r.push(false);
+                        content = id;
                         throw err;
                     }
                     done(null, content);
@@ -85,7 +116,7 @@ class BaseDAO{
                 r.push(true);
             });
     };
-    create(table,atrlist,artnum,id1,id2,r){
+    createHT(table,atrlist,artnum,id1,id2,r){
     //homework_scores (id1,id2,id3,null) ->(student_submit_homework,homework_ID_score,s_homework_content,s_homework_score)
     //教学班ID、学生ID、作业ID、
     //teacher_class_list (id1,id2) ->(t_class_ID_list,student_ID_list)
@@ -201,11 +232,7 @@ class BaseDAO{
                                 'sysllabus':rows[i].sysllabus
                             }
                             break;
-                            case'teacher_class_list':data[i]={
-                                't_class_ID_list':rows[i].t_class_ID_list,
-                                'student_ID_list':rows[i].student_ID_list
-                            }
-                            break;
+
                             case 'class':data[i]={
                                 'class_ID':rows[i].class_ID,
                                 'major_belong':rows[i].major_belong,
