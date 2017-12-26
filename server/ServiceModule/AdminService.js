@@ -264,7 +264,7 @@ class AdminService{
     //加载全部课程 V
     //result[RE] = (course_ID,course_name,faculty_name,teacher_name,teacher_id,t_class_ID,course_introduction,sysllabus)
     load_allCourse(result){
-        var sql = "select course_ID,course_name,faculty_name,teacher_name,teacher_id,t_class_ID "
+        var sql = "select course_ID,course_name,faculty_name,teacher_name,teacher_ID,t_class_ID,course_introduction,sysllabus "
             +"from course,teacher_class,teacher,faculty where teacher_class.course_ID_t_class = course.course_ID"
             +" and teacher_class.teacher_ID_t_class = teacher.teacher_id and course.faculty_belong = faculty.faculty_ID"
         base.inquireD(sql,result);
@@ -276,10 +276,10 @@ class AdminService{
                     'course_name':result[RE][i].course_name,
                     'faculty_name':result[RE][i].faculty_name,
                     'teacher_name':result[RE][i].teacher_name,
-                    't_class_ID':result[RE][i].t_class_id,
-                    'teacher_id':result[RE][i].teacher_id,
+                    't_class_ID':result[RE][i].t_class_ID,
+                    'teacher_id':result[RE][i].teacher_ID,
                     'course_introduction':result[RE][i].course_introduction,
-                   ' sysllabus':result[RE][i].sysllabus
+                    'sysllabus':result[RE][i].sysllabus
                 }
                 result[TF] = 3;
             }

@@ -13,11 +13,11 @@
   </el-form-item>
   </el-row>
 
-  <el-row type="flex" justify="start">
+  <!-- <el-row type="flex" justify="start">
   <el-form-item label="验证码" prop="code">
     <el-input v-model="ruleForm2.code" style="width:100px"></el-input>
   </el-form-item>
-</el-row>
+</el-row> -->
 
   <el-row type="flex" justify="start">
   <el-col :span='13'>

@@ -104,7 +104,7 @@
            this.$http.post('/api/get', {
                    type: 'sys_announce'
               },{}).then((response) => {
-                console.log(response.body);
+                // console.log(response.body);
                var a = response.body;
                try {
                  this.a_1=a[0][0].announcement_title;
@@ -130,7 +130,7 @@
            this.$http.post('/api/get', {
                    type: 'cou_announce'
               },{}).then((response) => {
-                console.log(response.body);
+                // console.log(response.body);
                var c = response.body;
                try {
                  this.c_1=c[0][0].announcement_title;
@@ -156,7 +156,7 @@
            this.$http.post('/api/get', {
                    type: 'latest_discussion'
               },{}).then((response) => {
-                console.log(response.body);
+                // console.log(response.body);
                var d = response.body;
                try {
                  this.d_1=d[0][0].post_title;
@@ -178,7 +178,7 @@
                } catch (error) {
                  
                }         
-            })                 
+            })                        
         },
         data(){
           return {

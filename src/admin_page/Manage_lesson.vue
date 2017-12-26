@@ -11,40 +11,34 @@
           <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span>搜索框</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    <el-button style="float: right; padding: 3px 0" type="text" @click="show_all">查看所有</el-button>
   </div>
 
   <el-row type="flex" justify="start">
-      <el-col>
-      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
   <el-form-item
     label="课程名称"
     prop="lesson_name"
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="lesson_name" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="lesson_name" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
-      </el-col>
 
-<el-col>
-      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="220px" class="demo-ruleForm">
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
   <el-form-item
     label="任课老师"
     prop="name"
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
-      </el-col>
 
-  </el-row>
 
-  <el-row type="flex" justify="start">
-       <el-col>
+
       <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
   <el-form-item
     label="开设学院"
@@ -52,29 +46,18 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="pub_department" v-model.number="numberValidateForm.pub_department" auto-complete="off"></el-input>
+    <el-input prefix-icon="el-icon-search" type="pub_department" v-model.number="numberValidateForm.pub_department" auto-complete="off"></el-input>
   </el-form-item>
 </el-form>
-      </el-col>
-        <el-col>
-      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-  <el-form-item
-    label="备选"
-    prop="other_condition"
-    :rules="[
-    ]"
-  >
-    <el-input prefix-icon="el-icon-search"type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
-  </el-form-item>
-</el-form>
-      </el-col>
+
+
 
   </el-row>
 
   <el-row type="flex" justify="center">
 
-    <el-button style='width:150px' type="primary">搜索</el-button>
-    <el-button style='width:150px;margin-left:40px'>重置</el-button>
+    <el-button style='width:150px' type="primary" @click="search_course">搜索</el-button>
+    <el-button style='width:150px;margin-left:40px' @click="reset_form">重置</el-button>
 
   </el-row>
 
@@ -90,7 +73,7 @@
       label="课程名称"
       width="150px">
       <template slot-scope="scope">
-        <span style="margin-left: 10px">{{ scope.row.lesson_name }}</span>
+           <el-button style="padding: 3px 0" type="text" @click="edit_lesson(scope.$index)">{{ scope.row.lesson_name }}</el-button>
       </template>
     </el-table-column>
 
@@ -172,20 +155,7 @@ import store from '../vuex/admin/store'
         //  }
       },
     mounted () {
-                this.$http.post('/api/get', {
-                    type: 'course_list'
-                  },{}).then((response) => {
-                    console.log(response.body);
-                    var cou_list = response.body;
-                    console.log(cou_list[0]);
-                    for(var i in cou_list[0]){
-                      var t = new Array()
-                      t['lesson_name']=cou_list[0][i].course_name;
-                      t['pub_department']=cou_list[0][i].faculty_belong;
-                      t['name']='aaa';
-                     this.tableData.push(t)
-                    }
-                  })
+               this.show_all()
     },     
     methods: {
       handleEdit(index, row) {
@@ -193,6 +163,13 @@ import store from '../vuex/admin/store'
       },
       handleDelete(index, row) {
         console.log(index, row);
+         this.$confirm('确认删除这门课程？')
+          .then(_ => {
+            // done();
+            this.tableData.splice(index,1);
+        alert('成功删除该课程！')
+          })
+          .catch(_ => {});
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -206,6 +183,76 @@ import store from '../vuex/admin/store'
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+       search_course(){
+         if(this.numberValidateForm.lesson_name===''&&this.numberValidateForm.pub_department===''&&this.numberValidateForm.name==='')
+          return;
+         this.tableData=[];
+         this.$http.post('/api/search_course', {
+          // find_course_by(course_name,faculty_name,teacher_name,result)
+                    course_name: this.numberValidateForm.lesson_name,
+                    faculty_name: this.numberValidateForm.pub_department,
+                    teacher_name:this.numberValidateForm.name,
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    var course_list = response.body[0];
+                    console.log(response.body[0])
+                    for(var i in course_list){
+
+                      var t = new Array()
+                      t['course_ID']=course_list[i].course_ID;
+                      t['teacher_id']=course_list[i].teacher_id;
+                      t['lesson_name']=course_list[i].course_name;
+
+                      t['pub_department']=course_list[i].faculty_name;
+                t['t_class_ID']=course_list[i].t_class_ID;
+                      t['name']=course_list[i].teacher_name;
+
+                          this.tableData.push(t)
+                    }
+                  })
+      },
+      //重置表格
+      reset_form(){
+     numberValidateForm={
+          lesson_name: '',
+          name: '',
+          pub_department: '',
+          other_condition: '',
+          publish_year: ''
+        }
+      },
+      show_all(){
+        this.tableData=[]
+        this.$http.post('/api/get', {
+                    type: 'course_list'
+                  },{}).then((response) => {
+                    // console.log(response.body);
+                    var cou_list = response.body;
+                    console.log(cou_list[0]);
+                    for(var i in cou_list[0]){
+                      var t = new Array()
+                      t['course_ID']=cou_list[0][i].course_ID;
+                      t['teacher_id']=cou_list[0][i].teacher_id;
+                      t['lesson_name']=cou_list[0][i].course_name;
+                      t['pub_department']=cou_list[0][i].faculty_name;
+                      t['name']=cou_list[0][i].teacher_name;
+                      t['t_class_ID']=cou_list[0][i].t_class_ID;
+                     this.tableData.push(t)
+                    }
+                  })
+      },
+      edit_lesson(index){
+          store.state.change_lesson=true
+          store.state.manage_lesson=[]
+          store.state.manage_lesson.push(this.tableData[index]['name'])
+          store.state.manage_lesson.push(this.tableData[index]['lesson_name'])
+          store.state.manage_lesson.push(this.tableData[index]['pub_department'])
+          store.state.manage_lesson.push(this.tableData[index]['course_ID'])
+          store.state.manage_lesson.push(this.tableData[index]['teacher_id'])
+          store.state.manage_lesson.push(this.tableData[index]['t_class_ID'])
+          console.log(store.state.manage_lesson)
+           this.$router.push({path:'/admin/add_class'});           
       }
     }
   }

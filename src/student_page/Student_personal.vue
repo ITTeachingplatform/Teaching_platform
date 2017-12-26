@@ -7,7 +7,6 @@
           <el-progress :percentage="100" :show-text="false"></el-progress>
           <el-row type="flex" class="row-bg"  style="margin-top:15px;">
             <el-col :span="8">
-
                 </el-col>
             <el-col :span="10">
               <div class="grid-content">

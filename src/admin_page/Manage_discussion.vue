@@ -8,44 +8,75 @@
  <el-button round style="margin-left:600px;margin-bottom:20px">发布讨论</el-button>
 </router-link>
   <el-row type="flex" justify="center">
-          <el-card style="width:900px" class="box-card">
+          <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span>搜索框</span>
+    <el-button style="float: right; padding: 3px 0" type="text" @click="show_all">查看所有讨论</el-button>
   </div>
-          <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <!--row 1-->
-            <el-row type="flex" justify="start" :gutter="20">
-              <el-col :span="16">
-                <el-form-item label="主题关键词" prop="keyword"  :rules="[]">
-                  <el-input type="keyword" v-model="ruleForm.keyword" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="发布者ID" prop="post_starter" :rules="[]">
-                  <el-input type="post_starter" v-model="ruleForm.post_starter" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!--row 2-->
-            <el-row type="flex" justify="start" :gutter="20">
-              <el-col :span="14">
-                <el-form-item label="类别标签" prop="post_label" :rules="[]">
-                  <el-input type="post_label" v-model="ruleForm.post_label" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="发布时间" prop="post_date" :rule="[]">
-                  <el-date-picker type="date" v-model="ruleForm.post_date" placeholder="选择日期"></el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
 
+  <el-row type="flex" justify="start">
+      <el-col>
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+  <el-form-item
+    label="讨论区关键词"
+    prop="id_word"
+    :rules="[
+    ]"
+  >
+    <el-input prefix-icon="el-icon-search" type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+  </el-form-item>
+</el-form>
+      </el-col>
+
+<el-col>
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="220px" class="demo-ruleForm">
+  <el-form-item
+    label="讨论区发布者(教师/学生/管理员)"
+    prop="name"
+    :rules="[
+    ]"
+  >
+    <el-input prefix-icon="el-icon-search" type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+  </el-form-item>
+</el-form>
+      </el-col>
+
+  </el-row>
+
+  <el-row type="flex" justify="start">
+       <el-col>
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
+  <el-form-item
+    label="标签"
+    prop="label"
+    :rules="[
+    ]"
+  >
+    <el-input prefix-icon="el-icon-search" type="other_condition" v-model.number="numberValidateForm.label" auto-complete="off"></el-input>
+  </el-form-item>
+</el-form>
+      </el-col>
+
+ <el-col>
+      <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
+  <el-form-item
+    label="公告发布时间"
+    prop="publish_date"
+    :rules="[
+    ]"
+  >
+      <el-date-picker type="date" v-model="numberValidateForm.publish_date" value-format="yyyy-MM-dd" @change="dateChange" auto-complete="off"></el-date-picker>
+       <!-- <el-input prefix-icon="el-icon-search"type="date"  @change="dateChange" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input> -->
+  </el-form-item>
+</el-form>
+      </el-col>
+
+  </el-row>
 
   <el-row type="flex" justify="center">
 
-            <el-button style='width:150px' type="primary" @click="submitForm('ruleForm')">搜索</el-button>
-            <el-button style='width:150px;margin-left:40px' @click="resetForm('ruleForm')">重置</el-button>
+    <el-button style='width:150px' type="primary" @click="search_post">搜索</el-button>
+    <el-button style='width:150px;margin-left:40px' @click="reset_form">重置</el-button>
 
   </el-row>
 
@@ -67,7 +98,7 @@
 
     <el-table-column
       label="发布者"
-      width="70px">
+      width="120px">
       <template slot-scope="scope">
         <el-popover trigger="hover" placement="top">
           <p>公告者: {{ scope.row.writer }}</p>
@@ -113,9 +144,6 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
           type="danger"
           @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>
@@ -141,11 +169,12 @@ import store from '../vuex/admin/store';
       data() {
         return {
           radio: '1',
-        ruleForm: {
-          keyword: '',
-          post_starter: '',
-          post_date: '',
-          post_label: '',
+          search_date: '',
+          numberValidateForm: {
+            id_word: '',
+            writer: '',
+            publish_date: '',
+            label: '',
           },
           tableData:[]
         }
@@ -155,7 +184,7 @@ import store from '../vuex/admin/store';
                 this.$http.post('/api/get', {
                     type: 'discuss_list'
                   },{}).then((response) => {
-                    console.log(response.body);
+                    // console.log(response.body);
                     var dis_list = response.body;
                     for(var i=0;i<dis_list[0].length;i++){
                       var t = new Array()
@@ -183,6 +212,13 @@ import store from '../vuex/admin/store';
       },
       handleDelete(index, row) {
         console.log(index, row);
+         this.$confirm('确认删除这条讨论？')
+          .then(_ => {
+            // done();
+            this.tableData.splice(index,1);
+        alert('成功删除该讨论！')
+          })
+          .catch(_ => {});
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -196,6 +232,71 @@ import store from '../vuex/admin/store';
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      //讨论区搜索
+      search_post(){
+        if(this.numberValidateForm.id_word===''&&this.search_date===''&&this.numberValidateForm.writer===''&&this.numberValidateForm.label==='')
+          return;
+         this.tableData=[];
+            //  find_post_by(post_title,post_date,post_starter_ID,result)
+          console.log(this.search_date)
+         this.$http.post('/api/search_post', {
+          // post_title,post_starter,post_label,post_date
+                   post_title: this.numberValidateForm.id_word,
+                   post_date: this.search_date,
+                    post_starter:this.numberValidateForm.writer,
+                    post_label: this.numberValidateForm.label
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    var dis_list = response.body[0];
+                    for(var i in dis_list){
+                      var t = new Array()
+                      t['topic']=dis_list[i].post_title;
+                      t['writer']=dis_list[i].post_starter;
+                      t['publish_date']=dis_list[i].post_date;
+                      t['tag']=dis_list[i].post_label;
+                      t['final_changer']=dis_list[i].post_last_reviser;
+                      t['vis_num']=dis_list[i].post_browse_num;
+                      t['anw_num']=dis_list[i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
+      },
+      //重置表格
+      reset_form(){
+      this.numberValidateForm={
+            id_word: '',
+            writer: '',
+            publish_date: '',
+            label: '',
+          }
+        this.search_date = ''
+      },
+      //日期格式化
+      dateChange(val){
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
+      show_all(){
+        this.tableData =[]
+                this.$http.post('/api/get', {
+                    type: 'discuss_list'
+                  },{}).then((response) => {
+                    // console.log(response.body);
+                    var dis_list = response.body;
+                    for(var i=0;i<dis_list[0].length;i++){
+                      var t = new Array()
+                      t['topic']=dis_list[0][i].post_title;
+                      t['writer']=dis_list[0][i].post_starter;
+                      t['publish_date']=dis_list[0][i].post_date;
+                      t['tag']=dis_list[0][i].post_label;
+                      t['final_changer']=dis_list[0][i].post_last_reviser;
+                      t['vis_num']=dis_list[0][i].post_browse_num;
+                      t['anw_num']=dis_list[0][i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
       }
     }
   }

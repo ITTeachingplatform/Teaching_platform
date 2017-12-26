@@ -14,6 +14,8 @@ let teacher_info = []
 let announce_info = []
 let discussion_info = []
 let lesson_info = []
+let manage_lesson = []
+let change_lesson = false
 const state = {
     admin_account,
     page,
@@ -22,7 +24,8 @@ const state = {
     announce_info,
     discussion_info,
     lesson_info,
-    admin_id
+    admin_id,
+    manage_lesson
 }
 
 export default state

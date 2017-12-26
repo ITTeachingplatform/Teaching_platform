@@ -17,7 +17,8 @@ export default {
     name: 'Avatar',
     methods:{
     handleCommand(command) {
-        this.$message('click on item ' + command);
+        if(command==='c')
+         this.$router.replace('/')
       }
     }
      }
