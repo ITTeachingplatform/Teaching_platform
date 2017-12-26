@@ -60,7 +60,7 @@
  <el-col>
       <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
   <el-form-item
-    label="公告发布时间"
+    label="发布时间"
     prop="publish_date"
     :rules="[
     ]"
