@@ -20,7 +20,7 @@ class Teacher_classDAO{//表名DAO
         this.getNewTeacher_classId(id);
         setTimeout(function(){
             baseDAO.create(id,table,atrlist,atrnum,result);
-        },100)
+        },1000)
     };
     updateTeacher_class(id,atr,val,result){
         baseDAO.update(id,atr,val,table,key,result);

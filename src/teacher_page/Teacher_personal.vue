@@ -13,16 +13,16 @@
               <div class="grid-content">
                 <!-- 表单 -->
                 <el-form ref="form" :model="form" label-width="80px">
-                  <el-form-item label="姓名"><div align="left">xxx</div></el-form-item>
-                  <el-form-item label="工号"><div align="left">xxxxxxx</div></el-form-item>
-                  <el-form-item label="院系"><div align="left">xxxxxxx</div></el-form-item>
-                  <el-form-item label="邮箱">
+                  <el-form-item label="姓名"><div align="left">{{form.name}}</div></el-form-item>
+                  <el-form-item label="工号"><div align="left">{{form.id}}</div></el-form-item>
+                  <el-form-item label="院系"><div align="left">{{form.faculty}}</div></el-form-item>
+                  <el-form-item label="邮箱" prop="email">
                     <el-input v-model="form.email" placeholder="请输入邮箱" :disabled=dis></el-input>
                   </el-form-item>
-                  <el-form-item label="个人简介">
+                  <el-form-item label="个人简介" prop="introduction">
                     <el-input
                       type="textarea"
-                      :rows="3"
+                      :rows="5"
                       :disabled=dis
                       placeholder="请输入个人简介"
                       v-model="form.introduction">
@@ -34,8 +34,8 @@
                   <el-button style="margin-top:5px;" @click="changePassword">修改密码</el-button>
                 </div>
                 <div v-else>
-                  <el-button type="primary" style="margin-top:5px;" @click="dis = true">保 存</el-button>
-                  <el-button style="margin-top:5px;" @click="dis = true">取 消</el-button>                  
+                  <el-button type="primary" style="margin-top:5px;" @click="saveMessage">保 存</el-button>
+                  <el-button style="margin-top:5px;" @click="cancelChangeMessage()">取 消</el-button>                  
                 </div>
                 </div>
                 </el-col>
@@ -45,7 +45,7 @@
       <!-- 修改密码 -->
       <div id="changePassword">
         <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
-          <el-form :model="passwordForm" :rules="rules" class="demo-ruleForm">
+          <el-form :model="passwordForm" ref="passwordForm" :rules="rules" class="demo-ruleForm">
             <el-form-item label="原密码" :label-width="formLabelWidth" prop="old_password">
               <el-input type="password" v-model="passwordForm.old_password" placeholder="请输入原密码" auto-complete="off"></el-input>
             </el-form-item>
@@ -57,7 +57,7 @@
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button @click="cancelChangePassword">取 消</el-button>
             <el-button type="primary" @click="submitForm('passwordForm')">确 定</el-button>
           </div>
         </el-dialog>
@@ -67,13 +67,28 @@
 
 <script>
 import Teacher from '../components/Teacher/Teacher.vue';
+import store from '../vuex/teacher/store'
 export default {
     name: 'teacher_personal',
     data() {
        var checkPassword = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('密码不能为空'));
-        }
+          this.$http.post('/api/load_one_teacher', {
+              teacher_id: store.state.teacher_account.id
+              },{}).then((response) => {
+                    // console.log(store.state.teacher_account.id);
+              var t = response.body[0];
+              var pw =t.passwd;
+              // console.log(t.passwd);              
+              if (!value) {
+                return callback(new Error('密码不能为空'));
+              }else {
+              if(value !== pw){
+                console.log('密码：'+pw);
+                return callback(new Error('密码不正确！'))
+              }else
+              callback();
+          }              
+        })
       };
         var validatePass = (rule, value, callback) => {
         if (value === '') {
@@ -92,12 +107,14 @@ export default {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
-          this.dialogFormVisible=false;
         }
       };
       return {
         dialogFormVisible:false,
         form: {
+          name:'',
+          id:'',
+          faculty:'',
           email: '',
           introduction: '',
         },
@@ -107,6 +124,8 @@ export default {
           new_password2:'',
         },
         dis:true,
+        password:'',
+        final_password:'',
         formLabelWidth: '120px',
         rules:{
           old_password: [
@@ -122,27 +141,78 @@ export default {
       }
     },
     mounted(){
+                this.$http.post('/api/load_one_teacher', {
+                    teacher_id: store.state.teacher_account.id
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    console.log(store.state.teacher_account.id);
+                    var teacher_mes = response.body[0];
+                    this.form.name=teacher_mes.teacher_name;
+                    this.form.id=teacher_mes.teacher_ID;
+                    this.form.faculty=teacher_mes.faculty_working;
+                    this.form.introduction=teacher_mes.teacher_introduction;
+                    this.form.email=teacher_mes.teacher_email;
+                    // this.password=teacher_mes.passwd;
+                  })
     },
     components: {
         'Teacher': Teacher,
     },
     methods: {
+      cancelChangeMessage(){
+        this.dis=true;
+        // this.$refs[formName].resetFields();
+      },
+          saveMessage(){
+            this.dis=true;
+                    this.$http.post('/api/modify_one_teacher', {
+                    teacher_id: store.state.teacher_account.id,
+                    teacher_password:'',
+                    teacher_emal:this.form.email,
+                    teacher_introduction:this.form.introduction,
+                  },{}).then((response) => {
+                    // console.log(response.body);
+                    // console.log(store.state.teacher_account.id);
+                    // var teacher_mes = response.body[0];
+                    // this.form.name=teacher_mes.teacher_name;
+                    // this.form.id=teacher_mes.teacher_ID;
+                    // this.form.faculty=teacher_mes.faculty_working;
+                    // this.form.introduction=teacher_mes.teacher_introduction;
+                    // this.form.email=teacher_mes.teacher_email;
+                  })        
+                  alert("修改信息成功！");  
+          },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
       changePassword(){
         this.dialogFormVisible=true;
+      },
+      cancelChangePassword(){
+        this.dialogFormVisible=false
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+                    this.$http.post('/api/modify_one_teacher', {
+                    teacher_id: store.state.teacher_account.id,
+                    teacher_password:this.passwordForm.new_password1,
+                    teacher_emal:'',
+                    teacher_introduction:'',
+                  },{}).then((response) => {
+                  })
+            this.dialogFormVisible=false; 
+            this.$refs[formName].resetFields();       
+            alert('修改密码成功!');
           } else {
             console.log('error submit!!');
             return false;
           }
         });
-      },
-    }
+      }
+   },
+   }
       
-}
 </script>
 
 <style scpoed>

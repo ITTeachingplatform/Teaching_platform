@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import store from '../vuex/teacher/state'
     export default{
         name: 'Info_bar',
         mounted(){
@@ -179,13 +178,7 @@ import store from '../vuex/teacher/state'
                } catch (error) {
                  
                }         
-            })
-            this.$http.post('/api/get_UnCorrectHomework_one_teacher',{
-              teacher_id:store.state.teacher_account.id
-            },{}).then((response)=>{
-              console.log(response.body);
-              var h =response.body;
-            })                        
+            })                 
         },
         data(){
           return {

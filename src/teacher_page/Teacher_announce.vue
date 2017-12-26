@@ -96,7 +96,8 @@
       </el-dialog>
       </el-form>
     </div>
-    <!-- END Dialog --></div>
+    <!-- END Dialog -->
+    </div>
 </template>
 
 <script>
@@ -161,7 +162,7 @@ export default {
         this.dialogForm.ann_publisher=this.tableData[index].ann_publisher;
         
       },
-            submitForm(formName) {
+      submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');

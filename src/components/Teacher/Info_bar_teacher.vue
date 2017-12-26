@@ -1,204 +1,243 @@
 <!--教师首页的公告卡片-->
 <template>
-<div id="info_bar_teacher">
-  <el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">教学信息</el-row>
-<el-row type="flex" justify="center">
-<el-row type="flex" justify="center">
-<el-col>
-<el-card class="box-card">
-  <div slot="header" class="clearfix">
-    <span style="font-size:30px">近期公告</span>
-    <router-link to="/teacher_announce">
-    <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多公告</el-button>
-    </router-link>
-  </div>
-  <router-link to=" "><div class="text item">
-   {{a_1}}
-  </div></router-link>
-    <router-link to=" "><div class="text item">
-   {{a_2}}
-  </div></router-link>
-    <router-link to=" "><div class="text item">
-   {{a_3}}
-  </div></router-link>
-    <router-link to=" "><div class="text item">
-   {{a_4}}
-  </div></router-link>
-</el-card>
-</el-col>
+  <div id="info_bar_teacher">
+    <el-row type="flex" justify="center" style="font-size:40px;margin-top:10px;margin-bottom:10px;">教学信息</el-row>
+    <el-row type="flex" justify="center">
+      <el-row type="flex" justify="center">
+      <el-col>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span style="font-size:30px">近期系统公告</span>
+            <router-link to="/teacher_announce">
+            <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
+            </router-link>
+          </div>
+          <div v-for="i in sysann_list_num" :key="i" v-if="i < a.length">
+              <router-link to="#">
+                <el-button style="float: center; padding: 3px 0;font-size:20px;margin-bottom:10px;" type="text" @click="show_sysannounnce(a[i])">{{get_sysannounnce_title(i)}}</el-button>
+              </router-link>
+            </div>
+        </el-card>
+      </el-col>
+      <el-col>
+        <el-card class="box-card"  style="margin-left:20px">
+          <div slot="header" class="clearfix">
+            <span style="font-size:30px">近期课程信息</span>
+            <router-link to="/teacher_courses">
+            <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
+            </router-link>
+          </div>
+          <div v-for="i in couann_list_num" :key="i" v-if="i < b.length">
+              <router-link to="#">
+                <el-button style="float: center; padding: 3px 0;font-size:20px;margin-bottom:10px;" type="text" @click="show_couannounnce(b[i])">{{get_couannounnce_title(i)}}</el-button>
+              </router-link>
+          </div>
+        </el-card>
+      </el-col>
+      </el-row>
+    </el-row>
 
-<el-col>
-<el-card class="box-card"  style="margin-left:20px">
-  <div slot="header" class="clearfix">
-    <span style="font-size:30px">课程信息</span>
-    <router-link to="/teacher_courses">
-    <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">管理课程</el-button>
-    </router-link>
-  </div>
-  <router-link to=" "><div class="text item">
-   {{c_1}}
-  </div></router-link>
-    <div class="text item">
-   <router-link to=" ">{{c_2}}</router-link>
-  </div>
-    <div class="text item">
-   <router-link to=" ">{{c_3}}</router-link>
-  </div>
-    <div class="text item">
-   <router-link to=" ">{{c_4}}</router-link>
-  </div>
-</el-card>
-</el-col>
-
-</el-row>
-</el-row>
-
-
-<el-row type="flex" justify="center" style="margin-top:20px">
-<el-row type="flex" justify="center">
-<el-col>
-<el-card class="box-card">
-  <div slot="header" class="clearfix">
-    <span style="font-size:30px">近期讨论区</span>
-        <router-link to="/teacher_discussion">
-        <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多讨论区</el-button>
-        </router-link>
-  </div>
-  <div class="text item">
-   <router-link to=" ">{{d_1}}</router-link>
-  </div>
-    <div class="text item">
-   <router-link to=" ">{{d_2}}</router-link>
-  </div>
-    <div class="text item">
-   <router-link to=" ">{{d_3}}</router-link>
-  </div>
-    <div class="text item">
-   <router-link to=" ">{{d_4}}</router-link>
-  </div>
-</el-card>
-</el-col>
-
+    <el-row type="flex" justify="center" style="margin-top:20px">
+      <el-row type="flex" justify="center">
+        <el-col>
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span style="font-size:30px">近期讨论区</span>
+              <router-link to="/teacher_discussion">
+                <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">查看更多</el-button>
+              </router-link>
+            </div>
+            <div v-for="i in discus_list_num" :key="i" v-if="i < c.length">
+              <router-link to="#">
+                <el-button style="float: center; padding: 3px 0;font-size:20px;margin-bottom:10px;" type="text" @click="show_discussion(c[i])">{{get_discussion_title(i)}}</el-button>
+              </router-link>
+            </div>
+          </el-card>
+        </el-col>
 <el-col>
 <el-card class="box-card" style="margin-left:20px">
   <div slot="header" class="clearfix">
     <span style="font-size:30px">批改提示</span>
+    <router-link to="/teacher_courses">
     <el-button style="float: right; padding: 3px 0;font-size:20px;" type="text">批改作业</el-button>
+    </router-link>
   </div>
-  <div v-for="o in 4" :key="o" class="text item">
-    <router-link to=" ">{{'教学班 ' + o + "  作业XXXXXXXXXXXXXXXXXXXX"}}</router-link>
+  <div v-for="i in homework_list_num" :key="i" v-if="i < d.length">
+     <router-link to="#">
+        <el-button style="float: center; padding: 3px 0" type="text;font-size:20px;margin-bottom:10px;" @click="show_homework(d[i])">{{get_homework_title(i)}}</el-button>
+      </router-link>
   </div>
 </el-card>
 </el-col>
 
 </el-row>
 </el-row>
-
+    <!-- Dialog -->
+    <div>
+      <el-form :data="dialogForm">
+        <el-dialog  :visible.sync="centerDialogVisible" width="80%" center>
+        <el-row><h1 align=center>{{dialogForm.title}}</h1></el-row>
+        <el-row>发布者：{{dialogForm.publisher}}</el-row>
+        <el-row>发布时间：{{dialogForm.date}}</el-row>
+        <el-row style="margin:15px">{{dialogForm.content}}</el-row>
+        <span slot="footer" class="dialog-footer">
+          <!-- <el-button @click="centerDialogVisible=f alse">取 消</el-button> -->
+          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button></span>
+      </el-dialog>
+      </el-form>
+    </div>
+    <!-- END Dialog -->
 </div>
   
 </template>
 <script>
+import store from '../../vuex/teacher/store'
       export default{
         name: 'Info_bar_teacher',
         component:{
         },
         data(){
           return{
-            a_1:'',
-            a_2:'',
-            a_3:'',
-            a_4:'',
-            c_1:'',
-            c_2:'',
-            c_3:'',
-            c_4:'',
-            d_1:'',
-            d_2:'',
-            d_3:'',
-            d_4:'',            
+            centerDialogVisible:false,
+            dialogForm:{
+              title:'',
+              publisher:'',
+              date:'',
+              content:''
+            },
+        a:[],
+        sysann_list_num : 4,
+        b:[],
+        couann_list_num : 4,
+        c:[],
+        discus_list_num : 4,
+        d:[],
+        homework_list_num: 4,
           }
         },
         methods: {
+      get_sysannounnce_title(index){
+        // console.log(this.a[index]);
+        // console.log(this.a[index].announcement_title);
+        return this.a[index].announcement_title;
+      },
+      show_sysannounnce(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.announcement_title;
+        this.dialogForm.publisher=temp.ann_publisher;
+        this.dialogForm.date=temp.announcement_date;
+        this.dialogForm.content=temp.announcement_content;            
+      },
+      get_couannounnce_title(index){
+        return this.b[index].announcement_title;
+      },
+      show_couannounnce(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.announcement_title;
+        this.dialogForm.publisher=temp.ann_publisher;
+        this.dialogForm.date=temp.announcement_date;
+        this.dialogForm.content=temp.announcement_content;            
+      },
+      get_discussion_title(index){
+        return this.c[index].post_title;
+      },
+      show_discussion(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.post_title;
+        this.dialogForm.publisher=temp.post_starter;
+        this.dialogForm.date=temp.post_date;
+        this.dialogForm.content=temp.post_content;            
+      },
+      get_homework_title(index){
+        return this.d[index].homework_name;
+      },
+      show_homework(temp){
+        this.centerDialogVisible=true;
+        this.dialogForm.title=temp.homework_name;
+        this.dialogForm.publisher='None';
+        this.dialogForm.date=temp.homework_up_date;
+        this.dialogForm.content=temp.homework_content;            
+      },
         },
         mounted () {
-                     this.$http.post('/api/get', {
-                   type: 'sys_announce'
-              },{}).then((response) => {
-                console.log(response.body);
-               var a = response.body;
-               try {
-                 this.a_1=a[0][0].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.a_2=a[0][1].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.a_3=a[0][2].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.a_4=a[0][3].announcement_title; 
-               } catch (error) {
-                 
-               }         
-            }),
-           this.$http.post('/api/get', {
-                   type: 'cou_announce'
-              },{}).then((response) => {
-                console.log(response.body);
-               var c = response.body;
-               try {
-                 this.c_1=c[0][0].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.c_2=c[0][1].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.c_3=c[0][2].announcement_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.c_4=c[0][3].announcement_title; 
-               } catch (error) {
-                 
-               }         
-            }),
-           this.$http.post('/api/get', {
-                   type: 'latest_discussion'
-              },{}).then((response) => {
-                console.log(response.body);
-               var d = response.body;
-               try {
-                 this.d_1=d[0][0].post_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.d_2=d[0][1].post_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.d_3=d[0][2].post_title;
-               } catch (error) {
-                 
-               }
-               try {
-                 this.d_4=d[0][3].post_title; 
-               } catch (error) {
-                 
-               }         
-            })                        
+        this.$http.post('/api/get', {
+          type: 'sys_announce'
+        },{}).then((response) => {
+          // console.log(response.body);
+          var sysann_list = response.body[0];
+          try {
+            for(var i in sysann_list){
+            var t = new Array();
+            t['announcement_title'] = sysann_list[i].announcement_title;
+            t['ann_publisher'] = sysann_list[i].sys_ann_publisher;
+            t['announcement_date'] = sysann_list[i].announcement_date;
+            t['announcement_content'] = sysann_list[i].announcement_content;
+            this.a.push(t);
+            }
+            console.log('finish loading sys_ann list');
+          } catch (error) {
+            console.log('Error when loading sys_ann list!!' + error)
+          }    
+        }),
+        this.$http.post('/api/get', {
+          type: 'cou_announce'
+        },{}).then((response) => {
+          // console.log(response.body);
+          var couann_list = response.body[0];
+          try {
+            for(var i in couann_list){
+            var t = new Array();
+            t['announcement_title'] = couann_list[i].announcement_title;
+            t['ann_publisher'] = couann_list[i].cou_ann_publisher;
+            t['announcement_date'] = couann_list[i].announcement_date;
+            t['announcement_content'] = couann_list[i].announcement_content;
+            this.b.push(t);
+            }
+            console.log('finish loading course_ann list');
+            // console.log(this.b);
+          } catch (error) {
+            console.log('Error when loading course_ann list!!' + error)
+          }
+        }),
+        this.$http.post('/api/get', {
+          type: 'latest_discussion'
+        },{}).then((response) => {
+          // console.log(response.body);
+          var discuss_list = response.body[0];
+          try {
+            for(var i in discuss_list){
+              var t = new Array();
+              t['post_title'] = discuss_list[i].post_title;
+              t['post_starter'] = discuss_list[i].post_starter;
+              t['post_date'] = discuss_list[i].post_date;
+              t['post_content'] = discuss_list[i].post_content;
+              this.c.push(t);
+            }
+            console.log('finish loading discussion list');
+          } catch (error) {
+            console.log('Error when loading discussion list!!' + error)
+          }
+        }),
+        this.$http.post('/api/get_UnCorrectHomework_one_teacher', {
+          teacher_id: store.state.teacher_account['id']
+        },{}).then((response) => {
+          // console.log(response.body);
+          var homework_list = response.body[0];
+          console.log(homework_list);
+          try {
+            for(var i in homework_list){
+              var t = new Array();
+              t['homework_name'] = homework_list[i].homework_name;
+              t['homework_up_date'] = homework_list[i].homework_up_date;
+              t['homework_content'] = homework_list[i].homework_content;
+              this.d.push(t);
+            }
+            console.log('finish loading homework list');
+          } catch (error) {
+            console.log('Error when loading homework list!!' + error)
+          }       
+        })
+                       
 
         }
     }
