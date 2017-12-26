@@ -463,7 +463,7 @@ class AdminService{
                     'student_name':result[RE][i].student_name,
                     'class_staying':result[RE][i].class_staying,
                     'student_introduction':result[RE][i].student_introduction,
-                    'student_eamil':result[RE][i].student_email,
+                    'student_email':result[RE][i].student_email,
                     'faculty_name':result[RE][i].faculty_name,
                     'major_name':result[RE][i].major_name,
                     'class_name':result[RE][i].class_name
@@ -1589,7 +1589,7 @@ class AdminService{
         else{
             result3.push(0);
         }
-        if(teacher_eamil != ''){
+        if(teacher_email != ''){
             teacher.updateTeacher(teacher_id,'teacher_email',teacher_email,result1);
         }
         else{
