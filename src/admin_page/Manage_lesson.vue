@@ -159,6 +159,7 @@ import store from '../vuex/admin/store'
     },     
     methods: {
       handleEdit(index, row) {
+        edit_lesson(index);
         console.log(index, row);
       },
       handleDelete(index, row) {
