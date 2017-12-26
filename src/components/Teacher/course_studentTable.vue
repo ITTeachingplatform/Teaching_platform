@@ -23,38 +23,26 @@
            <el-table-column prop="grade" label="成绩" width="80">
            </el-table-column>
 
+
+
           
 
   
-       </el-table>
+        </el-table>
 
-       <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">发布</el-button>
+        <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">导出</el-button>
        
-       <el-dialog title="发布作业" :visible.sync="dialogFormVisible">
-  <el-form :model="form">
-    <el-form-item label="标题" :label-width="formLabelWidth">
-      <el-input v-model="form.name" auto-complete="off"></el-input>
-    </el-form-item>
-
-    <el-form-item label="发布日期" :label-width="formLabelWidth">
-      <el-date-picker type="date" placeholder="选择" v-model="form.date1" style="width: 100%;"></el-date-picker>
-    </el-form-item>
-
-    <el-form-item label="截止日期" :label-width="formLabelWidth">
-      <el-date-picker type="date" placeholder="选择" v-model="form.date2" style="width: 100%;"></el-date-picker>
-    </el-form-item>
-
-    <el-form-item label="内容" :label-width="formLabelWidth">
-    <el-input v-model="form.content" auto-complete="off"></el-input>
-    </el-form-item>
+       <!-- 导出学生对话框 -->
+          <el-dialog title="导出学生" :visible.sync="dialogFormVisible">
+            <span>是否导出学生?</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible=false">取消</el-button>
+              <el-button type="primary" @click="dialogFormVisible=false">确定</el-button>
+            </span>
+          </el-dialog>
 
     
-  </el-form>
-  <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-  </div>
-</el-dialog>
+  
 
 
         
