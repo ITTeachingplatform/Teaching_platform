@@ -17,19 +17,40 @@
                     prop="course"
                     label="课程"
                     width="180">
+          <template slot-scope="scope">
+            <span>
+              <!-- {name:'teacher_post',params:{post_id:scope.row.id}} -->
+              <router-link to="#">{{scope.row.course }}</router-link>
+            </span>
+          </template>                    
                 </el-table-column>
                 <el-table-column
                     prop="name"
                     label="标题"
                     width="180">
+          <template slot-scope="scope">
+            <span>
+              <router-link to="#">{{scope.row.name }}</router-link>
+            </span>
+          </template>                    
                 </el-table-column>
                 <el-table-column
                     prop="t_class"
                     label="教学班">
+          <template slot-scope="scope">
+            <span>
+              <router-link to="#">{{scope.row.t_class }}</router-link>
+            </span>
+          </template>
                 </el-table-column>
                 <el-table-column
                     prop="number"
                     label="未批改数量">
+          <template slot-scope="scope">
+            <span>
+              <router-link to="#">{{scope.row.number }}</router-link>
+            </span>
+          </template>                    
                 </el-table-column>
                 </el-table>     
       <!-- 课程选择 -->
@@ -37,31 +58,36 @@
           <span style="font-size:36px">课程选择</span>
         </div>
         <el-progress :percentage="100" :show-text="false"></el-progress>
-            <el-row :gutter="20">
-              <el-col :span="8"><div class="grid-content bg-purple">
-                <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span>项目管理</span>
-                <router-link to="/course_page"><el-button style="float: right; padding: 3px 0" type="text">查看</el-button></router-link>
-              </div>
-              <div class="text item">
-                <p>课程编号：xxx</p>
-                <p>教学班：xxx</p>
-              </div>
-            </el-card></div></el-col>
-              <el-col :span="8"><div class="grid-content bg-purple">
-                <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span>软件架构</span>
-                <el-button style="float: right; padding: 3px 0" type="text">查看</el-button>
-              </div>
-              <div class="text item">
-                <p>课程编号：xxx</p>
-                <p>教学班：xxx</p>
-              </div>
-            </el-card></div></el-col>
-            </el-row>
-            <router-view></router-view>
+        <el-table
+        :data="courseData"
+        style="width:100%">
+        <el-table-column
+          label="课程编号"
+          width="250">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">
+              <!-- @click="toPost(scope.$index)" -->
+              {{scope.row.course_id }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="课程名称" width="300">
+          <template slot-scope="scope">
+            <span style="margin-left:10px">{{ scope.row.course_name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="教学班" >
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{ scope.row.t_class_id }}</span>
+          </template>
+        </el-table-column>
+         <el-table-column label="操作" >
+          <template slot-scope="scope">
+            <el-button type="primary" round size="small">查 看</el-button>
+          </template>
+        </el-table-column>
+        </el-table>
         </div> 
       </div>
 
@@ -84,27 +110,8 @@ export default {
             t_class: '',
             number: '',
             courseData:[],
-          tableData: [{
-            course: '2016-05-02',
-            name: '王小虎',
-            t_class: '上海市普陀区金沙江路 1518 弄',
-            number: '44'
-          }, {
-            course: '2016-05-02',
-            name: '王小虎',
-            t_class: '上海市普陀区金沙江路 1518 弄',
-            number: '44'
-          }, {
-            course: '2016-05-02',
-            name: '王小虎',
-            t_class: '上海市普陀区金沙江路 1518 弄',
-            number: '44'
-          }, {
-            course: '2016-05-02',
-            name: '王小虎',
-            t_class: '上海市普陀区金沙江路 1518 弄',
-            number: '44'
-          }]
+            tableData: []
+          
         }
       },
       mounted () {
@@ -116,9 +123,9 @@ export default {
           try {
             for(var i in course_list){
               var t = new Array();
-              t['course_name'] = course_list[i].course_ID;
-              t['course_id'] = course_list[i].homework_up_date;
-              t['t_class_id'] = course_list[i].homework_content;
+              t['course_name'] = course_list[i].course_name;
+              t['course_id'] = course_list[i].course_ID;
+              t['t_class_id'] = course_list[i].t_class_ID;
               this.courseData.push(t);
             }
             console.log('finish loading course list');
@@ -126,26 +133,27 @@ export default {
             console.log('Error when loading course list!!' + error)
           }                       
           })
-          // this.$http.post('/api/get/load_allCourse_one_teacher', {
-          // teacher_id: store.state.teacher_account.id
-          // },{}).then((response) => {
-          // console.log(response.body);
-          // var course_list = response.body[0];
-          // try {
-          //   for(var i in course_list){
-          //     var t = new Array();
-          //     t['course_name'] = course_list[i].homework_name;
-          //     t['course_id'] = course_list[i].homework_up_date;
-          //     t['t_class_id'] = course_list[i].homework_content;
-          //     this.courseData.push(t);
-          //   }
-          //   console.log('finish loading course list');
-          // } catch (error) {
-          //   console.log('Error when loading course list!!' + error)
-          // }                       })
+          this.$http.post('/api/get_UnCorrectHomework_one_teacher', {
+          teacher_id: store.state.teacher_account.id
+          },{}).then((response) => {
+          console.log(response.body);
+          var course_list = response.body[0];
+          try {
+            for(var i in course_list){
+              var t = new Array();
+              t['course'] = course_list[i].homework_name;
+              t['name'] = course_list[i].homework_name;
+              t['t_class'] = course_list[i].t_class_ID;
+              t['number'] = course_list[i].num;
+              this.tableData.push(t);
+            }
+            console.log('finish loading homework list');
+          } catch (error) {
+            console.log('Error when loading homework list!!' + error)
+          }                       })
 
           
-      }
+      },
 }
 </script>
 

@@ -37,14 +37,14 @@ router.post('/search_announcement', (req, res) => {
     var result = new Array();
     var result_2 = new Array();
     AdminService.find_sysannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result);
-    AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result_2);
+    AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,'',result_2);
     setTimeout(function(){
     console.log(result)
     for(var i in result[0]){
     result_2[0][i]=result[0][i];
     }
     res.send(result_2);
-    }, 1000)
+    }, 1500)
 });
 
 router.post('/get/one_student_BasicInfo',  (req, res) => {
@@ -217,5 +217,17 @@ router.post('/get/load_allCourse_one_teacher', (req, res) => {
         res.send(result);
     }, 1000)
 });
-
+//讨论区搜索apis.js
+//讨论区搜索
+router.post('/search_post', (req, res) => {
+    console.log('Searching post');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.find_post_by(params.post_title,params.post_starter,params.post_label,params.post_date,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
 module.exports = router;
