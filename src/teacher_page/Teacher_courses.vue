@@ -33,10 +33,10 @@
                 </el-table-column>
                 </el-table>     
       <!-- 课程选择 -->
-                <div style="margin:20px">
+        <div style="margin:20px">
           <span style="font-size:36px">课程选择</span>
-                </div>
-            <el-progress :percentage="100" :show-text="false"></el-progress>
+        </div>
+        <el-progress :percentage="100" :show-text="false"></el-progress>
             <el-row :gutter="20">
               <el-col :span="8"><div class="grid-content bg-purple">
                 <el-card class="box-card">
@@ -65,11 +65,6 @@
         </div> 
       </div>
 
-
-</el-row>
-
-
-
   </div>
 </template>
 
@@ -88,6 +83,7 @@ export default {
             name: '',
             t_class: '',
             number: '',
+            courseData:[],
           tableData: [{
             course: '2016-05-02',
             name: '王小虎',
@@ -110,6 +106,45 @@ export default {
             number: '44'
           }]
         }
+      },
+      mounted () {
+          this.$http.post('/api/get/load_allCourse_one_teacher', {
+          teacher_id: store.state.teacher_account.id
+          },{}).then((response) => {
+          console.log(response.body);
+          var course_list = response.body[0];
+          try {
+            for(var i in course_list){
+              var t = new Array();
+              t['course_name'] = course_list[i].course_ID;
+              t['course_id'] = course_list[i].homework_up_date;
+              t['t_class_id'] = course_list[i].homework_content;
+              this.courseData.push(t);
+            }
+            console.log('finish loading course list');
+          } catch (error) {
+            console.log('Error when loading course list!!' + error)
+          }                       
+          })
+          // this.$http.post('/api/get/load_allCourse_one_teacher', {
+          // teacher_id: store.state.teacher_account.id
+          // },{}).then((response) => {
+          // console.log(response.body);
+          // var course_list = response.body[0];
+          // try {
+          //   for(var i in course_list){
+          //     var t = new Array();
+          //     t['course_name'] = course_list[i].homework_name;
+          //     t['course_id'] = course_list[i].homework_up_date;
+          //     t['t_class_id'] = course_list[i].homework_content;
+          //     this.courseData.push(t);
+          //   }
+          //   console.log('finish loading course list');
+          // } catch (error) {
+          //   console.log('Error when loading course list!!' + error)
+          // }                       })
+
+          
       }
 }
 </script>

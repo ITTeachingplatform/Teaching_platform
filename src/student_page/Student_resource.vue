@@ -4,7 +4,8 @@
     <div class="container">
       <el-row style="font-size:50px;margin-top:20px">课程资源</el-row>
       <el-row type="flex" justify="center" >
-        <div class="block" style="width:900px;margin-top:10px">
+        <div class="block" style="width:900px;margin-top:10px;margin-bottom:10px">
+          <el-card class="box-card" style='width:900px'>
           <div slot="header" class="clearfix">
             <span>搜索框</span>
           </div>
@@ -18,23 +19,21 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="资源类型" prop="file_type" :rules="[{required:true}]">
-                  <el-select v-model="validateForm.file_type" placeholder="请选择资源类型">
-                    <el-option label="题库" value="1"></el-option>
-                    <el-option label="教学资源" value="2"></el-option>
-                  </el-select>
+                  <el-radio v-model="validateForm.file_type" label="1">题库</el-radio>
+                  <el-radio v-model="validateForm.file_type" label="2">教学资源</el-radio>
                 </el-form-item>
               </el-col>
             </el-row>
             <!--row 2-->
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="14">
-                <el-form-item label="课程名称" prop="course" :rules="[]">
-                  <el-input type="course" v-model="validateForm.course" auto-complete="off"></el-input>
+                <el-form-item label="课程名称" prop="course_name" :rules="[]">
+                  <el-input type="course_name" v-model="validateForm.course_name" auto-complete="off"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
                 <el-form-item label="发布时间" prop="date" :rule="[]">
-                  <el-date-picker type="date" v-model="validateForm.date" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker type="date" v-model="validateForm.date" placeholder="选择日期" value-format="yyyy-MM-dd" @change="dateChange" auto-complete="off"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -44,13 +43,14 @@
             <el-button style='width:150px' type="primary" @click="search_file">搜索</el-button>
             <el-button style='width:150px;margin-left:40px' @click="resetForm(validateForm)">重置</el-button>
           </el-row>
+          </el-card>
         </div>
       </el-row>
       <el-progress :percentage="100" :show-text="false"></el-progress>
       <!--Category bar-->
       <el-row type="flex" justify="center" >
         <div class="b" style="width:900px;margin-top:10px">
-          <el-table ref="singleTable" :data="tableData"  tooltip-effect="dark" style="width:100%" highlight-current-row @current-change="handleCurrentChange">
+          <el-table ref="singleTable" :data="tableData"  tooltip-effect="dark" style="width:100%margin-top:20px;text-align:left;" highlight-current-row @current-change="handleCurrentChange">
             
             <el-table-column label="标题" width="200px">
               <template slot-scope="scope">
@@ -63,9 +63,9 @@
               </template>
             </el-table-column>
 
-            <el-table-column label="课程名称" prop="course" width="180px">
+            <el-table-column label="课程名称" prop="course_name" width="180px">
               <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ scope.row.course }}</span>
+                <span style="margin-left: 10px">{{ scope.row.course_name }}</span>
               </template>
             </el-table-column>
 
@@ -86,15 +86,21 @@
                 <span style="margin-left: 10px">{{ scope.row.download_num }}</span>
               </template>
             </el-table-column>
-
+            <el-table-column label="操作" >
+              <template slot-scope="scope">
+                <el-button @click="centerDialogVisible = true" type="primary" size="mini" round>下载</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
       </el-row>
-      <div style="margin-top: 20px">
-        <el-button @click="setCurrent(tableData[1])">下载选中项</el-button>
-        <el-button @click="setCurrent()">取消选择</el-button>
-      </div>
     </div>
+    <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%">
+      <span>开始下载！</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,15 +114,16 @@ export default {
       },
     data() {
       return {
+        centerDialogVisible: false,
         rules: {
 
         },
         search_date: '',
         validateForm: {
           keyword: '',
-          file_type: '',
+          file_type: '1',
           date: '',
-          course: '',
+          course_name: '',
         },
         tableData: [],
         currentRow: null
@@ -139,9 +146,6 @@ export default {
         this.$refs[formName].resetFields();
         this.search_date=''
       },
-      setCurrent(row) {
-        this.$refs.singleTable.setCurrentRow(row);
-      },
       handleCurrentChange(val) {
         this.currentRow = val;
       },
@@ -152,34 +156,34 @@ export default {
             student_id: store.state.student_account.id,
             file_name: this.validateForm.keyword,
             date: this.search_date,
-            course: this.validateForm.course,
+            course_name: this.validateForm.course_name,
             type: this.validateForm.file_type
           },{}).then((response) => {
             console.log(response.body[0]);
             var file_list = response.body[0];
-            for(var i in file_list){
-              var t = new Array()
-              t['name']=file_list[i].announcement_title;
-              t['date']=file_list[i].announcement_date;
-              t['course']=file_list[i].course;
-              t['size']=file_list[i].size;
-              t['download_num']=file_list[i].download_num;
-              if(this.validateForm.type === '1' && file_list[i].sys_announcement_ID)
-                  t['name']=file_list[i].announcement_title;
-                  t['date']=file_list[i].announcement_date;
-                  t['course']=file_list[i].course;
-                  t['size']=file_list[i].size;
-                  t['download_num']=file_list[i].download_num;
-                  this.tableData.push(t)
-              if(this.validateForm.type === '2' && file_list[i].cou_announcement_ID)                        
-                  {
-                    t['name']=file_list[i].announcement_title;
-                    t['date']=file_list[i].announcement_date;
-                    t['course']=file_list[i].course;
-                    t['size']=file_list[i].size;
-                    t['download_num']=file_list[i].download_num;
-                    this.tableData.push(t)
-                  }
+            if(this.validateForm.file_type === '1'){
+              for(var i in file_list){
+                var t = new Array()
+                t['name']=file_list[i].bank_name;
+                t['date']=file_list[i].bank_up_date;
+                t['course_name']=file_list[i].course_name;
+                t['file_type']='题库';
+                t['size']=file_list[i].bank_size;
+                t['download_num']=file_list[i].bank_download_num;
+                this.tableData.push(t);
+              }
+            }
+            else{
+              for(var i in file_list){
+                var t = new Array()
+                t['name']=file_list[i].resource_name;
+                t['date']=file_list[i].resource_date;
+                t['course_name']=file_list[i].course_name;
+                t['file_type']='教学资源';
+                t['size']=file_list[i].resource_size;
+                t['download_num']=file_list[i].resource_downloads;
+                this.tableData.push(t)
+                }
             }
           })
       },

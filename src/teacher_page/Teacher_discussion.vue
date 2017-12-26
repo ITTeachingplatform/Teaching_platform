@@ -12,72 +12,39 @@
             <!-- <el-button style="float: right;padding: 3px 0" type="text">操作按钮</el-button> -->
           </div>
           <el-row type="flex" justify="start">
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item
-                  label="讨论区关键词"
-                  prop="id_word" 
-                  :rules="[]"
-                  >
-                  <el-input type="id_word" v-model.number="numberValidateForm.id_word" auto-complete="off"></el-input>
+          <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <!--row 1-->
+            <el-row type="flex" justify="start" :gutter="20">
+              <el-col :span="16">
+                <el-form-item label="主题关键词" prop="keyword"  :rules="[]">
+                  <el-input type="keyword" v-model="ruleForm.keyword" auto-complete="off"></el-input>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="220px" class="demo-ruleForm">
-                <el-form-item
-                  label="讨论区发布者"
-                  prop="name"
-                  :rules="[]"
-                  >
-                  <el-input type="name" v-model.number="numberValidateForm.name" auto-complete="off"></el-input>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="发布者ID" prop="post_starter" :rules="[]">
+                  <el-input type="post_starter" v-model="ruleForm.post_starter" auto-complete="off"></el-input>
                 </el-form-item>
-              </el-form>
-            </el-col>
-          </el-row>
-
-          <el-row type="flex" justify="start">
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item
-                  label="其他条件"
-                  prop="other_condition"
-                  :rules="[]"
-                  >
-                  <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+              </el-col>
+            </el-row>
+            <!--row 2-->
+            <el-row type="flex" justify="start" :gutter="20">
+              <el-col :span="14">
+                <el-form-item label="类别标签" prop="post_label" :rules="[]">
+                  <el-input type="post_label" v-model="ruleForm.post_label" auto-complete="off"></el-input>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item
-                  label="其他条件"
-                  prop="other_condition"
-                  :rules="[]"
-                  >
-                  <el-input type="other_condition" v-model.number="numberValidateForm.other_condition" auto-complete="off"></el-input>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="发布时间" prop="post_date" :rule="[]">
+                  <el-date-picker type="date" v-model="ruleForm.post_date" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
-              </el-form>
-            </el-col>
-
-            <el-col>
-              <el-form :model="numberValidateForm" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
-                <el-form-item
-                  label="公告发布时间"
-                  prop="publish_date"
-                  :rule="[]"
-                  >
-                  <el-input type="date" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-form>
-            </el-col>
+              </el-col>
+            </el-row>
+          </el-form>
           </el-row>
 
           <el-row type="flex" justify="center">
             <el-button style='width:150px' type="primary">搜索</el-button>
-            <el-button style='width:150px;margin-left:40px'>重置</el-button>
+            <el-button style='width:150px;margin-left:40px' v-on:click="resetForm('ruleForm')">重置</el-button>
           </el-row>
         </el-card>
       </el-row>
@@ -91,7 +58,10 @@
           label="讨论主题"
           width="200px">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{scope.row.topic }}</span>
+            <span style="margin-left: 10px">
+              <!-- @click="toPost(scope.$index)" -->
+              <router-link :to="{name:'teacher_post',params:{post_id:scope.row.id}}">{{scope.row.topic }}</router-link>
+            </span>
           </template>
         </el-table-column>
 
@@ -109,13 +79,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="发布时间" width="150px">
+        <el-table-column label="发布时间" width="180px">
           <template slot-scope="scope">
             <span style="margin-left:10px">{{ scope.row.publish_date }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="标签" width="180px">
+        <el-table-column label="标签" width="150px">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.tag }}</span>
           </template>
@@ -154,24 +124,36 @@ export default {
       data() {
       return {
         radio: '1',
-        numberValidateForm: {
-          id_word: '',
-          writer: '',
-          publish_date: '',
-          other_condition: '',
-        },
-        tableData: [{
-          topic: '关于上课的一点疑问',
-          writer: 'XXX',
-          publish_date: '2017/09/10',
-          tag: 'IT项目管理、学习',
-          final_changer: '小葱',
-          vis_num: '155',
-          sup_num: '99',
-          anw_num: '10'
-        }]
+        ruleForm: {
+          keyword: '',
+          post_starter: '',
+          post_date: '',
+          post_label: '',
+          },
+        tableData: []
       }
     },
+          mounted () {
+        // store.dispatch('get_discussion_item', {'Help_text': '此处获取讨论区信息'});
+                this.$http.post('/api/get', {
+                    type: 'discuss_list'
+                  },{}).then((response) => {
+                    console.log(response.body);
+                    var dis_list = response.body;
+                    for(var i=0;i<dis_list[0].length;i++){
+                      var t = new Array()
+                      t['id']=dis_list[0][i].post_ID;
+                      t['topic']=dis_list[0][i].post_title;
+                      t['writer']=dis_list[0][i].post_starter;
+                      t['publish_date']=dis_list[0][i].post_date;
+                      t['tag']=dis_list[0][i].post_label;
+                      t['final_changer']=dis_list[0][i].post_last_reviser;
+                      t['vis_num']=dis_list[0][i].post_browse_num;
+                      t['anw_num']=dis_list[0][i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
+      },      
     methods: {
       handleEdit(index, row) {
         console.log(index, row);
@@ -191,7 +173,7 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      }
+      },
     }
 
 }

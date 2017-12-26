@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
-              <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+              <el-button @click="handleClick(scope.row)" type="primary" size="mini" round>查看</el-button>
             </template>
          </el-table-column>
         </el-table>
@@ -55,6 +55,7 @@
           t['teacher_name']=class_list[i].teacher_name;
           t['faculty_name']=class_list[i].faculty_name;
           t['t_class_ID']=class_list[i].t_class_ID;
+          t['course_ID']=class_list[i].course_ID;
           this.allClass.push(t);
         }
       })
@@ -65,9 +66,10 @@
         // this.$router.params.id;
       },
       handleClick(row) {
-        console.log(row.t_class_ID,row);
+        console.log(row);
         const one_t_class_id = row.t_class_ID;
-        this.$router.push({name:'Student_courses_view', params: {t_class_id: one_t_class_id}});
+        const one_course_id = row.course_ID;
+        this.$router.push({name:'Student_courses_view', params: {course_id: one_course_id, t_class_id: one_t_class_id}});
       },
     }
   }
