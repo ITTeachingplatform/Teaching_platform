@@ -5,32 +5,39 @@
                 <div id="topic" :data="postData">
                     <el-container>
                         <!-- 帖子标题、标签 -->
-                        <el-header><strong>{{postData.post_ID}}</strong><el-tag>{{postData.post_label}}</el-tag></el-header>
+                        <el-header><strong>{{postData.post_title}}</strong><div style="float:right;"><el-tag>{{postData.post_label}}</el-tag></div></el-header>
                         <el-container>
                             <!-- 个人信息 -->
-                            <el-aside width="200px">{{postData.post_starter}}</el-aside>
+                            <el-aside width="200px">
+                                <el-row><img src="../assets/head.jpg" width="120px" height="120px"></el-row>
+                                <el-row style="color:#000">{{postData.post_starter}}</el-row>
+                            </el-aside>
                             <el-container>
                                 <!-- 帖子内容 -->
                                 <el-main>{{postData.post_content}}</el-main>
                                 <!-- 回复数、浏览数、发帖时间 -->
-                                <el-footer>回复数：{{postData.post_reply_num}} 浏览数：{{postData.post_browse_num}} {{postData.post_date}}</el-footer>
+                                <el-footer>回复数：{{postData.post_reply_num}}&nbsp; 浏览数：{{postData.post_browse_num}}&nbsp;&nbsp;&nbsp; {{postData.post_date}}</el-footer>
                             </el-container>
                         </el-container>
                     </el-container>
                 </div>
-                <div id="reply">
-                    <el-container>
-                        <!-- <el-header>Header</el-header> -->
-                        <!-- <el-container> -->
-                            <el-aside width="200px">{{reply_sender}}</el-aside>
-                            <el-container>
-                                <!-- 回复内容 -->
-                                <el-main>{{reply_content}}</el-main>
-                                <el-footer>{{reply_time}}</el-footer>
-                            </el-container>
+                <el-table id="reply" :data="replyData">
+                    <!-- <div v-for="i in replyData" :key="i.index"> -->
+                <el-table-column>
+                    <template slot-scope="scope">
+                        <el-container>
+                         <el-aside width="200px">
+                            <span style="margin-left: 10px;color:#000">{{ scope.row.reply_sender }}</span>
+                         </el-aside>
+                        <!-- 回复内容 -->
+                        <el-main>{{ scope.row.reply_content }}</el-main>
+                        <el-footer>{{ scope.row.reply_time }}</el-footer>
+                        </el-container>
+                    </template>
+                </el-table-column>
                         <!-- </el-container> -->
-                    </el-container>
-                </div>
+                    <!-- </div> -->
+                </el-table>
                 <!-- 编辑器 -->
                 <editor></editor>
             </div>
@@ -49,21 +56,15 @@ export default {
             postData:{
                 post_ID:'',
                 post_title:'',
-                post_label:'s',
-                post_content:'hhhhhhh',
-                post_date:'yyyymmdd',
-                post_starter:'ww',
-                post_reply_num:'22',
-                post_browse_num:'22',
-                post_last_reviser:'22',
+                post_label:'',
+                post_content:'',
+                post_date:'',
+                post_starter:'',
+                post_reply_num:'',
+                post_browse_num:'',
+                post_last_reviser:'',
             },
-            replyData:[{
-                reply_ID:'',
-                reply_belong:'fff',
-                reply_content:'fff',
-                reply_sender:'fff',
-                reply_time:'tt',
-            }]
+            replyData:[]
         }
     },
     computed: {
@@ -73,6 +74,48 @@ export default {
     },
     mounted(){
         this.postData.post_ID=this.$route.params.post_id;
+          this.$http.post('/api/view_post', {
+          post_id: this.$route.params.post_id
+          },{}).then((response) => {
+          console.log(response.body);
+          var post_mes = response.body[0];
+          try {
+              this.postData.post_title= post_mes.post_title;
+              this.postData.post_label= post_mes.post_label;
+              this.postData.post_content = post_mes.post_content;
+              this.postData.post_starter = post_mes.post_starter;
+              this.postData.post_content = post_mes.post_content;
+              this.postData.post_reply_num = post_mes.post_reply_num;
+              this.postData.post_browse_num = post_mes.post_browse_num;
+              this.postData.post_last_reviser = post_mes.post_last_reviser;
+              this.postData.post_date = post_mes.post_date;
+            console.log('finish loading the post');
+          } catch (error) {
+            console.log('Error when loading the post!!' + error)
+          }                       
+          })
+          this.$http.post('/api/post_replay', {
+          post_id: this.$route.params.post_id
+          },{}).then((response) => {
+          console.log(response.body);
+          var replay_list = response.body[0];
+          try {
+            for(var i in replay_list){
+              var t = new Array();
+              t['reply_ID'] = replay_list[i].reply_ID;
+              t['reply_belong'] = replay_list[i].reply_belong;
+              t['reply_content'] = replay_list[i].reply_content;
+              t['reply_sender'] = replay_list[i].reply_sender;
+              t['reply_time'] = replay_list[i].reply_time;
+              this.replyData.push(t);
+            }
+            console.log('Loading the replay!!' + error)
+            }
+          catch (error) {
+            console.log('Error when loading the replay!!' + error)
+          }                       
+          })
+          
     }
 }
 </script>
@@ -119,7 +162,7 @@ export default {
     background-color: #D3DCE6;
     color: #333;
     text-align: center;
-    line-height: 200px;
+    /* line-height: 100px; */
   }
   
   .el-main {

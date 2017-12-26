@@ -230,4 +230,28 @@ router.post('/search_post', (req, res) => {
         res.send(result);
     }, 1000)
 });
+//加载一个帖子的所有信息
+router.post('/view_post', (req, res) => {
+    console.log('Open a post');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_one_post(params.post_id,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+//加载一个帖子的回复
+router.post('/post_replay', (req, res) => {
+    console.log('Open a post all replay');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allReply_one_post(params.post_id,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
 module.exports = router;
