@@ -44,7 +44,7 @@ class BaseDAO{
                             break;
                             case 'course':data[i]=+rows[i].course_ID.substring(2,8)
                             break;
-                            case'teacher_class':data[i]=+rows[i].teacher_class_ID.substring(2,8)
+                            case'teacher_class':data[i]=+rows[i].t_class_ID.substring(2,8)
                             break;
                             case 'class':data[i]=+rows[i].class_ID.substring(2,8)
                             break;
@@ -54,9 +54,9 @@ class BaseDAO{
                             break;
                             case 'bank':data[i]=+rows[i].bank_ID.substring(2,8)
                             break;
-                            case 'course_announcement':data[i]=+rows[i].course_announcement_ID.substring(2,8)
+                            case 'course_announcement':data[i]=+rows[i].cou_announcement_ID.substring(2,8)
                             break;
-                            case 'system_announcement':data[i]=+rows[i].system_announcement_ID.substring(2,8)
+                            case 'system_announcement':data[i]=+rows[i].sys_announcement_ID.substring(2,8)
                             break;
                             case 'post':data[i]=+rows[i].post_ID.substring(2,8)
                             break;

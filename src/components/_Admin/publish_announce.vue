@@ -10,11 +10,13 @@
   </el-form-item>
   <el-form-item label="公告类型" prop="announce_type">
     <el-select v-model="ruleForm.announce_type" placeholder="请选择公告类型" style="width:100%">
-      <el-option label="系统公告/XXX公告" value="system_announce"></el-option>
-      <el-option label="教学公告" value="teaching_announce"></el-option>
+      <el-option label="系统公告/XXX公告" value="0"></el-option>
+      <el-option label="教学公告" value="1"></el-option>
     </el-select>
   </el-form-item>
-
+  <el-form-item label="课程ID">
+    <el-input v-model="ruleForm.course_ID"></el-input>
+  </el-form-item>
   <el-form-item label="正文" prop="announcement">
     <el-input type="textarea" :rows="14" v-model="ruleForm.announcement"></el-input>
   </el-form-item>
@@ -37,9 +39,12 @@ export default {
       return {
         ruleForm: {
           title: '',
-          announce_type: 'system_announce',
+          announce_type: '0',
           announcement: '',
+          content: '',
+          course_ID:'CO000003',
         },
+        course_Visible:false,
         rules: {
           title: [
             { required: true, message: '请输入标题名称', trigger: 'blur' },
@@ -59,7 +64,12 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('成功发布公告！');
+           this.$confirm('确认发布公告？')
+          .then(_ => {
+            // done();
+           this.add_ann();
+          })
+          .catch(_ => {});
           } else {
             alert('请填写完整的相关信息！');
             return false;
@@ -68,6 +78,27 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+            add_ann(){
+              console.log(this.ruleForm)
+          this.$http.post('/api/add_announcement', {
+          //  announcement_title,announcement_date,sys_ann_publisher
+                    publisher_ID: 'AD000001',
+                    flag:this.ruleForm.announce_type,
+                    title:this.ruleForm.title,
+                    content:this.ruleForm.announcement,
+                    course_ID: this.ruleForm.course_ID
+                  },{}).then((response) => {
+                      var result = response.body;
+                      if(result[1]===0){
+                        alert('发表公告成功，新增ID号为：'+result[0]);
+                        this.$router.push({path:'/admin/manage_announce'});
+                      }
+                      else{
+                        alert('公告发表失败，请确认填写信息是否完整！');
+                      }
+
+                    })
       }
     }
   }

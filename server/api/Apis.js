@@ -45,9 +45,8 @@ router.post('/search_announcement', (req, res) => {
     var result = new Array();
     var result_2 = new Array();
     AdminService.find_sysannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result);
-    AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,result_2);
+    AdminService.find_couannouncement_by(params.announcement_title,params.announcement_date,params.sys_ann_publisher,'',result_2);
     setTimeout(function(){
-        console.log(result)
         for(var i in result[0]){
             result_2[0][i]=result[0][i];
         }
@@ -55,6 +54,18 @@ router.post('/search_announcement', (req, res) => {
     }, 1000)
 });
 
+// add_one_announcement(publisher_ID,flag,title,content,course_ID,result)
+router.post('/add_announcement', (req, res) => {
+    console.log('Adding an announcement');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.add_one_announcement(params.publisher_ID,params.flag,params.title,params.content,params.course_ID,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
 
 //讨论区搜索
 router.post('/search_post', (req, res) => {
@@ -169,17 +180,48 @@ router.post('/add_post', (req, res) => {
     }, 1000)
 });
 
-//发布系统公告
-    //   router.post('/add_sys_ann', (req, res) => {
-    //     console.log('Adding a sys_ann');
-    //     var params = req.body;
-    //     var AdminService = new Admin();
-    //     var result = new Array();
-    //     AdminService.add_one_post(params.post_label,params.post_title,params.post_content,params.post_starter,result);
-    //     setTimeout(function(){
-    //         res.send(result);
-    //     }, 1000)
-    // });
+// load_allStudent_one_course_teacher(course_id,teacher_ID,result)
+//获取一个教学班里的所有学生
+router.post('/load_course_student', (req, res) => {
+    console.log('Getting students of course');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allStudent_one_course_teacher(params.course_id,params.teacher_ID,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+
+//添加一个教学班(包括教学大纲、课程介绍)
+// add_one_course(course_id,course_name,teacher_id,faculty_id,course_introduction,sysllabus,result)
+router.post('/add_one_course', (req, res) => {
+    console.log('Adding a course');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.add_one_course(params.course_id,params.course_name,params.teacher_id,params.faculty_id,params.course_introduction,params.sysllabus,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 3000)
+});
+
+// 添加一个学生进一个教学班
+// add_one_student_one_t_class(t_class_id,student_id,result)
+router.post('/add_one_student_to_course', (req, res) => {
+    console.log('Adding a student to a course');
+    var params = req.body;
+    console.log(params)
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.add_one_student_one_t_class(params.t_class_id,params.student_id,result)
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
 
 router.post('/get',  (req, res) => {
     var params = req.body;
@@ -246,7 +288,6 @@ else if(params.type == 'course_list'){
     var result = new Array();
     AdminService.load_allCourse(result);
     setTimeout(function(){
-        console.log(result);
         res.send(result);
     }, 1000)
 }

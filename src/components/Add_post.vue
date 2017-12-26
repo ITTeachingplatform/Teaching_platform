@@ -73,7 +73,7 @@ export default {
                     var result = response.body;
                     if(result[1] === 0){
                         alert('成功发布讨论，ID号为：' + result[0]);
-                        
+                        this.$router.push({path:'/admin/manage_discussion'});
                     }
                     else{
                         alert('发布讨论失败，请确认信息是否填写正确！');

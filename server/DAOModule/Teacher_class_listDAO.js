@@ -13,7 +13,7 @@ class Teacher_class_listDAO{//表名DAO
     constructor(){
     };
     createTeacher_class_list(t_class_ID_list,student_ID_list,result){//id = new Array(),result = true/false
-        baseDAO.createHT(table,atrlist,artnum,t_class_ID_list,student_ID_list,result);
+        baseDAO.createHT(table,atrlist,atrnum,t_class_ID_list,student_ID_list,result);
     };
     updateTeacher_class_list(id,atr,val,result){
         baseDAO.update(id,atr,val,table,key,result);

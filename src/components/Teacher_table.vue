@@ -106,7 +106,7 @@
       label="工号"
       width="180px">
       <template slot-scope="scope">
-         <router-link to=''><span style="margin-left: 10px" @click="show_info(scope.$index)">{{ scope.row.id }}</span></router-link>
+            <el-button style="padding: 3px 0" type="text"@click="show_info(scope.$index)">{{ scope.row.id }}</el-button>
       </template>
     </el-table-column>
 
@@ -326,6 +326,14 @@ import store from '../vuex/admin/store'
       },
       handleDelete(index, row) {
         console.log(index, row);
+                 this.$confirm('确认删除这个教师？')
+          .then(_ => {
+            // done();
+       this.tableData.splice(index,1);
+        alert('成功删除教师！')
+          })
+          .catch(_ => {});
+
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {

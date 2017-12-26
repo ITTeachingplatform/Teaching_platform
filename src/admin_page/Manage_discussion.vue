@@ -11,7 +11,7 @@
           <el-card class="box-card">
   <div slot="header" class="clearfix">
     <span>搜索框</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+    <el-button style="float: right; padding: 3px 0" type="text" @click="show_all">查看所有讨论</el-button>
   </div>
 
   <el-row type="flex" justify="start">
@@ -65,7 +65,8 @@
     :rules="[
     ]"
   >
-    <el-input prefix-icon="el-icon-search"type="date"  @change="dateChange" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input>
+      <el-date-picker type="date" v-model="numberValidateForm.publish_date" value-format="yyyy-MM-dd" @change="dateChange" auto-complete="off"></el-date-picker>
+       <!-- <el-input prefix-icon="el-icon-search"type="date"  @change="dateChange" v-model.number="numberValidateForm.publish_date" auto-complete="off"></el-input> -->
   </el-form-item>
 </el-form>
       </el-col>
@@ -143,9 +144,6 @@
       <template slot-scope="scope">
         <el-button
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
           type="danger"
           @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       </template>
@@ -214,6 +212,13 @@ import store from '../vuex/admin/store';
       },
       handleDelete(index, row) {
         console.log(index, row);
+         this.$confirm('确认删除这条讨论？')
+          .then(_ => {
+            // done();
+            this.tableData.splice(index,1);
+        alert('成功删除该讨论！')
+          })
+          .catch(_ => {});
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -234,7 +239,7 @@ import store from '../vuex/admin/store';
           return;
          this.tableData=[];
             //  find_post_by(post_title,post_date,post_starter_ID,result)
-          // console.log(this.search_date)
+          console.log(this.search_date)
          this.$http.post('/api/search_post', {
           // post_title,post_starter,post_label,post_date
                    post_title: this.numberValidateForm.id_word,
@@ -273,6 +278,26 @@ import store from '../vuex/admin/store';
         origin = parseInt(origin) + 1;
         this.search_date = origin.toString();
       },
+      show_all(){
+        this.tableData =[]
+                this.$http.post('/api/get', {
+                    type: 'discuss_list'
+                  },{}).then((response) => {
+                    // console.log(response.body);
+                    var dis_list = response.body;
+                    for(var i=0;i<dis_list[0].length;i++){
+                      var t = new Array()
+                      t['topic']=dis_list[0][i].post_title;
+                      t['writer']=dis_list[0][i].post_starter;
+                      t['publish_date']=dis_list[0][i].post_date;
+                      t['tag']=dis_list[0][i].post_label;
+                      t['final_changer']=dis_list[0][i].post_last_reviser;
+                      t['vis_num']=dis_list[0][i].post_browse_num;
+                      t['anw_num']=dis_list[0][i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
+      }
     }
   }
 </script>
