@@ -5,26 +5,39 @@
 
      <!-- <el-row type="flex" justify="center"> -->
        <el-table :data="tableData" border>
-         <el-table-column prop="title" label="标题" width="150">
-           
-         </el-table-column>
-
-         <el-table-column prop="publishdate" label="发布日期" width="180">
-         </el-table-column>
-
-         <el-table-column prop="duedate" label="截止日期" width="180">
-         </el-table-column>
-
-         <el-table-column prop="publisher" label="发布人" width="100">
-         </el-table-column>
-
-          <el-table-column prop="totalnum" label="总人数" width="80">
+          <el-table-column label="标题" width="250px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px"  >{{ scope.row.homework_name }}</span>
+              </template>
           </el-table-column>
+          <el-table-column label="发布人" width="150px">
+            <template slot-scope="scope">
+              <!-- <span style="margin-left: 10px">{{ scope.row.homework_t_class_belong }}</span> -->
+              </template>
+          </el-table-column>
+          <el-table-column label="发布时间(年月日)" width="150px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.homework_up_date }}</span></template>
+          </el-table-column>
+          <el-table-column label="截止时间(年月日)" width="150px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.homework_down_date }}</span></template>
+          </el-table-column>
+          <el-table-column label="总人数" width="100px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.s_homework_score }}</span></template>
+          </el-table-column>
+          <el-table-column label="提交人数" width="100px">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.s_homework_score }}</span></template>
+          </el-table-column>
+          <!-- <el-table-column label="操作" >
+            <template slot-scope="scope">
+              <el-button @click="showDialog(scope.$index)" type="primary" size="mini" round>查看详细</el-button>
+            </template>
+         </el-table-column> -->
 
-           <el-table-column prop="handlenum" label="提交人数" width="50">
-           </el-table-column>
-
-           <el-table-column type="selection" width="50"></el-table-column>
+           <!-- <el-table-column type="selection" width="50"></el-table-column> -->
 
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -32,11 +45,6 @@
             </template>
           </el-table-column>
 
-
-
-          
-
-  
        </el-table>
 
        <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">发布</el-button>
@@ -90,12 +98,13 @@
 
 
 <script>
-//import store from '../vuex/teacher/store'
+import store from '../../vuex/teacher/store'
 export default { 
     name: 'course_homework',
    // store,
    data(){
        return{
+         course_ID:'',
            dialogFormVisible: false,
            formLabelWidth: '120px',
            form: {
@@ -105,29 +114,32 @@ export default {
           date2: '',
          
         },
-
-           
-           tableData:[{
-               title:'第1章作业',
-               publishdate:'2017/09/15',
-               duedate:'2017/9/22',
-               publisher:'李红',
-               totalnum:'87',
-               handlenum:58
-               
-           },{
-               title:'第2章作业',
-               publishdate:'2017/09/14',
-               duedate:'2017/9/25',
-               publisher:'李红',
-               totalnum:87,
-               handlenum:0
-
-           }]
+           tableData:[]
 
            }
 
        },
+       mounted () {  
+        this.$http.post('/api/get/one_teacher_one_Course_allhomework', {
+          teacher_id: store.state.teacher_account.id,
+          course_ID: this.$route.params.course_id
+        },{}).then((response) => {
+          console.log(response.body);
+          var homework_list = response.body[0];
+          console.log(homework_list);
+          for(var i in homework_list){
+            var t = new Array()
+            t['homework_name']=homework_list[i].homework_name;
+            t['homework_up_date']=homework_list[i].homework_up_date;
+            t['homework_down_date']=homework_list[i].homework_down_date;
+            // t['homework_t_class_belong']=homework_list[i].homework_t_class_belong;
+            t['homework_content']=homework_list[i].homework_content;
+            t['s_homework_content']=homework_list[i].s_homework_content;
+            // t['s_homework_score']=homework_list[i].s_homework_score;
+            this.tableData.push(t)
+          }
+        })
+      }, 
       
    }
     

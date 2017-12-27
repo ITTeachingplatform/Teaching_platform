@@ -6,17 +6,29 @@
 
      <!-- <el-row type="flex" justify="center"> -->
        <el-table :data="tableData" border>
-         <el-table-column prop="title" label="标题" >
-         </el-table-column>
+      <el-table-column label="标题" width="200px">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.name  }}</span>
+        </template>
+      </el-table-column>
 
-         <el-table-column prop="size" label="大小" width="100">
-         </el-table-column>
+      <el-table-column label="上传时间" width="150px">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.date }}</span>
+        </template>
+      </el-table-column>
 
-         <el-table-column prop="date" label="上传时间" width="200">
-         </el-table-column>
+      <el-table-column label="文件大小" prop="size" width="100px">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.size }}</span>
+        </template>
+      </el-table-column>
 
-         <el-table-column prop="downloadtimes" label="下载次数" width="100">
-         </el-table-column>
+      <el-table-column label="下载数" prop="download_num" width="100px">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.download_num }}</span>
+        </template>
+      </el-table-column>
 
          <el-table-column type="selection" width="50"></el-table-column>
 
@@ -24,9 +36,18 @@
        </el-table>
 
        <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">上传</el-button>
-       <el-button style="margin-top:20px">下载</el-button>
+       <el-button style="margin-top:20px" @click="centerDialogVisible = true" >下载</el-button>
        <el-button style="margin-top:20px">删除</el-button>
-       
+           <!-- 确认下载对话框 -->
+    <div>
+      <el-dialog title="提示" :visible.sync="centerDialogVisible" width="30%">
+      <span>开始下载！</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    </div>
+
        <el-dialog title="发布作业" :visible.sync="dialogFormVisible">
   <el-form :model="form">
     <el-form-item label="标题" :label-width="formLabelWidth">
@@ -53,12 +74,6 @@
   </div>
 </el-dialog>
 
-
-        
-    
-       
-
-
       
        <!-- <el-button style="margin-top:20px">删除</el-button> -->
     <!-- </el-row>    -->
@@ -73,8 +88,10 @@ export default {
    // store,
    data(){
        return{
+         centerDialogVisible:false,
            dialogFormVisible: false,
            formLabelWidth: '120px',
+          tableData:[],
            form: {
           title: '',
           size:'',
@@ -83,22 +100,27 @@ export default {
 
          
         },
-
-           
-           tableData:[{
-               title:'训练题1',
-               size:'7.5M',
-               date:'2017/09/12',
-               downloadtimes:62,
-
-               
-           },{
-               title:'训练题2',
-               size:'6.3M',
-               date:'2017/09/14',
-               downloadtimes:55,
-
-           }]
+       mounted () {
+        this.$http.post('/api/get/one_Course_allbank', {
+          student_id: '',
+          t_class_id: this.$route.params.t_class_id
+        },{}).then((response) => {
+          console.log(response.body);
+          var bank_list = response.body[0];
+          // console.log(bank_list);
+          for(var i in bank_list){
+            var t = new Array()
+            t['name']=bank_list[i].bank_name;
+            t['date']=bank_list[i].bank_up_date;
+            t['course_name']=bank_list[i].course_name;
+            t['file_type']='题库';
+            t['size']=bank_list[i].bank_size;
+            t['download_num']=bank_list[i].bank_download_num;
+            this.tableData.push(t)
+          }
+        })
+      }, 
+        
 
            }
 

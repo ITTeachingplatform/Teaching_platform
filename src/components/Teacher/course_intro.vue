@@ -15,7 +15,7 @@
     <el-input v-model="formLabelAlign.department" :disabled.sync="modify" style="width:300px;float:left"></el-input>
   </el-form-item>
   <el-form-item label="课程介绍">
-    <el-input type="textarea" :rows="4" v-model="textarea" :disabled.sync="modify" style="width:400px;float:left"></el-input>
+    <el-input type="textarea" :rows="4" v-model="formLabelAlign.introduction" :disabled.sync="modify" style="width:400px;float:left"></el-input>
   </el-form-item>
 
   <el-form-item label="教学大纲">
@@ -30,41 +30,7 @@
   </el-form-item>
 
 </el-form>
-
-
-
-
-
-
   </el-row>
-
-  
-
-    <!-- <el-row type="flex" justify="start">
-      <el-col>
-        <el-form :model="numberValidateForm" ref="numberValidateForm">
-          <el-form-item label="课程名称" prop="lesson_name" >
-            <el-input type="id" v-model.number="numberValidateForm.lesson_name" auto-complete="off"></el-input>
-          </el-form-item> 
-        </el-form>
-      </el-col>   
-    </el-row>
-
-    <el-row type="flex" justify="start">
-      <el-col>
-        <el-form :model="numberValidateForm" ref="numberValidateForm">
-          <el-form-item label="课程所属院系" prop="department">
-            <el-input type="department" v-model.number="numberValidateForm.department" auto-complete="off"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>  -->
-    
-
-    
-
-         
-
 
   </div>
 </template>
@@ -81,7 +47,8 @@
         formLabelAlign: {
           name: '',
           department: '',
-          type: ''
+          type: '',
+          introduction:''
         }
       };
     }

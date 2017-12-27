@@ -231,7 +231,18 @@ router.post('/get/one_Course_allhomework', (req, res) => {
             res.send(result);
         }, 1000)}
 });
-
+router.post('/get/one_teacher_one_Course_allhomework', (req, res) => {
+    console.log('Getting a course\'s all homework');
+    var params = req.body;
+    if(params.teacher_id != null){
+        var AdminService = new Admin();
+        var result = new Array();
+        AdminService.load_allHomework_one_teacher_one_t_class(params.teacher_id,params.t_class_id,result);
+        setTimeout(function(){
+            console.log(result)
+            res.send(result);
+        }, 1000)}
+});
 router.post('/get/one_Course_allres', (req, res) => {
     console.log('Getting a course\'s all resource');
     var params = req.body;
@@ -302,6 +313,18 @@ router.post('/teacher_all_info', (req, res) => {
     var result = new Array();
     AdminService.load_one_teacher(params.id,result);
     setTimeout(function(){
+        res.send(result);
+    }, 1000)
+});
+
+router.post('/load_one_course_allstudent', (req, res) => {
+    console.log('Getting one teacher course all students');    
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allStudent_one_course_teacher(params.course_id,params.teacher_id,result);
+    setTimeout(function(){
+        console.log(result);
         res.send(result);
     }, 1000)
 });
@@ -565,6 +588,43 @@ router.post('/get/load_allCourse_one_teacher', (req, res) => {
     AdminService.load_allCourse_one_teacher(params.teacher_id,result);
     setTimeout(function(){
         console.log(result);
+        res.send(result);
+    }, 1000)
+});
+//讨论区搜索apis.js
+//讨论区搜索
+router.post('/search_post', (req, res) => {
+    console.log('Searching post');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.find_post_by(params.post_title,params.post_starter,params.post_label,params.post_date,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+//加载一个帖子的所有信息
+router.post('/view_post', (req, res) => {
+    console.log('Open a post');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_one_post(params.post_id,result);
+    setTimeout(function(){
+        console.log(result)
+        res.send(result);
+    }, 1000)
+});
+//加载一个帖子的回复
+router.post('/post_replay', (req, res) => {
+    console.log('Open a post all replay');
+    var params = req.body;
+    var AdminService = new Admin();
+    var result = new Array();
+    AdminService.load_allReply_one_post(params.post_id,result);
+    setTimeout(function(){
+        console.log(result)
         res.send(result);
     }, 1000)
 });

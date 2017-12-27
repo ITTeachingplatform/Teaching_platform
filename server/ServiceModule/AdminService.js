@@ -1575,7 +1575,11 @@ class AdminService{
     //          2 :修改两个参数
     //          3 :修改三个参数
     //result[RE] undefined
+<<<<<<< HEAD
     modify_one_teacher(teacher_id,passwd,teacher_email,teacher_introduction,result){ 
+=======
+    modify_one_teacher(teacher_id,passwd,teacher_eamil,teacher_introduction,result){ 
+>>>>>>> origin/suzi_code
         result[TF] = 0;
         var result3 = new Array();
         result3.push(0);

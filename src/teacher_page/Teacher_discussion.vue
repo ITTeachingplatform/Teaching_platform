@@ -35,7 +35,7 @@
               </el-col>
               <el-col :span="10">
                 <el-form-item label="发布时间" prop="post_date" :rule="[]">
-                  <el-date-picker type="date" v-model="ruleForm.post_date" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker type="date" v-model="ruleForm.post_date" value-format="yyyy-MM-dd" placeholder="选择日期" @change="dateChange" auto-complete="off"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -43,7 +43,7 @@
           </el-row>
 
           <el-row type="flex" justify="center">
-            <el-button style='width:150px' type="primary">搜索</el-button>
+            <el-button style='width:150px' type="primary" @click="search_post">搜索</el-button>
             <el-button style='width:150px;margin-left:40px' v-on:click="resetForm('ruleForm')">重置</el-button>
           </el-row>
         </el-card>
@@ -81,11 +81,11 @@
 
         <el-table-column label="发布时间" width="180px">
           <template slot-scope="scope">
-            <span style="margin-left:10px">{{ scope.row.publish_date }}</span>
+            <span style="margin-left:10px">{{ scope.row.post_date }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="标签" width="150px">
+        <el-table-column label="标签" width="100px">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{ scope.row.tag }}</span>
           </template>
@@ -130,7 +130,8 @@ export default {
           post_date: '',
           post_label: '',
           },
-        tableData: []
+        tableData: [],
+        search_date:'',
       }
     },
           mounted () {
@@ -145,7 +146,7 @@ export default {
                       t['id']=dis_list[0][i].post_ID;
                       t['topic']=dis_list[0][i].post_title;
                       t['writer']=dis_list[0][i].post_starter;
-                      t['publish_date']=dis_list[0][i].post_date;
+                      t['post_date']=dis_list[0][i].post_date;
                       t['tag']=dis_list[0][i].post_label;
                       t['final_changer']=dis_list[0][i].post_last_reviser;
                       t['vis_num']=dis_list[0][i].post_browse_num;
@@ -155,6 +156,51 @@ export default {
                   })
       },      
     methods: {
+      search_post(){
+        if(this.ruleForm.keyword===''&&this.search_date===''&&this.ruleForm.post_starter===''&&this.ruleForm.post_label==='')
+          return;
+         this.tableData=[];
+            //  find_post_by(post_title,post_date,post_starter_ID,result)
+          console.log(this.search_date)
+         this.$http.post('/api/search_post', {
+          // post_title,post_starter,post_label,post_date
+                   post_title: this.ruleForm.keyword,
+                   post_date: this.search_date,
+                    post_starter:this.ruleForm.post_starter,
+                    post_label: this.ruleForm.post_label
+                  },{}).then((response) => {
+                    // console.log(response.body[0]);
+                    var dis_list = response.body[0];
+                    for(var i in dis_list){
+                      var t = new Array()
+                      t['id']=dis_list[i].post_ID;
+                      t['topic']=dis_list[i].post_title;
+                      t['writer']=dis_list[i].post_starter;
+                      t['post_date']=dis_list[i].post_date;
+                      t['tag']=dis_list[i].post_label;
+                      t['final_changer']=dis_list[i].post_last_reviser;
+                      t['vis_num']=dis_list[i].post_browse_num;
+                      t['anw_num']=dis_list[i].post_reply_num;
+                     this.tableData.push(t)
+                    }
+                  })
+      },
+      //重置表格
+      reset_form(){
+      this.ruleForm={
+            keyword: '',
+            post_starter: '',
+            post_date: '',
+            post_label: '',
+          }
+        this.search_date = ''
+      },
+      //日期格式化
+      dateChange(val){
+        var origin = val.replace(/-/g,'');
+        origin = parseInt(origin) + 1;
+        this.search_date = origin.toString();
+      },
       handleEdit(index, row) {
         console.log(index, row);
       },

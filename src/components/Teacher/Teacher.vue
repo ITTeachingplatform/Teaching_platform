@@ -58,6 +58,10 @@ export default {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       }
+    },
+    mounted(){
+      if(store.state.teacher_account.id==='')
+      this.$router.replace('/')
     }
 }
 </script>

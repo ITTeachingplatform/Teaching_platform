@@ -5,9 +5,15 @@
      <!-- <el-row type="flex" justify="center"> -->
        <el-table :data="tableData" >
          <el-table-column prop="announce" label="通知" width="300">
+              <template slot-scope="scope">
+              <span style="margin-left: 10px" >{{ scope.row.announcement_title }}</span>
+              </template>
          </el-table-column>
 
          <el-table-column prop="date" label="日期" width="500">
+              <template slot-scope="scope">
+              <span style="margin-left: 10px" >{{ scope.row.announcement_date }}</span>
+              </template>
          </el-table-column>
 
          <el-table-column label="操作" >
@@ -16,7 +22,6 @@
           </template>
          </el-table-column>
 
-         </el-table-column>
        </el-table>
     <!-- </el-row>    -->
     <el-button type="primary" style="margin-top:20px" @click="dialogFormVisible=true">新建通知</el-button>
@@ -40,22 +45,15 @@
     </el-dialog>
 
     <!-- 查看每个公告的对话框 -->
-    <el-dialog title="查看公告" :visible.sync="lookVisible">
-      <el-form :model="form">
-        <el-form-item label="公告名称" :label-width="formLabelWidth">
-          <el-input v-model="form.title" auto-complate="off" style="width:300px;;float:left"></el-input>
-        </el-form-item>
-
-        <el-form-item label="公告内容" :label-width="formLabelWidth">
-          <el-input type="textarea" :rows="6" v-model="textarea" style="width:400px;;float:left"></el-input>
-        </el-form-item>
-
-
+    <el-dialog title="" :visible.sync="lookVisible">
+      <el-form :model="dialogForm">
+        <el-row><h1 align=center>{{dialogForm.title}}</h1></el-row>
+        <el-row>发布时间：{{dialogForm.publish_date}}</el-row>
+        <el-row style="margin:15px">{{dialogForm.content}}</el-row>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="lookVisible=false">取消</el-button>
-        <el-button type="primary" @click="dialogFormVisible=false">修改</el-button>
       </div>
 
 
@@ -78,18 +76,19 @@ export default {
        return{
            dialogFormVisible: false,
            lookVisible:false,
+           t_class_id:'',
+           course_ID:'',
            formLabelWidth: '120px',
-           form: {
-          title: '',
-          content: '',       
+           dialogForm: {
+              title: '',
+              publish_date:'',
+              content: '',       
            },
-           tableData:[{
-               announce:'国庆调课通知',
-               date:'2017/09/15',
-           },{
-               announce:'教室调整通知',
-               date:'2017/09/20',
-           }]
+           form: {
+              title: '',
+              content: '',       
+           },
+           tableData:[],
 
         }
 
@@ -98,8 +97,33 @@ export default {
          handleClick(index,row) {
            this.lookVisible=true;
            console.log(index,row);
+        this.dialogForm.title=this.tableData[index].announcement_title;
+        this.dialogForm.publish_date=this.tableData[index].announcement_date;
+        this.dialogForm.content=this.tableData[index].brief_content;
+           
          },
-       }
+       },
+    mounted (){
+      this.t_class_id=this.$route.params.t_class_id;
+      this.$http.post('/api/get/one_Course_allann', {
+        course_ID: this.$route.params.course_id,
+      },{}).then((response) => {
+                    console.log(response.body);
+                    var ann_list = response.body[0];
+                    // console.log(ann_list);
+                    for(var i in ann_list){
+                      var t = new Array()
+                      t['announcement_title']=ann_list[i].announcement_title;
+                      // t['ann_publisher']=ann_list[i].sys_ann_publisher;
+                      t['announcement_date']=ann_list[i].announcement_date;
+                      t['brief_content']=ann_list[i].announcement_content;
+                     this.tableData.push(t)
+            }
+            console.log('finish loading course list');
+        // console.log(this.CourseInfo);
+      })
+    },
+           
    }
     
     
